@@ -50,6 +50,7 @@ class Security extends Plugin
             $publicResources = array(
                 'apigetdata' => array('*'),
                 'apimatch' => array('*'),
+                'apisavematch' => array('*'),
                 'apigetconfig' => array('*'),
                 'apicache' => array('*'),
                 'backendlogin'    => array('*'),
