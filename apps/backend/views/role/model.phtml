@@ -1,0 +1,102 @@
+
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Role</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="form_title"></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="role-form" id="role-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Name <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input  maxlength="255" value="<?php echo isset($arr_role['input_data']["name"]) ? $arr_role['input_data']["name"] : "" ?>" type="text" id="txtName" name="txtName"   class="form-control col-md-7 col-xs-12 <?php echo (isset($arr_role['msg_info']['name']) ) ? 'border-red' : ""; ?>">
+                            <span class="text-danger msg-name"><?php echo isset($arr_role['msg_info']["name"]) ? $arr_role['msg_info']["name"] : "";?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Order <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10" value="<?php echo isset($arr_role['input_data']["order"]) ? $arr_role['input_data']["order"] : "" ?>" id="txtOrder" name="txtOrder"   class="form-control col-md-7 col-xs-12 <?php echo (isset($arr_role['msg_info']["order"])) ? 'border-red' : ""; ?>"   type="text">
+                            <span class="text-danger msg-order"><?php echo isset($arr_role['msg_info']["order"]) ? $$arr_role['msg_info']["order"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Active</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                            <label class="container_radio"><input type="radio" name="rdActive" value="Y" <?php echo (isset($arr_role['input_data']["active"]) && $arr_role['input_data']["active"]=="Y" )  ? "checked" : '' ; ?>>Yes<span class="checkmark"></span></label>
+                            <label class="container_radio"><input type="radio" name="rdActive" value="N" <?php echo (isset($arr_role['input_data']["active"]) && $arr_role['input_data']["active"]=="N" )  ? "checked" : '' ; ?>>No<span class="checkmark"></span></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Function</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12 form-check">
+                            <?php
+                            echo $arr_role['input_data']['str_action'];
+                            ?>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button type="button" class="btn btn-warning" name="btnUncheck" >Uncheck</button>
+                            <button type="button" class="btn btn-info" name="btnCheckAll" >Check All</button>
+                            <button name="submit" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="<?php echo $this->url->get("/dashboard/list-role"); ?>">Cancel</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $( document ).ready(function() {
+        $('button[name=btnUncheck]').click(function() {
+            $('.check').prop('checked', false);
+        });
+        $('button[name=btnCheckAll]').click(function() {
+            $('.check').prop('checked', true);
+        });
+        var valid = true;
+        var id = <?php echo $arr_role['input_data']["id"] ;?>;
+        if(id > 0){
+            $('#txtName').attr("readonly",true);
+        }
+        $('form[name=type-form]').submit(function(event) {
+            if($('input[name=txtName]').val() == '') {
+                $('.msg-name').text('Full name field is required.');
+                $('#txtName').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-name').text('');
+            }
+            if ($('input[name=txtOrder]').val() == '') {
+                $('.msg-order').text('Order field is required.');
+                valid = false;
+
+            } else if (isNaN($('input[name=txtOrder]').val())) {
+                $('.msg-order').text('Enter a valid order.');
+                valid = false;
+            } else {
+                $('.msg-order').text('');
+            }
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=submit]').prop('disabled', true);
+            }
+        });
+    });
+
+</script>

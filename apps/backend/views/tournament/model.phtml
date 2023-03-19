@@ -1,0 +1,81 @@
+<script>
+    $(document).ready(function() {
+        $('form[name=language-form]').submit(function(event) {
+            var valid = true;
+
+
+            if (!valid) event.preventDefault();
+            if (valid) {
+                $('button[name=submit]').prop('disabled', true);
+            }
+        });
+    });
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Tournament</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="form_title"></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="language-form" id="language-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+
+                    <?php
+
+                    use Score\Repositories\Team;
+                    use Score\Repositories\Tournament;
+
+                    foreach ($formData as $key => $value) :
+                        if ($key == "tournament_id") {
+                            continue;
+                        }
+                        $name = str_replace(["tournament_", "_id"], ["", ""], $key);
+                        $name = str_replace(["_"], [" "], $name);
+                        $name = ucwords($name);
+                    ?>
+                        <?php
+
+                        switch ($key):
+                            case "tournament_crawl":
+                            case "tournament_active":
+                        ?>
+                                <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12"><?= $name ?></label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                                        <label class="container_radio"><input type="radio" name="<?= $key ?>" value="Y" <?php echo (isset($formData[$key]) && $formData[$key] == "Y") ? "checked" : ''; ?>>Yes<span class="checkmark"></span></label>
+                                        <label class="container_radio"><input type="radio" name="<?= $key ?>" value="N" <?php echo (isset($formData[$key]) && $formData[$key] == "N") ? "checked" : ''; ?>>No<span class="checkmark"></span></label>
+                                    </div>
+                                </div>
+                            <?php break;
+                            default: ?>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"><?= $name ?>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input maxlength="255" value="<?php echo isset($formData[$key]) ? $formData[$key] : "" ?>" id="<?= $key ?>" name="<?= $key ?>" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$key])) ? $messages["status"] : ""; ?>" type="text">
+                                        <span class="text-danger msg-order"><?php echo isset($messages[$key]) ? $messages[$key] : ""; ?></span>
+                                    </div>
+                                </div>
+                        <?php endswitch ?>
+                    <?php endforeach ?>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="submit" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="<?php echo $this->url->get("/dashboard/list-tournament"); ?>">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

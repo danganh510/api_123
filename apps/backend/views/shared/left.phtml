@@ -1,0 +1,113 @@
+<?php
+use Score\Repositories\Role;
+if (isset($role_function)) {
+    $pre = 'backend';
+    $menu_active = 'class="active"';
+    $menu_sub_active = 'style="display: block;"';
+    $menu_sub_sub_active = 'class="current-page"';
+    $controllers = Role::getControllers();
+    $actions = Role::getActionsShow();
+    $controllerName = $this->dispatcher->getControllerName();
+
+}
+$url_base = $this->url->get("/dashboard//");
+$controllerNow = $this->dispatcher->getControllerName();
+
+$ulSideBar = "";
+foreach ($controllers as $key => $infoControllers) {
+    $icon = $infoControllers['icon'];
+    $check_controller = (Role::checkMenu($role_function, $infoControllers['controllers'])) ? true : false;
+    $check_controller_sub = (Role::checkMenuSub($infoControllers['controllers'], $this->dispatcher->getControllerName())) ? true : false; 
+
+    $is_active = $check_controller_sub ? $menu_active:"";
+    $is_menu_active = $check_controller_sub ? $menu_sub_active : "";
+
+    if($check_controller) {
+        $ul_child_menu = "";
+        foreach ($infoControllers['controllers'] as $controllerName => $controller) {
+            $controller = str_replace("backend","",$controller);
+            $active_controller = ($controllerNow === $controller ? $menu_sub_sub_active : "");
+            $url_controller = str_replace("/","",$this->url->get($controller));
+            $labelController = $controllerName;
+             if(Role::checkiMenuItem($role_function,$controller)) { 
+                $ul_child_menu .= "<li {$active_controller} >
+                                        <a href='/dashboard/list-$url_controller'>{$labelController} </a>
+                                    </li>";
+             }
+        }
+        $label = ucwords(str_replace("_"," ",$key));
+        $ulSideBar .= "
+        <li {$is_active} >
+            <a>
+                <i class='fa {$icon}'>
+                </i> {$label}  
+                <span class='fa fa-chevron-down'></span>
+            </a>
+            <ul class='nav child_menu' {$is_menu_active} >
+            {$ul_child_menu}
+            </ul>
+        </li>";
+    }
+}
+
+
+foreach ($actions as $controller => $arrAction) {
+    $check_controller = (Role::checkMenu($role_function, [$controller])) ? true : false;
+    $check_controller_sub = (Role::checkMenuSub( [$controller], $this->dispatcher->getControllerName())) ? true : false;
+
+    $is_active = $check_controller_sub ? $menu_active:"";
+    $is_menu_active = $check_controller_sub ? $menu_sub_active : "";
+
+    $icon = $arrAction['icon'];
+    $controller = str_replace("backend","",$controller);
+    $label = ucwords(str_replace("_"," ",$controller));
+    $active_controller = ($controllerNow === $controller ? true : false);
+
+    if($check_controller) {
+        $ul_child_menu = "";
+        foreach ($arrAction['actions'] as $key =>  $action) {
+            $active_action = $action === $this->dispatcher->getActionName() && $active_controller ? $menu_sub_sub_active : "";
+            $url_action = $this->url->get("/dashboard//".$controller."/".$action);
+            $labelAction = ucwords(str_replace("_"," ",$action));
+        
+            $ul_child_menu .= "<li {$active_controller} >
+                                    <a href='{$url_action}'>{$labelAction} </a>
+                                </li>";
+                        
+        }
+
+        $ulSideBar .= " <li {$is_active} >
+                                <a>
+                                    <i class='fa {$icon}'></i>
+                                    {$label}
+                                    <span class='fa fa-chevron-down'></span>
+                                </a>
+                                <ul class='nav child_menu' {$is_menu_active} >
+                                        {$ul_child_menu}
+                                </ul>
+                        </li>";
+    }
+  
+}
+
+$htmlReturn = "
+        <div class='col-md-3 left_col'>
+        <div class='left_col scroll-view'>
+            <div class='navbar nav_title' style='border: 0;'>
+                <a href='{$url_base}' class='site_title'><i class='fa fa-institution'></i>
+                    <span>123tyso </span></a>
+            </div>
+            <div class='clearfix'></div>
+            <br/>
+            <div id='sidebar-menu' class='main_menu_side hidden-print main_menu'>
+                <div class='menu_section'>
+                    <ul class='nav side-menu'>
+                        {$ulSideBar}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+ ";
+ echo $htmlReturn;
+?>

@@ -1,0 +1,194 @@
+<?php
+$urlPage = "?";
+if (strlen($this->dispatcher->getParam("txtSearch")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtSearch" => $this->dispatcher->getParam("txtSearch")));
+}
+if (strlen($this->dispatcher->getParam("slcTournament")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcTournament" => $this->dispatcher->getParam("slcTournament")));
+}
+if (strlen($this->dispatcher->getParam("slcTeam")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcTeam" => $this->dispatcher->getParam("slcTeam")));
+}
+if (strlen($this->dispatcher->getParam("txtFormDate")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtFormDate" => $this->dispatcher->getParam("txtFormDate")));
+}
+if (strlen($this->dispatcher->getParam("txtToDate")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtToDate" => $this->dispatcher->getParam("txtToDate")));
+}
+$formdate = $this->dispatcher->getParam("txtFormDate");
+$todate = $this->dispatcher->getParam("txtToDate");
+?>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Match</h3>
+    </div>
+</div>
+<?php if (isset($msg_result)) { ?>
+    <div class="clearfix"></div>
+    <div class="alert alert-<?php echo $msg_result['status'] ?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_result['msg']; ?>
+    </div>
+<?php } ?>
+<?php $message_success = isset($msg_del["success"]) ? $msg_del["success"] : '';
+$message_error = isset($msg_del["error"]) ? $msg_del["error"] : '';
+if (!empty($message_success)) { ?>
+    <div class="clearfix"></div>
+    <div class="alert alert-success alert-dismissible fade in" role="alert">
+        <?php echo $message_success; ?>
+    </div>
+<?php }
+if (!empty($message_error)) { ?>
+    <div class="clearfix"></div>
+    <div class="alert alert-error alert-dismissible fade in" role="alert">
+        <?php echo $message_error; ?>
+    </div>
+<?php } ?>
+<div class="clearfix"></div>
+<form class="searchForm" name="form-match" method="post" action="">
+    <?php $keyword = $this->dispatcher->getParam("txtSearch");
+    ?>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row ">
+                        <div class="col-md-1">
+                            <h2 class="">Keyword</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <input maxlength="255" class="form-control" type="text" name="txtSearch" placeholder="ID, Name" value="<?php echo isset($keyword) ? $keyword : ""; ?>">
+                        </div>
+                        <h2>Tournament</h2>
+                        <div class="col-md-2">
+                            <select class="form-control select" name="slcTournament" id="slcTournament">
+                                <option value="">All Tournament</option>
+                                <?php echo isset($slcTournament) ? $slcTournament : '' ?>
+                            </select>
+                        </div>
+                        <h2>Team</h2>
+                        <div class="col-md-2">
+                            <select class="form-control select" name="slcTeam" id="slcTeam">
+                                <option value="">All Team</option>
+                                <?php echo isset($slcTeam) ? $slcTeam : '' ?>
+                            </select>
+                        </div>
+                       
+                    </div>
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-md-1">
+                            <h2>From</h2>
+                        </div>
+                        <div class="col-md-2">
+                            <input autocomplete="off" placeholder="Form Date (Start Date)" value="<?php echo isset($formdate) ? $formdate : ""; ?>" type="text" id="txtFormDate" data-timepicker="true" data-time-format='hh:ii' name="txtFormDate" class="form-control col-md-7 col-xs-12 datepicker-here">
+                        </div>
+                        <div class="col-md-1">
+                            <h2>To</h2>
+                        </div>
+                        <div class="col-md-2">
+                            <input autocomplete="off" placeholder="To Date (Start Date)" value="<?php echo isset($todate) ? $todate : ""; ?>" type="text" id="txtToDate" data-timepicker="true" data-time-format='hh:ii' name="txtToDate" class="form-control col-md-7 col-xs-12 datepicker-here">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" name="search" class="btn btn-success">Search</button>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Total</strong>
+                        <?php echo $list_language->total_items ?> records
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table_header">
+                                <tr class="headings">
+                                    <th style="text-align: left" width="50px"><label class="container_checkbox"><input type="checkbox" id="checkboxAll"><span class="checkmark_checkbox"></span></label></th>
+                                    <th width="50px" class="column-title">ID</th>
+                                    <th class="column-title">Tournament</th>
+                                    <th class="column-title">Name</th>
+                                    <th class="column-title">Home</th>
+                                    <th class="column-title">Away</th>
+                                    <th width="80px" class="column-title">Home Score</th>
+                                    <th width="80px" class="column-title">Away Score</th>
+                                    <th class="column-title">Time</th>
+                                    <th class="column-title">Start Time</th>
+                                    <th width="80px" class="column-title">Order</th>
+                                    <th width="50px" class="column-title no-link last"><span class="nobr">Action</span></th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="tb_body">
+                                <?php
+
+                                use Score\Models\ScMatch;
+                                use Score\Repositories\Team;
+                                use Score\Repositories\Tournament;
+
+                                /**
+                                 * @var ScMatch $item
+                                 */
+                                foreach ($list_language->items as $item) {
+                                ?>
+                                    <tr>
+                                        <td><label class="container_checkbox"><input class="check" name="item[]" value="<?php echo $item->getMatchId() ?>" type="checkbox"><span class="checkmark_checkbox"></span></label></td>
+                                        <td class=" "><?php echo $item->getMatchId() ?></td>
+                                        <td class=" "><?php echo Tournament::getNameById($item->getMatchTournamentId()) ?></td>
+                                        <td class=" "><?php echo $item->getMatchName() ?></td>
+                                        <td class=" "><?php echo Team::getTeamNameById($item->getMatchHomeId()) ?></td>
+                                        <td class=" "><?php echo  Team::getTeamNameById($item->getMatchAwayId()) ?></td>
+                                        <td class=" "><?php echo $item->getMatchHomeScore() ?></td>
+                                        <td class=" "><?php echo $item->getMatchAwayScore() ?></td>
+                                        <td class=" "><?php echo $item->getMatchTime() ?></td>
+                                        <td class=" "><?php echo is_numeric($item->getMatchStartTime()) ? $this->my->formatDateTime($item->getMatchStartTime()) : $item->getMatchStartTime() ?></td>
+                                        <td class=" "><?php echo $item->getMatchOrder() ?></td>
+                                        <td><a class="btn btn-primary btn-xs margin-0" href="<?php echo $this->url->get("/dashboard/edit-match?id=" . $item->getMatchId()); ?> ">View</a>
+                                        </td>
+                                    </tr>
+
+                                <?php } ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label for="slcAction">With Selected:</label>
+                            <select class="form-control" id="slcAction" name="slcAction" style="display: inline-block;width: 40%">
+                                <option value="" selected>Please select</option>
+                                <option value="drop">Drop</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <?php if ($list_language->total_pages > 1) { ?>
+                                <nav class="paginate-footer">
+                                    <?php if ($urlPage != "?") $urlPage .= "&";
+                                    $urlPage .= "page=";
+                                    echo $this->my->renderPagination($urlPage, $list_language->current, $list_language->total_pages, 2);
+                                    ?>
+                                </nav>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function() {
+        $('button[name=search]').click(function() {
+            $('form[name=form-match]').prop('action', '<?php echo $this->url->get('/dashboard/list-match'); ?>');
+            $('form[name=form-match]').submit();
+        });
+        $('.delete-all').click(function() {
+            $('form[name=form-match]').prop('action', '<?php echo $this->url->get('/dashboard/delete-match'); ?>');
+            $('form[name=form-match]').submit();
+        });
+    });
+</script>

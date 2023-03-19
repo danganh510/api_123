@@ -1,0 +1,5 @@
+<?php include('model.phtml'); ?>
+<script>
+    $('.form_title').html('Form Create');
+    $('form[name=config-form]').prop('action','<?php echo $this->url->get('/dashboard/create-configcontent'); ?>');
+</script>

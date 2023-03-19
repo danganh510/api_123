@@ -1,0 +1,165 @@
+<script>
+    $( document ).ready(function() {
+        $('form[name=info-form]').submit(function(event) {
+            var valid = true;
+            if($('input[name=txtName]').val() == '') {
+                $('.msg-name').text('Name field is required.');
+                $('#txtName').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-name').text('');
+                $('#txtName').removeClass("border-red");
+            }
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=sbmInfo]').prop('disabled', true);
+            }
+        });
+        $('form[name=password-form]').submit(function(event) {
+            var valid = true;
+            if($('input[name=txtPassword]').val() == '') {
+                $('.msg-password').text('Password field is required.');
+                $('#txtPassword').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-password').text('');
+                $('#txtPassword').removeClass("border-red");
+            }
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=sbmPassword]').prop('disabled', true);
+            }
+        });
+        $('form[name=role-form]').submit(function(event) {
+            var valid = true;
+            if($( "select#slcRole option:checked" ).val()=='') {
+                $('.msg-role').text('Role is required.');
+                $('#slcRole').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-role').text('');
+                $('#slcRole').removeClass("border-red");
+            }
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=sbmRole]').prop('disabled', true);
+            }
+        });
+    });
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Detail User #<?php echo $data['user_id']; ?></h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_content">
+                <br />
+                <div class="row" >
+                    <div class="col-md-6 well">
+                    <h3>Information</h3>
+                        <?php if(isset($msg_information))  {?>
+                            <div class="clearfix"></div>
+                            <div  class="alert alert-<?php echo $msg_information['status']?> alert-dismissible fade in" role="alert">
+                                <?php echo $msg_information['msg']; ?>
+                            </div>
+                        <?php } ?>
+                        <form name="info-form" id="info-form" data-parsley-validate class="form-horizontal form-label-left" method="post"
+                           action="<?php echo $this->url->get('/dashboard/information-user?id=').$data['user_id']; ?>">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Name<span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-md-9 col-sm-6 col-xs-12">
+                                        <input maxlength="255" value="<?php echo isset($data["user_name"]) ? $data["user_name"] : "" ?>" type="text" id="txtName" name="txtName"   class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["name"])) ? $messages["status"] : ""; ?>">
+                                        <span class="text-danger msg-name"><?php echo isset($messages["name"]) ? $messages["name"] : "";?></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Email </label>
+                                    <div class="col-md-9 col-sm-6 col-xs-12">
+                                        <input maxlength="255" value="<?php echo isset($data["user_email"]) ? $data["user_email"] : "" ?>" type="text" id="txtEmail" name="txtEmail" readonly   class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Active </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                                        <label class="container_radio"><input type="radio" name="radActive" value="Y" <?php echo (isset($data["user_active"]) && $data["user_active"]=="Y" )  ? "checked" : '' ; ?>>Yes<span class="checkmark"></span></label>
+                                        <label class="container_radio"><input type="radio" name="radActive" value="N" <?php echo (isset($data["user_active"]) && $data["user_active"]=="N" )  ? "checked" : '' ; ?>>No<span class="checkmark"></span></label>
+                                    </div>
+                                </div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button name="sbmInfo" type="submit" class="btn btn-success">Update</button>
+                                        <a class="btn btn-primary" href="list-user">Cancel</a>
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="well">
+                            <h3>Change Password</h3>
+                            <?php if(isset($msg_password))  {?>
+                                <div class="clearfix"></div>
+                                <div  class="alert alert-<?php echo $msg_password['status']?> alert-dismissible fade in" role="alert">
+                                    <?php echo $msg_password['msg']; ?>
+                                </div>
+                            <?php } ?>
+                            <form name="password-form" id="password-form" data-parsley-validate class="form-horizontal form-label-left" method="post"
+                                  action="<?php echo $this->url->get('/dashboard/password-user?id=').$data['user_id']; ?>">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 col-sm-3 col-xs-12" for="last-name">New password<span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-md-8 col-sm-6 col-xs-12">
+                                        <input maxlength="255" value="<?php echo isset($data["user_password"]) ? $data["user_password"] : "" ?>" type="password" id="txtPassword" name="txtPassword"   class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["password"])) ? $messages["status"] : ""; ?>">
+                                        <span class="text-danger msg-password"><?php echo isset($messages["password"]) ? $messages["password"] : "";?></span>
+                                    </div>
+                                </div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button name="sbmPassword" type="submit" class="btn btn-success">Change </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="well">
+                            <h3>Role User</h3>
+                            <?php if(isset($msg_role))  {?>
+                                <div class="clearfix"></div>
+                                <div  class="alert alert-<?php echo $msg_role['status']?> alert-dismissible fade in" role="alert">
+                                    <?php echo $msg_role['msg']; ?>
+                                </div>
+                            <?php } ?>
+                            <form name="role-form" id="role-form" data-parsley-validate class="form-horizontal form-label-left" method="post"
+                                  action="<?php echo $this->url->get('/dashboard/role-user?id=').$data['user_id']; ?>">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Role Type<span class="text-danger">*</span></label>
+                                    <div class="col-md-9 col-sm-6 col-xs-12">
+                                        <select class="form-control" name="slcRole" id="slcRole">
+                                            <option value="">Select Role . . .</option>
+                                            <?php echo isset($slcRole)? $slcRole : ''?>
+                                        </select>
+                                        <span class="text-danger msg-role"><?php echo isset($messages["role"]) ? $messages["role"] : "";?></span>
+                                    </div>
+                                </div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button name="sbmRole" type="submit" class="btn btn-success">Update </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>                    
+                </div>                
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,191 @@
+<script>
+    $(document).ready(function() {
+        $('form[name=country-form]').submit(function(event) {
+            var valid = true;
+            if($('input[name=txtCode]').val() == '') {
+                $('.msg-code').text('Code field is required.');
+                $('#txtCode').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-code').text('');
+                $('#txtCode').removeClass("border-red");
+            }
+
+            if ($('input[name=txtOrder]').val() == '') {
+                $('.msg-order').text('Order field is required.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else if (isNaN($('input[name=txtOrder]').val())) {
+                $('.msg-order').text('Enter a valid order.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-order').text('');
+                $('#txtOrder').removeClass("border-red");
+            }
+
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=sbmCountry]').prop('disabled', true);
+            }
+        });
+    });
+</script>
+
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Country</h3>
+    </div>
+</div>
+<?php if(!empty($messages['message']))
+{
+    ?>
+    <div class="clearfix"></div>
+    <p style="font-size:18px;text-align:center" class="alert alert-<?php echo $messages['typeMessage']?>">
+        <?php echo $messages['message']; ?>
+    </p>
+<?php }	?>
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">Form Edit
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="country-form" id="country-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                    <input type="hidden" name="save" id="save" value="<?php echo \Score\Models\ScLanguage::GENERAL ;?>" />
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="slcArea">Area </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="slcArea" name="slcArea" class="form-control col-md-7 col-xs-12 " >
+                                <option value=0>Select Area...</option>
+                                <?php
+                                echo isset($select_area) ? $select_area : "";
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtCode">Code<span class="red">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="2" value="<?php echo isset($formData["country_code"]) ? $formData["country_code"] : "" ?>" type="text" id="txtCode" name="txtCode" class="form-control col-md-7 col-xs-12 <?php echo isset($messages["code"]) ? $messages["status"] : ""; ?>" />
+                            <span class="text-danger msg-code"><?php echo isset($messages["code"]) ? $messages["code"] : ""?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Order <span class="text-danger">*</span> </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10"
+                                   value="<?php echo isset($formData["country_order"]) ? $formData["country_order"] : "" ?>"
+                                   id="txtOrder" name="txtOrder"
+                                   class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["country_order"]) || isset($messages["exist"])) ? $messages["status"] : ""; ?>"
+                                   type="text">
+                            <span class="text-danger msg-order"><?php echo isset($messages["order"]) ? $messages["order"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone Code <span class="text-danger">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="5"
+                                   value="<?php echo isset($formData["country_phone_code"]) ? $formData["country_phone_code"] : "" ?>"
+                                   id="txtPhoneCode" name="txtPhoneCode"
+                                   class="form-control col-md-7 col-xs-12 <?php echo isset($messages["country_phone_code"]) ? $messages["status"] : ""; ?>"
+                                   type="text">
+                            <span class="text-danger msg-phone-code"><?php echo isset($messages["country_phone_code"]) ? $messages["country_phone_code"] : ""; ?></span>
+                        </div>
+                    </div>
+     
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Active</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                            <label class="container_radio"><input type="radio" name="radActive" value="Y" <?php echo (isset($formData["country_active"]) && $formData["country_active"]=="Y" )  ? "checked" : '' ; ?>>Yes<span class="checkmark"></span></label>
+                            <label class="container_radio"><input type="radio" name="radActive" value="N" <?php echo (isset($formData["country_active"]) && $formData["country_active"]=="N" )  ? "checked" : '' ; ?>>No<span class="checkmark"></span></label>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="sbmCountry" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="<?php echo $this->url->get("/dashboard/list-country"); ?>">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <ul class="nav nav-pills" role="tablist">
+                <?php
+                foreach ( $formData['arr_language'] as $code => $lang ){
+                    $active = $formData['lang_current']== $code?"active":"";
+                    ?>
+                    <li role="presentation" class="<?php echo $active; ?>"><a href="#<?php echo $code ?>translate" aria-controls="<?php echo $code ?>translate" role="tab" data-toggle="tab"><?php echo strtoupper($code).' - '
+                                .$lang;
+                            ?></a></li>
+                <?php } ?>
+            </ul>
+            <div class="tab-content">
+                <?php foreach ($formData['arr_language'] as $code => $lang ) {
+                    $active = $formData['lang_current']== $code?"active":"";
+                    ?>
+                    <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="<?php echo $code; ?>translate">
+                        <br>
+                        <form name="country-form<?php echo $code; ?>" id="country-form<?php echo $code; ?>" action="" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                            <input type="hidden" name="save" id="save" value="<?php echo $code; ?>" />
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtName">Name <span class="text-danger">*</span></label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input maxlength="255"
+                                           value="<?php echo isset($formData['arr_translate'][$code]["country_name"]) ? $formData['arr_translate'][$code]["country_name"] : "" ?>"
+                                           type="text" id="txtName<?php echo $code; ?>" name="txtName"
+                                           class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["country_name"])) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-name-<?php echo $code; ?>"><?php echo isset($messages[$code]["country_name"]) ? $messages[$code]["country_name"] : ""; ?></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtNationality">Nationality</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input maxlength="255" value="<?php echo isset($formData['arr_translate'][$code]["country_nationality"]) ? $formData['arr_translate'][$code]["country_nationality"] : "" ?>" type="text" id="txtNationality" name="txtNationality" class="form-control col-md-7 col-xs-12" />
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button name="sbmCountry<?php echo $code; ?>" type="submit" class="btn btn-success">
+                                        <?php echo 'Save ' . $lang; ?>
+                                    </button>
+                                </div>
+                            </div>
+                            <script>
+                                $(document).ready(function() {
+                                    $('form[name=country-form<?php echo $code; ?>]').submit(function (event) {
+                                        valid = true;
+                                        if ($('#txtName<?php echo $code; ?>').val() == '') {
+                                            valid = false;
+                                            $('.msg-name-<?php echo $code;?>').text("Name field is required.");
+                                            $('#txtName<?php echo $code; ?>').addClass("border-red");
+                                        } else {
+                                            $('.msg-name-<?php echo $code;?>').text('');
+                                            $('#txtName<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if (!valid) event.preventDefault();
+                                        if (valid) {
+                                            $('#sbmCountry<?= $code ?>').prop('disabled', true);
+                                        }
+                                    });
+                                });
+                            </script>
+                        </form>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

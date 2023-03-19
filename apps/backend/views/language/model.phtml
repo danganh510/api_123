@@ -1,0 +1,137 @@
+<script>
+    $(document).ready(function () {
+        $('form[name=language-form]').submit(function (event) {
+            var valid = true;
+            if ($('input[name=txtName]').val() == '') {
+                $('.msg-name').text('Name field is required.');
+                $('#txtName').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-name').text('');
+                $('#txtName').removeClass("border-red");
+            }
+            if ($('input[name=txtCode]').val() == '') {
+                $('.msg-code').text('Code field is required.');
+                $('#txtCode').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-code').text('');
+                $('#txtCode').removeClass("border-red");
+            }
+            if ($('input[name=txtOrder]').val() == '') {
+                $('.msg-order').text('Order field is required.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else if (isNaN($('input[name=txtOrder]').val())) {
+                $('.msg-order').text('Enter a valid order.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-order').text('');
+                $('#txtOrder').removeClass("border-red");
+            }
+            if (!valid) event.preventDefault();
+            if (valid) {
+                $('button[name=submit]').prop('disabled', true);
+            }
+        });
+    });
+
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Language</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="form_title"></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br/>
+                <form name="language-form" id="language-form" data-parsley-validate
+                      class="form-horizontal form-label-left" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Name<span
+                                    class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255"
+                                   value="<?php echo isset($formData["language_name"]) ? $formData["language_name"] : "" ?>"
+                                   type="text" id="txtName" name="txtName"
+                                   class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["name"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-name"><?php echo isset($messages["name"]) ? $messages["name"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Code <span
+                                    class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="5"
+                                   value="<?php echo isset($formData["language_code"]) ? $formData["language_code"] : "" ?>"
+                                   type="text" id="txtCode" name="txtCode"
+                                   class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["code"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-code"><?php echo isset($messages["code"]) ? $messages["code"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Code Time </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255"
+                                   value="<?php echo isset($formData["language_code_time"]) ? $formData["language_code_time"] : "" ?>"
+                                   type="text" id="txtCodeTime" name="txtCodeTime"
+                                   class="form-control col-md-7 col-xs-12">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="country-code">Country </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="slcCountry" name="slcCountry" class="form-control col-md-7 col-xs-12">
+                                <option value=''>Select Country...</option>
+                                <?php
+                                echo isset($select_country) ? $select_country : "";
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Order <span
+                                    class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10"
+                                   value="<?php echo isset($formData["language_order"]) ? $formData["language_order"] : "" ?>"
+                                   id="txtOrder" name="txtOrder"
+                                   class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["order"])) ? $messages["status"] : ""; ?>"
+                                   type="text">
+                            <span class="text-danger msg-order"><?php echo isset($messages["order"]) ? $messages["order"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Active</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                            <label class="container_radio"><input type="radio" name="radActive"
+                                                                  value="Y" <?php echo (isset($formData["language_active"]) && $formData["language_active"] == "Y") ? "checked" : ''; ?>>Yes<span
+                                        class="checkmark"></span></label>
+                            <label class="container_radio"><input type="radio" name="radActive"
+                                                                  value="N" <?php echo (isset($formData["language_active"]) && $formData["language_active"] == "N") ? "checked" : ''; ?>>No<span
+                                        class="checkmark"></span></label>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="submit" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="<?php echo $this->url->get("/dashboard/list-language"); ?>">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

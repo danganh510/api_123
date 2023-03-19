@@ -1,0 +1,326 @@
+<script>
+    $(document).ready(function() {
+        $('form[name=type-form]').submit(function(event) {
+            var valid = true;
+
+            if ($('select[name=slcType]').val() == '') {
+                $('.msg-type').text('Type field is required.');
+                $('#slcType').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-type').text('');
+                $('#slcType').removeClass("border-red");
+            }
+            if ($('input[name=txtOrder]').val() == '') {
+                $('.msg-order').text('Order field is required.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else if (isNaN($('input[name=txtOrder]').val())) {
+                $('.msg-order').text('Enter a valid order.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-order').text('');
+                $('#txtOrder').removeClass("border-red");
+            }
+            if (!valid) event.preventDefault();
+            if (valid) {
+                $('button[name=sbmPage]').prop('disabled', true);
+            }
+        });
+        /*oFCKeditor2*/
+
+
+        window.onload = function() {
+            CKEDITOR.replace('txtContent' + '<?= $formData['lang_current'] ?>', {
+                allowedContent: true,
+                extraPlugins: 'justify,colorbutton,floatpanel,panel,panelbutton,button'
+            });
+        };
+
+
+        var list_lang = ["<?= $formData['lang_current'] ?>"];
+        $('.tabLanguage').click(function(e) {
+            var lang = $(this).data('lang');
+            if (list_lang.indexOf(lang) == -1) {
+                CKEDITOR.replace('txtContent' + lang, {
+                    allowedContent: true,
+                    extraPlugins: 'justify,colorbutton,floatpanel,panel,panelbutton,    button'
+                });
+            }
+            list_lang.push(lang);
+        });
+        /*END oFCKeditor2*/
+
+    });
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Article</h3>
+
+    </div>
+</div>
+<div class="clearfix"></div>
+<?php if (!empty($messages['message'])) {
+?>
+    <p style="font-size:18px;text-align:center" class="alert alert-<?php echo $messages['typeMessage'] ?>">
+        <?php echo $messages['message']; ?>
+    </p>
+<?php } ?>
+<p style="font-size:18px;text-align:center" id="arlet" hidden class="alert alert-success"></p>
+<div class="clearfix"></div>
+<p id="alertInsertTranslate" hidden style="font-size:18px;text-align:center" class="alert alert-success">
+    Update & Translate Page success
+</p>
+<p id="alertInsertTranslateError" hidden style="font-size:18px;text-align:center" class="alert alert-danger"></p>
+<div id="loading" hidden style="position: fixed;z-index: 10000;top: 0px;left: 0px;width: 100%;height: 100%;background: #fff;filter: alpha(opacity=85);opacity: 1;background: rgba(255, 255,255,0);text-align: center; color:#f00;">
+    <div style="background-color: #FDF7CC;border: 1px solid #FDC86C;border-radius: 4px;padding: 1px;margin: 20px auto;width: 50%;">
+        <img src="<?php echo $this->url->getStatic('backend/img/waiting.gif'); ?>" alt='<?php echo htmlentities(defined('txt_processing') ? txt_processing : ''); ?>' title='<?php echo htmlentities(defined('txt_processing') ? txt_processing : ''); ?>' style="vertical-align:middle;position: relative;z-index: 10001;" /><?php echo defined('txt_processing') ? txt_processing : ''; ?>
+        <span id="percent">0%</span>. Please waiting for the system to run!
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">Form Edit
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="type-form" id="type-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                    <input type="hidden" name="save" id="save" value="<?php echo \Score\Models\ScLanguage::GENERAL; ?>" />
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="slcType">Type <span class="text-danger">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="slcType" name="slcType" class="form-control <?php echo isset($messages["article_type_id"]) ? $messages["status"] : ""; ?>">
+                                <option value="">Select Type...</option>
+                                <?= isset($select_type) ? $select_type : ""
+                                ?>
+                            </select>
+                            <span class="text-danger msg-type"><?php echo isset($messages["article_type_id"]) ? $messages["article_type_id"] : "" ?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTitle" class="control-label col-md-3 col-sm-3 col-xs-12">Icon</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["article_icon"]) ? $formData["article_icon"] : "" ?>" id="txtIcon" class="form-control col-md-7 col-xs-12" type="text" name="txtIcon">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Order <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["article_order"]) ? $formData["article_order"] : "" ?>" id="txtOrder" name="txtOrder" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["article_order"]) || isset($messages["exist"])) ? $messages["status"] : ""; ?>" type="text">
+                            <span class="text-danger msg-order"><?php echo isset($messages["article_order"]) ? $messages["article_order"] : ""; ?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Is Home </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                            <label class="container_radio"><input type="radio" name="txtHome" value="Y" <?php echo (isset($formData["article_is_home"]) && $formData["article_is_home"] == "Y")  ? "checked" : ''; ?>>Yes<span class="checkmark"></span></label>
+                            <label class="container_radio"><input type="radio" name="txtHome" value="N" <?php echo (isset($formData["article_is_home"]) && $formData["article_is_home"] == "N")  ? "checked" : ''; ?>>No<span class="checkmark"></span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Active </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                            <label class="container_radio"><input type="radio" name="radActive" value="Y" <?php echo (isset($formData["article_active"]) && $formData["article_active"] == "Y")  ? "checked" : ''; ?>>Yes<span class="checkmark"></span></label>
+                            <label class="container_radio"><input type="radio" name="radActive" value="N" <?php echo (isset($formData["article_active"]) && $formData["article_active"] == "N")  ? "checked" : ''; ?>>No<span class="checkmark"></span></label>
+                        </div>
+                    </div>
+
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="sbmPage" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="<?php echo $this->url->get("/dashboard/list-article") ?>">Cancel</a>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <ul class="nav nav-pills" role="tablist">
+                <?php
+                foreach ($formData['arr_language'] as $code => $lang) {
+                    $active = $formData['lang_current'] == $code ? "active" : "";
+                ?>
+                    <li role="presentation" class="<?php echo $active; ?>">
+                        <a href="#<?php echo $code ?>translate" aria-controls="<?php echo $code ?>translate" data-lang="<?= $code ?>" class="tabLanguage" role="tab" data-toggle="tab"><?php echo strtoupper($code) . ' - '
+                                                                                                                                                                                            . $lang;
+                                                                                                                                                                                        ?></a>
+                    </li>
+                <?php } ?>
+            </ul>
+            <div class="tab-content">
+                <?php foreach ($formData['arr_language'] as $code => $lang) {
+                    $active = $formData['lang_current'] == $code ? "active" : "";
+                ?>
+                    <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="<?php echo $code; ?>translate">
+                        <br>
+                        <form name="type-form<?php echo $code; ?>" id="type-form<?php echo $code; ?>" action="" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                            <input type="hidden" name="save" id="save" value="<?php echo $code; ?>" />
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Name <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input maxlength="255" value="<?php echo isset($formData['arr_translate'][$code]["article_name"]) ? $formData['arr_translate'][$code]["article_name"] : "" ?>" type="text" id="txtName<?php echo $code; ?>" name="txtName" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["name"])) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-name-<?php echo $code; ?>"><?php echo isset($messages[$code]["name"]) ? $messages[$code]["name"] : ""; ?></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Alias URL
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input id="txtKeyword<?php echo $code; ?>" name="txtKeyword" class="form-control <?php echo (isset($messages[$code]["article_keyword"])) ? $messages["status"] : ""; ?>" value="<?php echo isset($formData['arr_translate'][$code]["article_keyword"]) ? $formData['arr_translate'][$code]["article_keyword"] : "" ?>">
+                                    <span class="text-danger msg-keyword-<?php echo $code; ?>"><?php echo isset($messages[$code]["article_keyword"]) ? $messages[$code]["article_keyword"] : ""; ?></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Title <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input maxlength="255" value="<?php echo isset($formData['arr_translate'][$code]["article_title"]) ? $formData['arr_translate'][$code]["article_title"] : "" ?>" type="text" id="txtTitle<?php echo $code; ?>" name="txtTitle" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["title"])) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-title-<?php echo $code; ?>"><?php echo isset($messages[$code]["title"]) ? $messages[$code]["title"] : ""; ?></span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Meta keyword<span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input value="<?php echo isset($formData['arr_translate'][$code]["article_meta_keyword"]) ? $formData['arr_translate'][$code]["article_meta_keyword"] : "" ?>" type="text" id="txtMetaKey<?php echo $code; ?>" name="txtMetaKey" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["meta_keyword"])) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-metakeyword-<?php echo $code; ?>"><?php echo isset($messages[$code]["meta_keyword"]) ? $messages[$code]["meta_keyword"] : ""; ?></span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Meta description<span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input value="<?php echo isset($formData['arr_translate'][$code]["article_meta_description"]) ? $formData['arr_translate'][$code]["article_meta_description"] : "" ?>" type="text" id="txtMetaDesc<?php echo $code; ?>" name="txtMetaDesc" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["article_meta_description"])) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-metadescription-<?php echo $code; ?>"><?php echo isset($messages[$code]["article_meta_description"]) ? $messages[$code]["article_meta_description"] : ""; ?></span>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Meta image
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input value="<?php echo isset($formData['arr_translate'][$code]["article_meta_image"]) ? $formData['arr_translate'][$code]["article_meta_image"] : "" ?>" type="text" id="txtMetaImage<?php echo $code; ?>" name="txtMetaImage" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["article_meta_image"])) ? $messages["status"] : ""; ?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Summary
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <textarea style="height: 225px;" id="txtSummary<?php echo $code; ?>" name="txtSummary" class="form-control col-md-7 col-xs-12"><?php echo isset($formData['arr_translate'][$code]["article_summary"]) ? $formData['arr_translate'][$code]["article_summary"] : "" ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Content
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <textarea id="txtContent<?php echo $code; ?>" class="form-control" style="height: 225px;" name="txtContent"><?php echo isset($formData['arr_translate'][$code]["article_content"]) ? $formData['arr_translate'][$code]["article_content"] : "" ?></textarea>
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button name="sbmPage<?php echo $code; ?>" type="submit" class="btn btn-success"><?php echo 'Save ' . $lang; ?></button>
+
+                                </div>
+
+
+                            </div>
+                            <script>
+                                $(document).ready(function() {
+                                    $('#txtName<?php echo $code; ?>').on('input', function() {
+                                        var id = <?php echo isset($formData['arr_translate'][$code]["article_id"]) ? $formData['arr_translate'][$code]["article_id"] : -1; ?>;
+                                        if (id < 0) {
+                                            var str = $(this).val();
+                                            var str_slug = slugify(str);
+                                            $('#txtKeyword<?php echo $code; ?>').val(str_slug);
+                                            $('#txtTitle<?php echo $code; ?>').val(str);
+                                            $('#txtMetaKey<?php echo $code; ?>').val(str);
+                                            $('#txtMetaDesc<?php echo $code; ?>').val(str);
+                                        }
+                                    });
+                                    $('form[name=type-form<?php echo $code; ?>]').submit(function(event) {
+                                        valid = true;
+                                        if ($('#txtName<?php echo $code; ?>').val() == '') {
+                                            valid = false;
+                                            $('.msg-name-<?php echo $code; ?>').text("Name field is required.");
+                                            $('#txtName<?php echo $code; ?>').addClass("border-red");
+                                        } else {
+                                            $('.msg-name-<?php echo $code; ?>').text('');
+                                            $('#txtName<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if ($('#txtTitle<?php echo $code; ?>').val() == '') {
+                                            $('.msg-title-<?php echo $code; ?>').text('Title field is required.');
+                                            $('#txtTitle<?php echo $code; ?>').addClass("border-red");
+                                            valid = false;
+                                        } else {
+                                            $('.msg-title-<?php echo $code; ?>').text('');
+                                            $('#txtTitle<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if ($('#txtKeyword<?php echo $code; ?>').val() == '') {
+                                            $('.msg-keyword-<?php echo $code; ?>').text('Keyword field is required.');
+                                            $('#txtKeyword<?php echo $code; ?>').addClass("border-red");
+                                            valid = false;
+                                        } else {
+                                            $('.msg-keyword-<?php echo $code; ?>').text('');
+                                            $('#txtKeyword<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if ($('#txtMetaKey<?php echo $code; ?>').val() == '') {
+                                            $('.msg-metakeyword-<?php echo $code; ?>').text('Meta keyword field is required.');
+                                            $('#txtMetaKey<?php echo $code; ?>').addClass("border-red");
+                                            valid = false;
+                                        } else {
+                                            $('.msg-metakeyword-<?php echo $code; ?>').text('');
+                                            $('#txtMetaKey<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if ($('#txtMetaDesc<?php echo $code; ?>').val() == '') {
+                                            $('.msg-metadescription-<?php echo $code; ?>').text('Meta description field is required.');
+                                            $('#txtMetaDesc<?php echo $code; ?>').addClass("border-red");
+                                            valid = false;
+                                        } else {
+                                            $('.msg-metadescription-<?php echo $code; ?>').text('');
+                                            $('#txtMetaDesc<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if (!valid) event.preventDefault();
+                                        if (valid) {
+                                            $('#sbmPage<?php echo $code; ?>').prop('disabled', true);
+                                        }
+                                    });
+                                });
+                            </script>
+                        </form>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

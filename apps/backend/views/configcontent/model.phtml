@@ -1,0 +1,95 @@
+<script>
+    $( document ).ready(function() {
+        $('form[name=config-form]').submit(function(event) {
+            var valid = true;
+            var txtKey = $('input[name=txtKey]').val().trim();
+            if(txtKey == '') {
+                $('.msg-key').text('Key field is required.');
+                $('#txtKey').addClass("border-red");
+                valid = false;
+            } else {
+                if((txtKey).indexOf(' ') > -1){
+                    $('.msg-key').text('Key have white space.');
+                    $('#txtKey').addClass("border-red");
+                    valid = false;
+                }else {
+                    $('.msg-key').text('');
+                    $('#txtKey').removeClass("border-red");
+                }
+            }
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=sbmConfig]').prop('disabled', true);
+            }
+        });
+    });
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Config</h3>
+    </div>
+</div>
+<?php if(isset($msg_result))  {?>
+    <div class="clearfix"></div>
+    <div  class="alert alert-<?php echo $msg_result['status']?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_result['msg']; ?>
+    </div>
+<?php } ?>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="form_title"></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="config-form" id="config-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="key">Key<span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["config_key"]) ? $formData["config_key"] : "" ?>" type="text" id="txtKey" name="txtKey" <?php echo $formData['mode'] == 'edit'?"readonly":"" ?>   class="form-control col-md-7 col-xs-12 <?php echo (isset($formData['messages']['key'])) ? $formData['messages']['status'] : ""; ?>">
+                            <span class="text-danger msg-key"><?php echo isset($formData['messages']['key']) ? $formData['messages']['key'] : "";?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="key">Content</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <ul class="nav nav-pills" role="tablist">
+                                <?php
+                                foreach ( $formData['arr_language'] as $code => $lang ){
+                                    $active = $formData['lang_default']== $code?"active":"";
+                                    ?>
+                                    <li role="presentation" class="<?php echo $active; ?>"><a href="#<?php echo $code ?>translate" aria-controls="<?php echo $code ?>translate" role="tab" data-toggle="tab"><?php echo $lang; ?></a></li>
+
+                                <?php } ?>
+                            </ul>
+                            <br>
+                            <div class="tab-content">
+                                <?php foreach ($formData['arr_language'] as $code => $lang ) {
+                                $active = $formData['lang_default']== $code?"active":"";
+                                ?>
+                                <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="<?php echo $code; ?>translate">
+                                    <textarea id="content_<?php echo $code; ?>" name ="content_<?php echo $code; ?>" class="form-control"  style="width:699px;height: 212px;"><?php echo isset($formData['arr_translate'][$code])?$formData['arr_translate'][$code]:''; ?></textarea>
+                                </div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group well">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="sbmConfig" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="/dashboard/list-configcontent">Cancel</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+					

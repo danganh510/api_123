@@ -1,0 +1,5 @@
+<?php include('model.phtml'); ?>
+<script>
+    $('.form_title').html('Form Edit');
+    $('form[name=role-form]').prop('action','<?php echo $this->url->get('/dashboard/edit-role?id=').$arr_role['input_data']["id"]; ?>');
+</script>

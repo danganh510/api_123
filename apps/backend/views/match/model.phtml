@@ -1,0 +1,134 @@
+<script>
+    $(document).ready(function() {
+        $('form[name=language-form]').submit(function(event) {
+            var valid = true;
+            if ($('input[name=txtName]').val() == '') {
+                $('.msg-name').text('Name field is required.');
+                $('#txtName').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-name').text('');
+                $('#txtName').removeClass("border-red");
+            }
+
+            if (!valid) event.preventDefault();
+            if (valid) {
+                $('button[name=submit]').prop('disabled', true);
+            }
+        });
+    });
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Match</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="form_title"></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="language-form" id="language-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+
+                    <?php
+
+                    use Score\Repositories\Team;
+                    use Score\Repositories\Tournament;
+
+                    foreach ($formData as $key => $value) :
+                        if ($key == "match_id") {
+                            continue;
+                        }
+                        $name = str_replace(["match_", "_id"], ["", ""], $key);
+                        $name = str_replace(["_"], [" "], $name);
+                        $name = ucwords($name);
+                    ?>
+                        <?php
+
+                        switch ($key):
+                            case "match_tournament_id":
+                        ?>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="country-code"><?= $name ?> </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select id="<?= $key ?>" name="<?= $key ?>" class="form-control col-md-7 col-xs-12 select">
+                                            <option value=''>Select <?= $name ?>...</option>
+                                            <?=
+                                            Tournament::getCombobox($value);
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            <?php break;
+                            case "match_home_id":
+                            ?>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="country-code"><?= $name ?> </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select id="<?= $key ?>" name="<?= $key ?>" class="form-control col-md-7 col-xs-12 select">
+                                            <option value=''>Select <?= $name ?>...</option>
+                                            <?=
+                                            Team::getCombobox($value);
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            <?php break;
+                            case "match_away_id":
+                            ?>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="country-code"><?= $name ?> </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <select id="<?= $key ?>" name="<?= $key ?>" class="form-control col-md-7 col-xs-12 select">
+                                            <option value=''>Select <?= $name ?>...</option>
+                                            <?=
+                                            Team::getCombobox($value);
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            <?php break;
+                            case "match_start_time":
+                            ?>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"><?= $name ?>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <?php if (is_numeric($value)) : ?>
+                                            <input autocomplete="off" placeholder="Form Date (Start Date)" data-timepicker="true" data-time-format='hh:ii' maxlength="255" value="<?php echo isset($formData[$key]) ? $this->my->formatDateTime($formData[$key]) : "" ?>" id="<?= $key ?>" name="<?= $key ?>" class="form-control col-md-7 col-xs-12 datepicker-here <?php echo (isset($messages[$key])) ? $messages["status"] : ""; ?>" type="text">
+                                        <?php else : ?>
+                                            <input  maxlength="255" value="<?php echo isset($formData[$key]) ? $formData[$key] : "" ?>" id="<?= $key ?>" name="<?= $key ?>" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$key])) ? $messages["status"] : ""; ?>" type="text">
+                                        <?php endif ?>
+                                        <span class="text-danger msg-order"><?php echo isset($messages[$key]) ? $messages[$key] : ""; ?></span>
+                                    </div>
+                                </div>
+                            <?php break;
+                            default: ?>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"><?= $name ?>
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input maxlength="10" value="<?php echo isset($formData[$key]) ? $formData[$key] : "" ?>" id="<?= $key ?>" name="<?= $key ?>" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$key])) ? $messages["status"] : ""; ?>" type="text">
+                                        <span class="text-danger msg-order"><?php echo isset($messages[$key]) ? $messages[$key] : ""; ?></span>
+                                    </div>
+                                </div>
+                        <?php endswitch ?>
+                    <?php endforeach ?>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="submit" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="<?php echo $this->url->get("/dashboard/list-match"); ?>">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

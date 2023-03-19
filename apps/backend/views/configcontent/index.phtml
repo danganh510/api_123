@@ -1,0 +1,151 @@
+<?php
+$urlPage = "?";
+if(strlen($this->dispatcher->getParam("txtSearch"))> 0){
+    if($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtSearch" => $this->dispatcher->getParam("txtSearch")));
+}
+if($this->dispatcher->getParam("slcLang") != ""){
+    if($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcLang" => $this->dispatcher->getParam("slcLang")));
+}
+?>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Config </h3>
+    </div>
+</div>
+<?php if(isset($msg_result))  {?>
+    <div class="clearfix"></div>
+    <div  class="alert alert-<?php echo $msg_result['status']?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_result['msg']; ?>
+    </div>
+<?php } ?>
+<?php $message_success = isset($msg_del["success"])? $msg_del["success"] :'';
+$message_error = isset($msg_del["error"])? $msg_del["error"] :'';
+if(!empty($message_success)) { ?>
+    <div class="clearfix"></div>
+    <div  class="alert alert-success alert-dismissible fade in" role="alert">
+        <?php echo $message_success; ?>
+    </div>
+<?php }if(!empty($message_error)) { ?>
+    <div class="clearfix"></div>
+    <div  class="alert alert-error alert-dismissible fade in" role="alert">
+        <?php echo $message_error; ?>
+    </div>
+<?php } ?>
+<div class="clearfix"></div>
+<form class="searchForm" name="config-form" method="post">
+    <?php $keyword = $this->dispatcher->getParam("txtSearch");
+    ?>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row ">
+                        <div class="col-md-1">
+                            <h2 class="">Keyword</h2>
+                        </div>
+                        <div class="col-md-4">
+                            <input maxlength="255" class="form-control" type="text" name="txtSearch" placeholder="Please enter key or content!" value="<?php echo isset($keyword) ? $keyword : ""; ?>">
+                        </div>
+                        <div class="col-md-1">
+                            <h2 class="">Language</h2>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" name="slcLang" id="slcLang">
+                                <?php
+                                echo isset($select_lang) ? $select_lang : "";
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" name="search" class="btn btn-success">Search</button>
+                            <a class="btn btn-info" href="<?php echo $this->url->get("/dashboard/create-configcontent"); ?>">Add New</a>
+                        </div>
+                    </div>
+                    <div >
+                        <strong>Total</strong>
+                        <?php echo $list_config->total_items ?> records
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table_header" >
+                            <tr class="headings">
+                                <th style="width: 200px" class="column-title" class="width">Key </th>
+                                <th  class="column-title" >Content </th>
+                                <th style="width: 150px" class="column-title no-link last"><span class="nobr">Action</span></th>
+                            </tr>
+                            </thead>
+                            <tbody class="tb_body">
+                            <?php foreach ($list_config->items as $item) {
+                                $key = $item->getConfigKey();
+                                ?>
+                                <script>
+                                    $(function(){
+                                        $('#delete<?php echo $key;?>').on("click",function(e){
+                                            e.preventDefault();
+                                            $('#myModal').modal("show");
+                                            var id=$("#key_<?php echo $key;?>").val();
+                                            $("#id").val(id);
+                                            var str="Are you sure to remove Key = ".concat(id).concat(" of ").concat("Config");
+                                            $('.content-warning').text(str);
+
+                                        });
+                                    });
+                                </script>
+                                <tr >
+                                    <input type="hidden" id="key_<?php echo $key;?>" name="id" value="<?php echo $key;?>" >
+                                    <td class=""><?php echo $key; ?></td>
+                                    <td align="center" >
+                                        <textarea  id="content" name ="content" class="form-control" readonly style="height: 112px;" ><?php echo $item->getConfigContent(); ?></textarea>
+                                    </td>
+                                    <td><a class="btn btn-primary btn-xs margin-0"   href="<?php echo $this->url->get("/dashboard/edit-configcontent?id=".$key); ?> ">Edit</a>
+                                        <a id="delete<?php echo $key;?>" class="btn btn-danger btn-xs margin-0" href="/configcontent">
+                                            <i class="icon-trash icon-white"></i>
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            <?php }?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-6">
+                            <?php if($list_config->total_pages > 1) {?>
+                                <nav class="paginate-footer">
+                                    <?php  if($urlPage != "?") $urlPage .= "&";
+                                    $urlPage .= "page=";
+                                    echo $this->my->renderPagination($urlPage, $list_config->current, $list_config->total_pages,2);
+                                    ?>
+                                </nav>
+                            <?php }?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function(){
+
+        $('button[name=search]').click(function() {
+            $('form[name=config-form]').prop('action','<?php echo $this->url->get('/dashboard/list-configcontent'); ?>');
+            $('form[name=config-form]').submit();
+        });
+
+        $('.delete-all').click(function(){
+            var str="<?php echo $this->url->get('/dashboard/delete-configcontent');?>?id=";
+            var id=$("#id").val();
+            str=str.concat(id);
+            $('.delete-all').attr("href",str);
+        });
+    });
+</script>

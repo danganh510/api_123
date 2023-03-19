@@ -1,0 +1,155 @@
+<?php
+$keyword =$this->dispatcher->getParam("txtSearch");
+$from = $this->dispatcher->getParam("txtFrom");
+$to = $this->dispatcher->getParam("txtTo");
+$urlPage = "?";
+if(strlen($this->dispatcher->getParam("txtSearch"))> 0){
+    if($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtSearch" => $keyword));
+}
+if(strlen($this->dispatcher->getParam("txtFrom")) > 0) {
+    if($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtFrom" => $from));
+}
+if(strlen($this->dispatcher->getParam("txtTo")) > 0) {
+    if($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtTo" => $to));
+}
+?>
+<div class="page-title">
+    <div class="title_left">
+        <h3>User</h3>
+    </div>
+</div>
+<?php if(isset($msg_result['status'])) { ?>
+    <div class="clearfix"></div>
+    <div  class="alert alert-<?php echo $msg_result['status'] ?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_result['msg']; ?>
+    </div>
+<?php } ?>
+<?php if(isset($msg_delete['error']) && !empty($msg_delete['error'])) { ?>
+    <div class="clearfix"></div>
+    <div  class="alert alert-error alert-dismissible fade in" role="alert">
+        <?php echo $msg_delete['error']; ?>
+    </div>
+<?php } ?>
+<?php if(isset($msg_delete['success']) && !empty($msg_delete['success'])) { ?>
+    <div class="clearfix"></div>
+    <div  class="alert alert-success alert-dismissible fade in" role="alert">
+        <?php echo $msg_delete['success']; ?>
+    </div>
+<?php } ?>
+    <div class="clearfix"></div>
+    <form class="searchForm" name="form-user" method="post">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row ">
+                        <div class="col-md-1">
+                            <h2>Keyword</h2>
+                        </div>
+                        <div class="col-md-2">
+                            <input class="form-control" type="text" name="txtSearch" maxlength="255" placeholder="ID, Name, Email" value="<?php echo isset($keyword) ? $keyword : ""; ?>">
+                        </div>
+                            <h2>From date</h2>
+                        <div class="col-md-2">
+                            <input name="txtFrom" id="txtFrom" autocomplete="off" type="text" class="form-control datepicker-here" data-timepicker="true" data-time-format='hh:ii' placeholder="From Date" value="<?php echo isset($from) ? $from : ''; ?>" >
+                        </div>
+                            <h2>To date</h2>
+                        <div class="col-md-2">
+                            <input name="txtTo" id="txtTo" autocomplete="off" type="text" class="form-control datepicker-here" data-timepicker="true" data-time-format='hh:ii' placeholder="To Date" value="<?php echo isset($to) ? $to : ''; ?>" >
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" name="search" class="btn btn-success">Search</button>
+                        </div>
+                        <div class="col-md-2 pull-right text-right">
+                            <a class="btn btn-info" href="<?php echo $this->url->get("/dashboard/create-user"); ?>">Add New</a>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Total</strong>
+                        <?php echo $user->total_items ?> records
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table_header">
+                            <tr class="headings">
+                                <th style="text-align: left" width="50px"><label class="container_checkbox"><input type="checkbox" id="checkboxAll"><span class="checkmark_checkbox"></span></label></th>
+                                <th width="50px" class="column-title">ID </th>
+                                <th class="column-title">Name </th>
+                                <th class="column-title">Email </th>
+                                <th class="column-title">Role </th>
+                               <th width="160px" class="column-title">Insert Time </th>
+                                <th width="50px" class="column-title">Active </th>
+                                <th width="50px" class="column-title no-link last"><span class="nobr">Action </span></th>
+                            </tr>
+                            </thead>
+                            <tbody class="tb_body">
+                            <?php
+                            foreach ($user->items as $item ) {
+                                ?>
+                                <tr>
+                                    <td><label class="container_checkbox"><input class="check" name="item[]" value="<?php echo $item->user_id ?>" type="checkbox"><span class="checkmark_checkbox"></span></label></td>
+                                    <td class=" "><?php echo $item->user_id; ?></td>
+                                    <td class=" "><?php echo $item->user_name; ?></td>
+                                    <td class=" "><?php echo $item->user_email; ?></td>
+                                    <td class=" "><?php echo $item->user_role_id; ?></td>
+                                     <td class=" "><?php echo $this->my->formatDateTime($item->user_insert_time,false); ?></td>
+                                    <td class="text-center" data-title="Active">
+                                        <?php
+                                        $status = $item->user_active;
+                                        $classStatus = ($status == "Y") ? "success" : "danger" ;
+                                        ?>
+                                        <span class="label label-<?php echo $classStatus; ?>"><?php echo $status; ?></span>
+                                    </td>
+                                    <td class="last">
+                                        <a class="btn btn-primary btn-xs margin-0" style="" href="<?php echo $this->url->get("/dashboard/edit-user?id=".$item->user_id); ?>">View</a>
+                                    </td>
+                                </tr>
+
+                            <?php }?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label for="slAction">With Selected:</label>
+                            <select class="form-control" id="slcAction" name="slcAction" style="display: inline-block;width: 40%">
+                                <option value="" selected >Please select</option>
+                                <option value="drop">Drop</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 pull-right">
+                            <?php if($user->total_pages > 1) {?>
+                                <nav class="paginate-footer">
+                                    <?php  if($urlPage != "?") $urlPage .= "&";
+                                    $urlPage .= "page=";
+                                    echo $this->my->renderPagination($urlPage, $user->current, $user->total_pages, 2);
+                                    ?>
+                                </nav>
+                            <?php }?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <script>
+        $(document).ready(function(){
+            $('button[name=search]').click(function() {
+                $('form[name=form-user]').prop('action','<?php echo $this->url->get('/dashboard/list-user'); ?>');
+                $('form[name=form-user]').submit();
+            });
+            $('.delete-all').click(function(){
+                $('form[name=form-user]').prop('action','<?php echo $this->url->get('/dashboard/delete-user'); ?>');
+                $('form[name=form-user]').submit();
+            });
+        });
+    </script>
+

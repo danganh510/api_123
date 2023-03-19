@@ -1,0 +1,168 @@
+<?php
+$urlPage = "?";
+if (strlen($this->dispatcher->getParam("txtSearch")) > 0) {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("txtSearch" => $this->dispatcher->getParam("txtSearch")));
+}
+if ($this->dispatcher->getParam("slType") != "") {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slType" => $this->dispatcher->getParam("slType")));
+}
+$slcLang = $this->dispatcher->getParam("slcLang");
+if ($this->dispatcher->getParam("slcLang") != "") {
+    if ($urlPage != "?") $urlPage .= "&";
+    $urlPage .= http_build_query(array("slcLang" => $slcLang));
+}
+
+?>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Type </h3>
+    </div>
+</div>
+<?php if (isset($msg_result['status'])) { ?>
+    <div class="clearfix"></div>
+    <div class="alert alert-<?php echo $msg_result['status'] ?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_result['msg']; ?>
+    </div>
+<?php } ?>
+<?php if (isset($msg_delete['status'])) { ?>
+    <div class="clearfix"></div>
+    <div class="alert alert-<?php echo $msg_delete['status'] ?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_delete['msg']; ?>
+    </div>
+<?php } ?>
+<div class="clearfix"></div>
+<div id="loading" hidden>
+    <img class="lazyload padding-top10" src="<?php echo $this->url->getStatic('backend/'); ?>img/waiting.gif" style="vertical-align:middle;position: relative;z-index: 10001;" /> Processing...
+</div>
+<form class="searchForm" name="form-type" method="post">
+
+    <?php
+    $keyword = $this->dispatcher->getParam("txtSearch");
+    $area = $this->dispatcher->getParam("slcArea");
+    ?>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <div class="row form-group">
+                        <div class="col-md-2">
+                            <h2>Find</h2>
+                        </div>
+                        <div class="col-md-3">
+                            <textarea class="form-control" type="text" name="txtSearch" id="txtSearch" placeholder="ID, Name, Title, Meta Keyword, Meta Description"><?php echo isset($keyword) ? $keyword : ''; ?></textarea>
+                            <span class="text-danger msg-search" style="color: #a94442 !important;"></span>
+                        </div>
+                        <div class="col-md-1">
+                            <h2>Type</h2>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" name="slType" id="slType">
+                                <option value="0">All Type</option>
+                                <?php
+                                echo isset($select_type) ? $select_type : "";
+                                ?>
+                            </select>
+                        </div>
+                        <button type="button" name="search" class="btn btn-success">Search</button>
+
+                        <a class="btn btn-info" href="<?php echo $this->url->get("dashboard/create-type"); ?>">Add
+                            New</a>
+                    </div>
+                    <div>
+                        <strong>Total</strong>
+                        <?php echo $page->total_items ?> records
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table_header">
+                                <tr class="headings">
+                                    <th style="text-align: left" width="50px"><label class="container_checkbox"><input type="checkbox" id="checkboxAll"><span class="checkmark_checkbox"></span></label></th>
+                                    <th width="50px" class="column-title">ID</th>
+                                    <th class="column-title">Name</th>
+                                    <th class="column-title">Type</th>
+                                    <th width="50px" class="column-title">Order</th>
+                                    <th width="50px" class="column-title">Status</th>
+                                    <th width="50px" class="column-title no-link last"><span class="nobr">Action</span></th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="tb_body">
+                                <?php foreach ($page->items as $item) { ?>
+
+                                    <?php
+                                    /**
+                                     * @var \Score\Models\ScType $item
+                                     */
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <label class="container_checkbox">
+                                                <input class="check" name="item[]" id="type-checkbox<?php echo $item->getTypeId(); ?>" value="<?php echo $item->getTypeId(); ?>" type="checkbox">
+                                                <span class="checkmark_checkbox"></span>
+                                            </label>
+                                        </td>
+                                        <td class=" "><?php echo $item->getTypeId(); ?></td>
+                                        <td class=" "><?php echo $item->getTypeName(); ?></td>
+                                        <td class=" "><?= \Score\Repositories\Type::getTypeNameById($item->getTypeParentId()); ?></td>
+                                        <td class="text-center"><?php echo $item->getTypeOrder(); ?></td>
+                                        <td class="text-center" data-title="Active">
+                                            <?php
+                                            $status = $item->getTypeActive();
+                                            $classStatus = ($status == "Y") ? "success" : "danger";
+                                            ?>
+                                            <span class="label label-<?php echo $classStatus; ?>"><?php echo $status; ?></span>
+                                        </td>
+                                        <td class="last">
+                                            <a class="btn btn-primary btn-xs margin-0" style="" href="<?php echo $this->url->get("/dashboard/edit-type?id=" . $item->getTypeId()); ?>">View</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <label for="slcAction">With Selected:</label>
+                            <select class="form-control" id="slcAction" name="slcAction" style="display: inline-block;width: 40%">
+                                <option value="" selected>Please select</option>
+                                <option value="drop">Drop</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <?php if ($page->total_pages > 1) { ?>
+                                <nav class="paginate-footer">
+                                    <?php if ($urlPage != "?") $urlPage .= "&";
+                                    $urlPage .= "page=";
+                                    echo $this->my->renderPagination($urlPage, $page->current, $page->total_pages, 2);
+                                    ?>
+                                </nav>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function() {
+        $('button[name=search]').click(function() {
+            $('form[name=form-type]').prop('action', '<?php echo $this->url->get('dashboard/list-type'); ?>');
+            $('form[name=form-type]').submit();
+        });
+
+        $('.delete-all').click(function() {
+            $('form[name=form-type]').prop('action', '<?php echo $this->url->get('/dashboard/delete-type'); ?>');
+            $('form[name=form-type]').submit();
+        });
+    });
+</script>

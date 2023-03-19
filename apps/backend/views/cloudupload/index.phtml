@@ -1,0 +1,95 @@
+<script type="text/javascript">
+    $(function () {
+        var uploadFiles = $("#upload-files");
+        var msg = $("#order-form-message");
+        $("#upload-form").submit(function (event) {
+            var message = {
+                "type": "error",
+                "message": ""
+            };
+            var valid = true;
+            if (uploadFiles.prop("value") == "") {
+                valid = false;
+                message['message'] = "Select file to upload!";
+            }
+            msg.removeClass(function (index, className) {
+                return (className.match(/(^|\s)alert-\S+/g) || []).join(' ');
+            });
+            msg.addClass("alert-" + message['type']);
+            if (valid) {
+                message['message'] = "<img src='<?php echo $this->url->getStatic('backend/img/waiting.gif'); ?>' alt='Processing...' />Please be patient while our system is processing!";
+            } else {
+                event.preventDefault();
+            }
+            msg.html(message['message']);
+            msg.show();
+        });
+    });
+</script>
+<div class="page-title">
+    <div class="title_left">
+        <h3>Upload File</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <form class="form-horizontal" id="upload-form"  method="post"      enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="custom-file-upload col-md-1 " for="upload-files">Upload Files <em
+                                    class="text-danger">*</em></label>
+                        <div class="col-md-2">
+                            <input id="upload-files" name="upload-files[]" type="file" class="custom-file-upload"
+                                   accept="" multiple="multiple"/>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div id="order-form-message"
+                     class="alert <?php echo isset($message['type']) ? "alert-" . $message['type'] : ""; ?>"
+                     style="display:<?php echo isset($message) ? "block" : "none" ?>; ">
+                    <?php echo isset($message['message']) ? $message['message'] : ""; ?>
+                </div>
+                <?php
+                if (!empty($uploadFiles)) {
+                    ?>
+                    <div>
+                        <?php
+                        foreach ($uploadFiles as $file) {
+                            ?>
+                            <div class="alert alert-success" style="margin-bottom: 10px;">
+
+                                <?php
+                                if (isset($this->globalVariable->contentTypeImages[$file['file_type']])) {
+                                    ?>
+                                    <img src="<?php echo $file['file_url']; ?>" width="40" height="30"/>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <img src="<?php echo $this->url->getStatic('backend/img/icon-file.png') ?>"
+                                         width="40" height="30"/>
+                                    <?php
+                                }
+                                ?>
+                                <a href="<?php echo $file['file_url']; ?>" target="_blank">
+                                    <?php echo $file['file_url']; ?>
+                                </a>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

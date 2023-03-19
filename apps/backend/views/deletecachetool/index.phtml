@@ -1,0 +1,240 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3>Delete Cache Tool</h3>
+    </div>
+</div>
+<div class="clearfix"></div>
+<?php
+if (isset($msg_result['status'])) {
+    $msg_result['status'] = !$msg_result['status'] ? "error" : "success";
+    ?>
+    <div class="alert alert-<?= $msg_result['status'] ?> alert-dismissible fade in" role="alert">
+        <?php echo $msg_result['message']; ?>
+    </div>
+<?php } ?>
+<form class="searchForm" name="form-deletecache" method="post" action="<?php echo $this->url->get('deletecachetool/deletecache'); ?>">
+    <input type="hidden" name="delete" id="deleteCache" value=""/>
+    <input type="hidden" name="deleteTable" id="deleteTable" value=""/>
+    <input type="hidden" name="deleteId" id="deleteId" value=""/>
+    <input type="hidden" name="siteDelete" id="siteDelete" value=""/>
+    <div>
+        <div style="border-bottom: 1px solid #c4c4c4;margin-bottom: 20px;padding-bottom: 10px;"></div>
+        <div style="border-bottom: 1px solid #c4c4c4;margin-bottom: 20px;padding-bottom: 10px;">
+            <h4 style="font-size: 18px">Cache Config<br><span class="text-danger" style="font-size: 15px"></span></h4>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="<?= $URL_DELETE_CACHE ?>" class="btn btn-success cacheDeleteTool">
+                Delete Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="<?= $URL_DELETE_ROUTER_CACHE ?>" class="btn btn-success cacheDeleteTool">
+                Router
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="<?= $URL_DELETE_LOCATION_LANGUAGE_CACHE ?>" class="btn btn-success cacheDeleteTool">
+                Language
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="sitemapcompress" class="btn btn-success cacheDeleteTool">
+                Sitemap Compress
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="destinationcheapestmonth" class="btn btn-success cacheDeleteTool">
+                Destination Cheapest Month
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="destinationflightdeals" class="btn btn-success cacheDeleteTool">
+                Destination Flight Deals
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="destinationstatisticflight" class="btn btn-success cacheDeleteTool">
+                Destination Statistic Flight
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="metaalternate" class="btn btn-success cacheDeleteTool">
+                Meta Alternate
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="tableDataCache" class="btn btn-success cacheDeleteTool">
+                Table Data
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="apiFrontend" class="btn btn-success cacheDeleteTool">
+            api Frontend
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="hotelUpdatedCache" class="btn btn-success cacheDeleteTool hidden">
+                Hotel Updated
+            </button>
+            <br>
+            <div class="mt-10">
+                <h5>Delete Header Keyword</h5>
+                <span class="form-group form-inline" style="display: inline-block; margin-right: 15px;">
+                    <label>Table</label>
+                    <select name="slcTableName" class="form-control">
+                        <option value="">Please Choose</option>
+                        <option value="ScPage">ScPage</option>
+                        <option value="ScFaqType">ScFaqType</option>
+                        <option value="ScFaq">ScFaq</option>
+                        <option value="ScArticle">ScArticle</option>
+                        <option value="ScBlog">ScBlog</option>
+                        <option value="ScBlogType">ScBlogType</option>
+                        <option value="ScContentPromotion">ScContentPromotion</option>
+                        <option value="ScInsuranceDestination">ScInsuranceDestination</option>
+                        <option value="ScContentTravelGuideCategory">ScContentTravelGuideCategory</option>
+                        <option value="ScContentTravelGuideArticle">ScContentTravelGuideArticle</option>
+                    </select>
+                </span>
+                <span class="form-group form-inline">
+                    <label>ID</label>
+                    <input name="txtId" class="form-control" type="text" />
+                </span>
+                <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="headerKeywordsCache" class="btn btn-success cacheDeleteTool">
+                    Delete
+                </button>
+            </div>
+        </div>
+        <div style="border-bottom: 1px solid #c4c4c4;margin-bottom: 20px;padding-bottom: 10px;">
+            <h4 style="font-size: 18px">Cache Page Keyword<br><span class="text-danger" style="font-size: 15px"></span></h4>
+
+            <button  data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="<?= $URL_DELETE_POPULAR_LOCATIONS ?>" class="btn btn-success cacheDeleteTool hidden">
+                Popular Location
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="aboutusKeyCache" class="btn btn-success cacheDeleteTool">
+                AboutUs Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="blogKeyCache" class="btn btn-success cacheDeleteTool">
+                Blog Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="faqKeyCache" class="btn btn-success cacheDeleteTool">
+                Faq Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="flightArKeyCache" class="btn btn-success cacheDeleteTool">
+                Flight Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="insuranceKeyCache" class="btn btn-success cacheDeleteTool">
+                Insurance Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="hotelArKeyCache" class="btn btn-success cacheDeleteTool">
+                Hotel Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="informationKeyCache" class="btn btn-success cacheDeleteTool">
+                Information Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="landingPageKeyCache" class="btn btn-success cacheDeleteTool">
+                LandingPage Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="promotionKeyCache" class="btn btn-success cacheDeleteTool">
+                Promotion Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="destinationLandingPageKeyCache" class="btn btn-success cacheDeleteTool">
+                Destination LandingPageKey Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="travelguidePageKeyCache" class="btn btn-success cacheDeleteTool">
+                Guide Pagekey
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="thingstodoPageKeyCache" class="btn btn-success cacheDeleteTool">
+                Thingstodo PageKey
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="getaquoteKeyCache" class="btn btn-success cacheDeleteTool">
+                Get a Quote Key
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="schengeninsuranceKeyCache" title="schengeninsuranceKeyCache" class="btn btn-success cacheDeleteTool">
+                Schengen Insurance Key
+            </button>
+            <br>
+        </div>
+        <div style="border-bottom: 1px solid #c4c4c4;margin-bottom: 20px;padding-bottom: 10px;">
+            <h4 style="font-size: 18px">Delete Cache API 2<br><span class="text-danger" style="font-size: 15px"></span></h4>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="tokenApi2" class="btn btn-success cacheDeleteTool">
+                Token API 2
+            </button>
+            <br>
+        </div>
+        <div style="border-bottom: 1px solid #c4c4c4;margin-bottom: 20px;padding-bottom: 10px;">
+            <h4 style="font-size: 18px">Delete Cache Page Destination<br><span class="text-danger" style="font-size: 15px"></span></h4>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="flightRouteCache" class="btn btn-success cacheDeleteTool">
+                Flight Route Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="flightDestinationCache" class="btn btn-success cacheDeleteTool">
+                Flight Destination Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="footerFlightDestinationCache" class="btn btn-success cacheDeleteTool">
+                Footer Flight Destination Cache
+            </button>
+            <br>
+        </div>
+    </div>
+</form>
+
+
+<form class="searchForm" name="form-delete-airport" method="post" action="<?php echo $this->url->get('deletecachetool/deletecachetype'); ?>">
+    <input type="hidden" name="delete" id="deleteCacheAirPort" value=""/>
+    <input type="hidden" name="siteDelete" id="siteDelete" value=""/>
+    <div>
+        <div style="border-bottom: 1px solid #c4c4c4;margin-bottom: 20px;padding-bottom: 10px;"></div>
+        <div style="border-bottom: 1px solid #c4c4c4;margin-bottom: 20px;padding-bottom: 10px;">
+            <h4 style="font-size: 18px">Delete Cache For API<br><span class="text-danger" style="font-size: 15px"></span></h4>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="airports" class="btn btn-success cacheDelete">
+                Delete Airport Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="airportsbycountry" class="btn btn-success cacheDelete">
+                Delete Airport By Country Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="airlines" class="btn btn-success cacheDelete">
+                Delete Airlines Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="flightDeal" class="btn btn-success cacheDelete">
+                Delete FlightDeal Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="aircrafts" class="btn btn-success cacheDelete">
+                Delete Aircrafts  Cache
+            </button>
+            <br>
+            <button data-form-name="form-deleterouter" type="button" name="btnDeleteRouterCache" title="config" class="btn btn-success cacheDelete">
+                Delete Config Cache
+            </button>
+            <br>
+        </div>
+
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('button.cacheDelete').click(function () {
+            var type = $(this).attr('title');
+            $('#deleteCacheAirPort').val(type);
+            $('.cacheDelete').prop('disable',true);
+            $('form[name=form-delete-airport').submit();
+        });
+        $('button.cacheDeleteTool').click(function () {
+            var type = $(this).attr('title');
+            var tableName = $('select[name=slcTableName]').val();
+            var id = $('input[name=txtId]').val();
+            $('#deleteCache').val(type);
+            $('#deleteTable').val(tableName);
+            $('#deleteId').val(id);
+            $('.cacheDelete').prop('disable',true);
+            $('form[name=form-deletecache').submit();
+        });
+    });
+</script>

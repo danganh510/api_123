@@ -1,0 +1,276 @@
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="banner-title">Banner </h3>
+    </div>
+</div>
+
+<?php if(!empty($messages['message']))
+{
+    ?>
+    <div class="clearfix"></div>
+    <p style="font-size:18px;text-align:center" class="alert alert-<?php echo $messages['typeMessage']?>">
+        <?php echo $messages['message']; ?>
+    </p>
+<?php }	?>
+<div class="clearfix"></div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">Form Edit</div>
+            <div class="x_content">
+                <br />
+                <form class="form-horizontal well" id="banner-form" name="banner-form" action="<?php echo $this->url->get('/banner/edit?id=').$formData["banner_id"]; ?>" method="POST" >
+                    <input type="hidden" name="save" id="save" value="general" />
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Controller <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select id="slcController" name="slcController" class="form-control col-md-7 col-xs-12  <?php echo (isset($messages["controller"])) ? $messages["status"] : ""; ?>" >
+                                <option value="">Select Controller...</option>
+                                <?php echo isset($select_controller)? $select_controller : ''?>
+                            </select>
+                            <span class="text-danger msg-controller"><?php echo isset($messages["controller"]) ? $messages["controller"] : "";?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Link
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["banner_link"]) ? $formData["banner_link"] : "" ?>" type="text" id="txtLink" name="txtLink"   class="form-control col-md-7 col-xs-12 ">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Order <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10" value="<?php echo isset($formData["banner_order"]) ? $formData["banner_order"] : "" ?>" type="text" id="txtOrder" name="txtOrder"  class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["order"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-order"><?php echo isset($messages["order"]) ? $messages["order"] : "";?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Image <span class="text-danger">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["banner_image"]) ? $formData["banner_image"] : "" ?>" type="text" id="txtImage" name="txtImage"   class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["image"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-img"><?php echo isset($messages["image"]) ? $messages["image"] : "";?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Image Mobile <span class="text-danger">*</span></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="255" value="<?php echo isset($formData["banner_image_mobile"]) ? $formData["banner_image_mobile"] : "" ?>" type="text" id="txtImageMobile" name="txtImageMobile" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["image_mobile"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-img-mobile"><?php echo isset($messages["image_mobile"]) ? $messages["image_mobile"] : "";?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Start time </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12" >
+                            <?php
+                            $banner_start_time = "";
+                            if (isset($formData["banner_start_time"])){
+                                $banner_start_time = $formData["banner_start_time"];
+                            }
+                            if ($banner_start_time != 0 || !empty($banner_start_time)){
+                                $banner_start_time = date('m/d/Y H:i', $this->my->localTime($banner_start_time));
+                            } else {
+                                $banner_start_time = "";
+                            }
+                            ?>
+                            <input value="<?php echo $banner_start_time ?>"
+                                   type="text" id="txtStartTime" data-timepicker="true" placeholder="MM/DD/YYYY hh:MM" data-time-format='hh:ii'
+                                   name="txtStartTime" class="form-control col-md-7 col-xs-12 datepicker-here <?php echo isset($messages["banner_start_time"]) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-start-time"><?php echo isset($messages["banner_start_time"]) ? $messages["banner_start_time"] : ""; ?></span>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">End time  </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <?php
+                            $banner_end_time = 0;
+                            if (isset($formData["banner_end_time"])) {
+                                $banner_end_time = $formData["banner_end_time"];
+                            }
+                            if ($banner_end_time != 0 || !empty($banner_end_time)) {
+                                $banner_end_time = date('m/d/Y H:i', $this->my->localTime($banner_end_time));
+                            } else {
+                                $banner_end_time = "";
+                            }
+                            ?>
+                            <input value="<?php echo $banner_end_time?>" type="text" id="txtEndTime" data-timepicker="true" placeholder="MM/DD/YYYY hh:MM" data-time-format='hh:ii' name="txtEndTime"  class="form-control col-md-7 col-xs-12 datepicker-here <?php echo isset($messages["banner_end_time"]) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-start-time"><?php echo isset($messages["banner_end_time"]) ? $messages["banner_end_time"] : ""; ?></span>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Active </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-check">
+                            <label class="container_radio"><input type="radio" name="radActive" value="Y" <?php echo (isset($formData["banner_active"]) && $formData["banner_active"]=="Y" )  ? "checked" : '' ; ?>>Yes<span class="checkmark"></span></label>
+                            <label class="container_radio"><input type="radio" name="radActive" value="N" <?php echo (isset($formData["banner_active"]) && $formData["banner_active"]=="N" )  ? "checked" : '' ; ?>>No<span class="checkmark"></span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Locations</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 ">
+                            <div class="toggles ">
+                                <div class="toggle-item">
+                                    <div class="toggle-heading  ">
+                                        <h4>Show/Hide</h4>
+                                    </div>
+                                    <div class="toggle-content" hidden >
+                                        <?php foreach ($list_banner_locations as $item) { ?>
+                                            <div class="col-md-3 country_block">
+                                                <label class="container_checkbox" >
+                                                    <?php echo $item['country_name'] ?>
+                                                    <input <?php echo $list_banner_locations_selected != NULL && in_array($item['country_code'], $list_banner_locations_selected) ? 'checked' : ''; ?>
+                                                            type="checkbox" class="form-control check "
+                                                            name="dataBannerLocations[]"
+                                                            id="<?php echo $item['country_code'] ?>"
+                                                            value="<?php echo $item['country_code'] ?>">
+                                                    <span class="checkmark_checkbox"></span>
+                                                </label>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="sbmBanner" type="submit"  class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="<?php echo $this->url->get("/banner");?>">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+                <div class="well">
+                    <ul class="nav nav-pills" role="tablist">
+                        <?php
+                        foreach ( $formData['arr_language'] as $code => $lang ){
+                            $active = $formData['lang_current']== $code?"active":"";
+                            ?>
+                            <li role="presentation" class="<?php echo $active; ?>"><a href="#<?php echo $code ?>translate" aria-controls="<?php echo $code ?>translate" role="tab" data-toggle="tab"><?php echo strtoupper($code) . ' - ' . $lang; ?></a></li>
+
+                        <?php } ?>
+                    </ul>
+                    <div class="tab-content">
+                        <?php foreach ($formData['arr_language'] as $code => $lang ) {
+                        $active = $formData['lang_current']== $code?"active":"";
+                        ?>
+                        <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="<?php echo $code; ?>translate">
+                            <br>
+                            <form class="form-horizontal" id="banner-form-<?php echo $code; ?>" name="banner-form-<?php echo $code; ?>" action="<?php echo $this->url->get('/banner/edit?id=').$formData["banner_id"]; ?>" method="POST" >
+                                <input type="hidden" name="save" id="save" value="<?php echo $code; ?>" />
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Title <span class="text-danger">*</span></label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input maxlength="255" value="<?php echo isset($formData['arr_translate'][$code]["banner_title"]) ? $formData['arr_translate'][$code]["banner_title"] : "" ?>" type="text" id="txtTitle<?php echo $code; ?>" name="txtTitle"
+                                               class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["title"])) ? $messages["status"] : ""; ?>">
+                                        <span class="text-danger msg-title-<?php echo $code; ?>"><?php echo isset($messages[$code]["title"]) ? $messages[$code]["title"] : ""; ?></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Subtitle </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <textarea class="form-control" id="txtSubtitle<?php echo $code; ?>" name ="txtSubtitle" style="height: 112px;" ><?php echo isset($formData['arr_translate'][$code]["banner_subtitle"]) ? $formData['arr_translate'][$code]["banner_subtitle"] : "" ?></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Content </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <textarea class="form-control" id="txtContent_<?php echo $code; ?>" name ="txtContent" style="height: 112px;" ><?php echo isset($formData['arr_translate'][$code]["banner_content"]) ? $formData['arr_translate'][$code]["banner_content"] : "" ?></textarea>
+
+                                    </div>
+                                </div>
+                                <div class="ln_solid"></div>
+                                <div class="form-group">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                        <button id="sbmBanner_<?php echo $code;?>" name="sbmBanner_<?php echo $code;?>" type="submit"  class="btn btn-success">Save change</button>
+                                    </div>
+                                </div>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('form[name=banner-form-<?php echo $code; ?>]').submit(function (event) {
+                                            valid = true;
+                                            if ($('#txtTitle<?php echo $code; ?>').val() == '') {
+                                                $('.msg-title-<?php echo $code; ?>').text('Title field is required.');
+                                                $('#txtTitle<?php echo $code; ?>').addClass("border-red");
+                                                valid = false;
+                                            } else {
+                                                $('.msg-title-<?php echo $code; ?>').text('');
+                                                $('#txtTitle<?php echo $code; ?>').removeClass("border-red");
+                                            }
+
+                                            if (!valid) event.preventDefault();
+                                            if (valid) {
+                                                $('#sbmPage<?php echo $code; ?>').prop('disabled', true);
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </form>
+                        </div>
+                        <?php } ?>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $( document ).ready(function() {
+        $('form[name=banner-form]').submit(function (event) {
+            var valid = true;
+            if($( "select#slcController option:checked" ).val()==0) {
+                $('.msg-controller').text('Controller is required.');
+                $('#slcController').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-controller').text('');
+                $('#slcController').removeClass("border-red");
+            }
+            if($('input[name=txtOrder]').val() == '') {
+                $('.msg-order').text('Order field is required.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else if (isNaN($('input[name=txtOrder]').val())) {
+                $('.msg-order').text('Enter a valid order.');
+                $('#txtOrder').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-order').text('');
+                $('#txtOrder').removeClass("border-red");
+            }
+            if($('input[name=txtImage]').val() == '') {
+                $('.msg-img').text('Image field is required.');
+                $('#txtImage').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-img').text('');
+                $('#txtImage').removeClass("border-red");
+            }
+            if($('input[name=txtImageMobile]').val() == '') {
+                $('.msg-img-mobile').text('Image Mobile field is required.');
+                $('#txtImageMobile').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-img-mobile').text('');
+                $('#txtImageMobile').removeClass("border-red");
+            }
+            if( ! valid ) event.preventDefault();
+            if( valid ) {
+                $('button[name=sbmBanner]').prop('disabled', true);
+
+            }
+        });
+
+    });
+</script>
+

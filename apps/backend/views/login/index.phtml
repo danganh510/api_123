@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Security Corporation Group </title>
+    <link rel="shortcut icon" href="<?php echo $this->url->getStatic('favicon.ico'); ?>" >
+    <!-- Bootstrap -->
+    <link href="<?php echo $this->url->getStatic('shared/css/'); ?>bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="<?php echo $this->url->getStatic('shared/fonts/'); ?>font-awesome.min.css" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="<?php echo $this->url->getStatic('backend/css/'); ?>custom.min.css" rel="stylesheet">
+    <link href="<?php echo $this->url->getStatic('backend/css/');?>style.css?v=<?php echo time(); ?>" rel="stylesheet">
+</head>
+
+<body class="login">
+<div>
+
+
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form id="login" class="login" method="post" action="<?php echo $this->url->get('dashboard/login'); ?>">
+                    <h1>Login Form</h1>
+                    <?php if(isset($msgErrorLogin) && strlen($msgErrorLogin) > 0){ ?>
+                        <div class="clearfix">
+                            <div class="alert alert-danger" role="alert">
+                                <?php echo $msgErrorLogin; ?>
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <div>
+                        <input type="text" class="form-control login_input <?php echo !empty($msgErrorEmail)?"border-red":""; ?>"  id="email" name="email" placeholder="Email" maxlength="255" value="<?php echo isset($email)?$email:""; ?>"  />
+                        <div id="msgErrorEmail" class="text-left text-danger "><?php echo isset($msgErrorEmail)?$msgErrorEmail:""?></div>
+                    </div>
+                    <div>
+                        <input type="password" class="form-control login_input login_top <?php echo !empty($msgErrorPass)?"border-red":""; ?>" id="password" name="password" placeholder="Password" value="<?php echo isset($password)?$password:""?>" maxlength="255" />
+                        <div id="msgErrorPass" class="text-left text-danger"><?php echo isset($msgErrorPass)?$msgErrorPass:""?></div>
+
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-default submit login_top">LOGIN</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="<?php echo $this->url->getStatic('backend/js/'); ?>jquery.min.js"></script>
+<script src="<?php echo $this->url->getStatic('shared/js/l-validate-util.js'); ?>"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var loginEmail = $("#email");
+        var loginEmailMsg = $("#msgErrorEmail");
+        var loginPassword = $("#password");
+        var loginPasswordMsg = $("#msgErrorPass");
+        $("#login").submit(function (event) {
+            var valid = true;
+            if (loginEmail.prop("value").length < 1) {
+                loginEmailMsg.text("This field cannot be empty.");
+                $('#email').addClass("border-red");
+                valid = false;
+            }
+            else if (LValidator.validEmail(loginEmail.prop("value")) == false) {
+                loginEmailMsg.text("Enter a valid email!");
+                $('#email').addClass("border-red");
+                valid = false;
+            }
+            else {
+                loginEmailMsg.text('');
+                $('#email').removeClass("border-red");
+            }
+            if (loginPassword.prop("value").length < 1) {
+                loginPasswordMsg.text("This field cannot be empty.");
+                $('#password').addClass("border-red");
+                valid = false;
+            }
+            else {
+                loginPasswordMsg.text('');
+                $('#password').removeClass("border-red");
+            }
+
+            if (valid == false) {
+                event.preventDefault();
+            }
+            else {
+                loginEmail.prop('readonly', true);
+                loginPassword.prop('readonly', true);
+                $('.btn').prop('disabled', true);
+                $('.loading').show();
+            }
+        });
+    });
+</script>
