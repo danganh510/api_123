@@ -3,6 +3,7 @@
 namespace Score\Backend\Controllers;
 
 use Exception;
+use GuzzleHttp\Client;
 use Score\Models\ScMatch;
 use Score\Repositories\Team;
 
@@ -110,42 +111,34 @@ class CrawlerController extends ControllerBase
         // echo (microtime(true) - $start_time) . "</br>";
         delete_cache:
         if (($is_live !== true && $total > 1) || $isDeleteCache == true) {
-            //cache match trong vòng 14 ngày
-            $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
-            $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
-            $arrMatch = ScMatch::find(
-                "match_start_time > $timestamp_before_7 AND match_start_time < $timestamp_affter_7"
-            );
-            $arrMatch = $arrMatch->toArray();
-            $matchCache = new CacheMatch();
-            $matchCache->setCache(json_encode($arrMatch));
+            $result =  file_get_contents(API_END_PONT . "/create-cache-match");
+            if ($result['code'] == 200) {
+                echo $result['status'];
+            }
         } else {
             //cache match trong vòng 1 ngày
-            $matchCache = new CacheMatchLive();
-            $matchCache->setCache(json_encode($arrMatchCrawl));
+            $data_sent_cache = [
+                'arrMatchCrawl' => $arrMatchCrawl
+            ];
+            $client = new Client([
+                // Base URI is used with relative requests
+                'base_uri' => API_END_PONT . "/create-cache-live",
+                // You can set any number of default request options.
+                'timeout'  => 1.0,
+            ]);
+            $result = $client->request('POST', API_END_PONT . "/create-cache-live", [
+                'json' => $data_sent_cache
+            ]);
+            var_dump($result);
+            exit;
         }
 
         //nếu có trận được tạo mới thì cache lại:
         if ($is_new || ($is_live !== true && $total > 1)) {
-            $arrTeam = ScTeam::find("team_active = 'Y'");
-            $arrTeam = $arrTeam->toArray();
-            $arrTeamCache = [];
-            foreach ($arrTeam as $team) {
-                $arrTeamCache[$team['team_id']] = $team;
+            $result =  file_get_contents(API_END_PONT . "/create-cache-team");
+            if ($result['code'] == 200) {
+                echo $result['status'];
             }
-            $teamCache = new CacheTeam();
-            $teamCache->setCache(json_encode($arrTeamCache));
-
-            echo "cache total: " . count($arrTeamCache) . " team /r/n";
-            //cache tour
-            $arrTour = ScTournament::find("tournament_active = 'Y'");
-            $arrTour = $arrTour->toArray();
-            $arrTourCache = [];
-            foreach ($arrTour as $tour) {
-                $arrTourCache[$tour['tournament_id']] = $tour;
-            }
-            $tourCache = new CacheTour();
-            $tourCache->setCache(json_encode($arrTourCache));
         }
 
         echo "---total: " . $total;

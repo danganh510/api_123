@@ -565,6 +565,21 @@ $di['router'] = function () {
 
 
     //API
+    $router->add('/create-cache-match', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "match"
+    ));
+    $router->add('/create-cache-live', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "live"
+    ));
+    $router->add('/create-cache-team', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "team"
+    ));
     $router->add('/get-config', array(
         "module" => "api",
         "controller" => 'getconfig',

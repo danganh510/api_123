@@ -51,6 +51,7 @@ class Security extends Plugin
                 'apigetdata' => array('*'),
                 'apimatch' => array('*'),
                 'apigetconfig' => array('*'),
+                'apicache' => array('*'),
                 'backendlogin'    => array('*'),
                 'backendcrawler'    => array('*'),
                 'backendcrawlerdetail'    => array('*'),
