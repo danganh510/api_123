@@ -26,8 +26,10 @@ class CacheController extends ControllerBase
     {
         $list_match = $this->requestParams['list_match'];
         $time_plus = $this->requestParams['time_plus'];
+        $this->type_crawl = $this->requestParams['type_crawl'];
         $cacheTeam = new CacheTeam();
         $arrTeamOb = $cacheTeam->getCache();
+        var_dump($this->requestParams);exit;
 
         $matchRepo = new MatchRepo();
         $total = 0;

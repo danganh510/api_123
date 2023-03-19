@@ -13,22 +13,22 @@ class MatchCrawl extends Component
     const TYPE_default = "default";
 
     
-    private $time;
-    private $start_time;
+    public $time;
+    public $start_time;
 
-    private $home;
-    private $home_score;
-    private $home_card_red;
-    private $home_img;
-    private $away;
-    private $away_score;
-    private $away_card_red;
+    public $home;
+    public $home_score;
+    public $home_card_red;
+    public $home_img;
+    public $away;
+    public $away_score;
+    public $away_card_red;
 
-    private $away_img;
-    private $href_detail;
-    private $country_code;
-    private $tournament;
-    private $round; //round or group
+    public $away_img;
+    public $href_detail;
+    public $country_code;
+    public $tournament;
+    public $round; //round or group
     public function getTime() {
         return $this->time;
     }

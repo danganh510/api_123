@@ -5,13 +5,13 @@ use Phalcon\Mvc\User\Component;
 
 class MatchTournament extends Component
 {
-    private $id;
-    private $tournament_name;
-    private $tournament_group;
-    private $country_name;
-    private $country_code;
-    private $country_image;
-    private $tournament_href;
+    public $id;
+    public $tournament_name;
+    public $tournament_group;
+    public $country_name;
+    public $country_code;
+    public $country_image;
+    public $tournament_href;
     public function getId() {
         return $this->id;
     }

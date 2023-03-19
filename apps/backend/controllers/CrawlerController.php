@@ -47,18 +47,11 @@ class CrawlerController extends ControllerBase
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live);
             $list_match = $crawler->getInstance();
-
-            //time plus = 1  crawl all to day
-            // $divParent = $crawler->getDivParent($seleniumDriver, $time_plus);
-            // $seleniumDriver->quit();
-            // echo (microtime(true) - $start_time) . "</br>";
         } catch (Exception $e) {
             echo $e->getMessage();
             // $seleniumDriver->quit();
             die();
         }
-        $cacheTeam = new CacheTeam();
-        $arrTeamOb = $cacheTeam->getCache();
 
         $arrMatchCrawl = [];
         $is_new = false;
@@ -68,36 +61,18 @@ class CrawlerController extends ControllerBase
             // $list_match = $crawler->CrawlMatchScore($divParent);
             // echo (microtime(true) - $start_time) . "</br>";
             listMatch:
-            $matchRepo = new MatchRepo();
-            foreach ($list_match as $match) {
-                $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl);
-                $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl);
-                $tournament = Tournament::saveTournament($match->getTournament(), $this->type_crawl);
-
-                if (!$home) {
-                    echo "can't save home team";
-                    continue;
-                }
-                if (!$away) {
-                    echo "can't save away team";
-                    continue;
-                }
-                if (!$tournament) {
-                    echo "can't save tournament team";
-                    continue;
-                }
-                $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl);
-                if ($result['matchSave']) {
-                    $arrMatchCrawl[] = $result['matchSave'];
-                    $total++;
-                    //  echo "Save match success --- ";
-                } else {
-                    echo "Save match false ---";
-                }
-                if ($result['is_new']) {
-                    $is_new = true;
-                }
-            }
+            $client = new Client();
+            $request = [
+                'list_match' => $list_match,
+                'time_plus' => $time_plus,
+                'type_crawl' => $this->type_crawl,
+                'is_live' => $is_live
+            ];
+            $result = $client->request('POST', API_END_PONT . "/save-match", [
+                'json' => $request
+            ]);
+            var_dump($result);
+            exit;
             $total++;
             // if ($total < 10) {
             //     sleep(5);
@@ -120,12 +95,7 @@ class CrawlerController extends ControllerBase
             $data_sent_cache = [
                 'arrMatchCrawl' => $arrMatchCrawl
             ];
-            $client = new Client([
-                // Base URI is used with relative requests
-                'base_uri' => API_END_PONT . "/create-cache-live",
-                // You can set any number of default request options.
-                'timeout'  => 1.0,
-            ]);
+            $client = new Client();
             $result = $client->request('POST', API_END_PONT . "/create-cache-live", [
                 'json' => $data_sent_cache
             ]);
