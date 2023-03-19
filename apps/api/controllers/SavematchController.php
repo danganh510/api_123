@@ -18,7 +18,7 @@ use Score\Repositories\MatchCrawl;
 use Score\Repositories\MatchRepo;
 use Score\Repositories\Tournament;
 
-class CacheController extends ControllerBase
+class SavematchController extends ControllerBase
 {
 
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
