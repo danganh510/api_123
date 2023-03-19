@@ -32,11 +32,8 @@ class CrawlerController extends ControllerBase
         $time_plus = $this->request->get("timePlus");
         $is_live = (bool)  $this->request->get("isLive");
         $this->type_crawl = $this->request->get("type");
-        $isDeleteCache = (bool) $this->request->get("deleteCache");
         $total = 0;
-        if ($isDeleteCache == true) {
-            goto delete_cache;
-        }
+
 
         if (!$this->type_crawl) {
             $this->type_crawl = MatchCrawl::TYPE_SOFA;
@@ -68,10 +65,12 @@ class CrawlerController extends ControllerBase
                 'type_crawl' => $this->type_crawl,
                 'is_live' => $is_live
             ];
-            $result = $client->request('POST', API_END_PONT . "/save-match", [
-                'json' => $request
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('POST', '', [
+                'form_params' => $request
             ]);
-         
+            var_dump($response);
+            exit;
             // if ($total < 10) {
             //     sleep(5);
             //     goto statCrawler;
