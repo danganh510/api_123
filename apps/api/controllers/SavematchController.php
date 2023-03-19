@@ -29,7 +29,6 @@ class CacheController extends ControllerBase
         $this->type_crawl = $this->requestParams['type_crawl'];
         $cacheTeam = new CacheTeam();
         $arrTeamOb = $cacheTeam->getCache();
-        var_dump($this->requestParams);exit;
 
         $matchRepo = new MatchRepo();
         $total = 0;
