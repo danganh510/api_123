@@ -71,9 +71,7 @@ class CrawlerController extends ControllerBase
             $result = $client->request('POST', API_END_PONT . "/save-match", [
                 'json' => $request
             ]);
-            var_dump($result);
-            exit;
-            $total++;
+         
             // if ($total < 10) {
             //     sleep(5);
             //     goto statCrawler;
@@ -84,32 +82,6 @@ class CrawlerController extends ControllerBase
         }
         // $seleniumDriver->quit();
         // echo (microtime(true) - $start_time) . "</br>";
-        delete_cache:
-        if (($is_live !== true && $total > 1) || $isDeleteCache == true) {
-            $result =  file_get_contents(API_END_PONT . "/create-cache-match");
-            if ($result['code'] == 200) {
-                echo $result['status'];
-            }
-        } else {
-            //cache match trong vòng 1 ngày
-            $data_sent_cache = [
-                'arrMatchCrawl' => $arrMatchCrawl
-            ];
-            $client = new Client();
-            $result = $client->request('POST', API_END_PONT . "/create-cache-live", [
-                'json' => $data_sent_cache
-            ]);
-            var_dump($result);
-            exit;
-        }
-
-        //nếu có trận được tạo mới thì cache lại:
-        if ($is_new || ($is_live !== true && $total > 1)) {
-            $result =  file_get_contents(API_END_PONT . "/create-cache-team");
-            if ($result['code'] == 200) {
-                echo $result['status'];
-            }
-        }
 
         echo "---total: " . $total;
 

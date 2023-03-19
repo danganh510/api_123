@@ -16,6 +16,7 @@ use Score\Repositories\CacheTour;
 use Score\Repositories\CrawlerList;
 use Score\Repositories\MatchCrawl;
 use Score\Repositories\MatchRepo;
+use Score\Repositories\MatchTournament;
 use Score\Repositories\Tournament;
 
 class SavematchController extends ControllerBase
@@ -27,6 +28,7 @@ class SavematchController extends ControllerBase
         $list_match = $this->requestParams['list_match'];
         $time_plus = $this->requestParams['time_plus'];
         $this->type_crawl = $this->requestParams['type_crawl'];
+        $is_live = $this->requestParams['is_live'];
         $cacheTeam = new CacheTeam();
         $arrTeamOb = $cacheTeam->getCache();
 
@@ -34,10 +36,16 @@ class SavematchController extends ControllerBase
         $total = 0;
         $is_new = false;
         $arrMatchCrawl = [];
-        foreach ($list_match as $match) {
+        foreach ($list_match as $match_info) {
+            $match = new MatchCrawl();
+            $match->setData($match_info);
+
+            $tournamentCrawl = new MatchTournament();
+            $tournamentCrawl->setData($match->getTournament());
+
             $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl);
             $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl);
-            $tournament = Tournament::saveTournament($match->getTournament(), $this->type_crawl);
+            $tournament = Tournament::saveTournament($tournamentCrawl, $this->type_crawl);
 
             if (!$home) {
                 echo "can't save home team";
@@ -63,12 +71,59 @@ class SavematchController extends ControllerBase
                 $is_new = true;
             }
         }
+        delete_cache:
+        if (($is_live !== true && $total > 1)) {
+            $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
+            $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
+            $arrMatch = ScMatch::find(
+                "match_start_time > $timestamp_before_7 AND match_start_time < $timestamp_affter_7"
+            );
+            $arrMatch = $arrMatch->toArray();
+            $matchCache = new CacheMatch();
+            $matchCache->setCache(json_encode($arrMatch));
+        } else {
+            $matchCache = new CacheMatchLive();
+            $result = $matchCache->setCache(json_encode($arrMatchCrawl));
+        }
+
+        //nếu có trận được tạo mới thì cache lại:
+        if ($is_new || ($is_live !== true && $total > 1)) {
+            $arrTeam = ScTeam::find("team_active = 'Y'");
+            $arrTeam = $arrTeam->toArray();
+            $arrTeamCache = [];
+            foreach ($arrTeam as $team) {
+                $arrTeamCache[$team['team_id']] = $team;
+            }
+            $teamCache = new CacheTeam();
+            $teamCache->setCache(json_encode($arrTeamCache));
+
+            echo "cache total: " . count($arrTeamCache) . " team /r/n";
+            //cache tour
+            $arrTour = ScTournament::find("tournament_active = 'Y'");
+            $arrTour = $arrTour->toArray();
+            $arrTourCache = [];
+            foreach ($arrTour as $tour) {
+                $arrTourCache[$tour['tournament_id']] = $tour;
+            }
+            $tourCache = new CacheTour();
+            $result = $tourCache->setCache(json_encode($arrTourCache));
+            if ($result) {
+                return [
+                    'code' => 200,
+                    'status' => 'success',
+                ];
+            } else {
+                return [
+                    'code' => 200,
+                    'status' => 'false',
+                ];
+            }
+        }
         return [
             'code' => 200,
             'status' => 'success',
             'total' => $total,
             'is_new' => $is_new,
-            'arrMatchCrawl' => $arrMatchCrawl
         ];
     }
 }
