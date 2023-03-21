@@ -66,7 +66,7 @@ class MatchController extends ControllerBase
             if (empty($arrTournament[$match['match_tournament_id']])) {
                 continue;
             }
-            if (!$isLive || !$flag_today) {
+            if (!$isLive && !$flag_today) {
                 if ($this->my->getDays($time, $match['match_start_time'] + $time_zone * 60 * 60) != 0) {
                     continue;
                 }
