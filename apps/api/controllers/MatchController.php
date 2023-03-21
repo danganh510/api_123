@@ -45,9 +45,11 @@ class MatchController extends ControllerBase
         $arrTournament = $cacheTour->getCache();
         // $matchRepo = new MatchRepo();
         // $arrMatch = $matchRepo->getMatch($time, $status);
+        $flag_today = false;
         if ($this->my->getDays($time, time() + $time_zone * 60 * 60) == 0 && !$isLive) {
             $arrMatch = MatchRepo::getMatchToday();
             $arrMatch = $arrMatch->toArray();
+            $flag_today = true;
         } else {
             $arrMatch = $cacheMatch->getCache();
         }
@@ -64,7 +66,7 @@ class MatchController extends ControllerBase
             if (empty($arrTournament[$match['match_tournament_id']])) {
                 continue;
             }
-            if (!$isLive) {
+            if (!$isLive || !$flag_today) {
                 if ($this->my->getDays($time, $match['match_start_time'] + $time_zone * 60 * 60) != 0) {
                     continue;
                 }
