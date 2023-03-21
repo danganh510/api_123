@@ -27,6 +27,7 @@ class GetdataController extends ControllerBase
         //     'columns' => ['type_id'],
         //     'language' => 'vi',
         //     'orderBy' => "type_id",
+        //     'limit' => 1,
         //     'conditions' => "type_parent_id = 1"
         // ];
 

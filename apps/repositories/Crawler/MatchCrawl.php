@@ -24,6 +24,11 @@ class MatchCrawl extends Component
     public $away;
     public $away_score;
     public $away_card_red;
+    public $match_score_ht;
+    public $match_score_ft;
+    public $match_time_ht;
+    public $match_time_ft;
+    public $match_time_finish;
 
     public $away_img;
     public $href_detail;
@@ -83,6 +88,26 @@ class MatchCrawl extends Component
     public function getTournament()
     {
         return $this->tournament;
+    }
+    public function getScoreHt()
+    {
+        return $this->match_score_ht;
+    }
+    public function getScoreFt()
+    {
+        return $this->match_score_ft;
+    }
+    public function getTimeHt()
+    {
+        return $this->match_time_ht;
+    }
+    public function getTimeFt()
+    {
+        return $this->match_time_ft;
+    }
+    public function getTimeFinish()
+    {
+        return $this->match_time_finish;
     }
     public function setTime($time)
     {
@@ -161,5 +186,30 @@ class MatchCrawl extends Component
     {
         $this->country_code = $country_code;
         return $this->country_code;
+    }
+    public function setScoreHt($match_score_ht)
+    {
+        $this->match_score_ht = $match_score_ht;
+        return $this->match_score_ht;
+    }
+    public function setScoreFt($match_score_ft)
+    {
+        $this->match_score_ft = $match_score_ft;
+        return $this->match_score_ft;
+    }
+    public function setTimeHt($match_time_ht)
+    {
+        $this->match_time_ht = $match_time_ht;
+        return $this->match_time_ht;
+    }
+    public function setTimeFt($match_time_ft)
+    {
+        $this->match_time_ft = $match_time_ft;
+        return $this->match_time_ft;
+    }
+    public function setTimeFinish($match_time_finish)
+    {
+        $this->match_time_finish = $match_time_finish;
+        return $this->match_time_finish;
     }
 }

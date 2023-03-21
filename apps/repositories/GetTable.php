@@ -8,7 +8,7 @@ use Phalcon\Mvc\User\Component;
 
 class GetTable extends Component
 {
-    const TABLE_CAN_GET = ['sc_article','sc_banner','sc_type'];
+    const TABLE_CAN_GET = ['sc_article', 'sc_banner', 'sc_type'];
     public function getColumnsModel($table)
     {
 
@@ -71,6 +71,9 @@ class GetTable extends Component
         if (isset($params['conditions']) && !empty($params['conditions'])) {
             $sql = $sql->where($params['conditions']);
         }
+        if (isset($params['limit'])) {
+            $sql = $sql->limit($params['limit']);
+        }
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();
         return $list_data;
@@ -102,6 +105,9 @@ class GetTable extends Component
             ->where("lang.{$modelInfo['column_lang_code']} = :lang_code:", ['lang_code' => $params['language']]);
         if (isset($modelInfo['conditions']) && !empty($modelInfo['conditions'])) {
             $sql = $sql->andWhere($modelInfo['conditions']);
+        }
+        if (isset($params['limit'])) {
+            $sql = $sql->limit($params['limit']);
         }
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();

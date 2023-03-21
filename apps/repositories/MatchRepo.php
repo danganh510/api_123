@@ -64,6 +64,29 @@ class MatchRepo extends Component
                 $matchSave->setMatchStartTime($timeInfo['start_time']);
             }
         }
+
+        if ($timeInfo['time_live'] == "HT") {
+            if ($matchSave->getMatchTimeFt() == "") {
+                $matchSave->setMatchTimeFt(time());
+            }
+            if ($matchSave->getMatchScoreHt() == "") {
+                $score_ht = $match->getHomeScore() . "-" . $match->getAwayScore();
+                $matchSave->setMatchScoreHt($score_ht);
+            }
+        }
+        if ($timeInfo['time_live'] == "FT") {
+            if ($matchSave->getMatchTimeFt() == "") {
+                $matchSave->setMatchTimeFt(time());
+            }
+            if ($matchSave->getMatchScoreFt() == "") {
+                $score_ft = $match->getHomeScore() . "-" . $match->getAwayScore();
+                $matchSave->setMatchScoreFt($score_ft);
+            }
+            if ($matchSave->getMatchTimeFinish() == "") {
+                $matchSave->setMatchTimeFinish(time());
+            }
+        }
+
         $matchSave->setMatchTime($timeInfo['time_live']);
         $matchSave->setMatchStatus($timeInfo['status']);
         $matchSave->setMatchRound($match->getRound());
@@ -279,5 +302,4 @@ class MatchRepo extends Component
             ]
         ]);
     }
-    
 }

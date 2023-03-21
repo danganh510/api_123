@@ -14,6 +14,13 @@ class ScMatch extends \Phalcon\Mvc\Model
     protected $match_away_id;
     protected $match_home_score;
     protected $match_away_score;
+
+    protected $match_score_ht;
+    protected $match_score_ft;
+    protected $match_time_ht;
+    protected $match_time_ft;
+    protected $match_time_finish;
+
     protected $match_home_card_red;
     protected $match_away_card_red;
     protected $match_round;
@@ -197,7 +204,7 @@ class ScMatch extends \Phalcon\Mvc\Model
     {
         $this->match_away_score = $match_away_score;
     }
-   /**
+    /**
      * @return mixed
      */
     public function getMatchAwayCardRed()
@@ -211,6 +218,26 @@ class ScMatch extends \Phalcon\Mvc\Model
     public function setMatchAwayCardRed($match_away_card_red)
     {
         $this->match_away_card_red = $match_away_card_red;
+    }
+    public function getMatchScoreHt()
+    {
+        return $this->match_score_ht;
+    }
+    public function getMatchScoreFt()
+    {
+        return $this->match_score_ft;
+    }
+    public function getMatchTimeHt()
+    {
+        return $this->match_time_ht;
+    }
+    public function getMatchTimeFt()
+    {
+        return $this->match_time_ft;
+    }
+    public function getMatchTimeFinish()
+    {
+        return $this->match_time_finish;
     }
     /**
      * @return mixed
@@ -321,7 +348,31 @@ class ScMatch extends \Phalcon\Mvc\Model
     {
         $this->match_start_year = $match_start_year;
     }
-
+    public function setMatchScoreHt($match_score_ht)
+    {
+        $this->match_score_ht = $match_score_ht;
+        return $this->match_score_ht;
+    }
+    public function setMatchScoreFt($match_score_ft)
+    {
+        $this->match_score_ft = $match_score_ft;
+        return $this->match_score_ft;
+    }
+    public function setMatchTimeHt($match_time_ht)
+    {
+        $this->match_time_ht = $match_time_ht;
+        return $this->match_time_ht;
+    }
+    public function setMatchTimeFt($match_time_ft)
+    {
+        $this->match_time_ft = $match_time_ft;
+        return $this->match_time_ft;
+    }
+    public function setMatchTimeFinish($match_time_finish)
+    {
+        $this->match_time_finish = $match_time_finish;
+        return $this->match_time_finish;
+    }
     /**
      * @return mixed
      */

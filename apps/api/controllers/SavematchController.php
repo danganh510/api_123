@@ -126,4 +126,7 @@ class SavematchController extends ControllerBase
             'is_new' => $is_new,
         ];
     }
+    public function detailAction()
+    {
+    }
 }
