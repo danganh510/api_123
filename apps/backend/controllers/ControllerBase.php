@@ -15,6 +15,14 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 
     public function initialize()
     {
+        // $output = shell_exec('cd ..');
+        // $output = shell_exec('cd ..');
+        // $output = shell_exec('cd ..');
+        // $output = shell_exec('cd ..');
+        // $output = shell_exec('git pull');
+        // echo "<pre>$output</pre>";
+        // die();
+        // echo "123";exit;
         header('Access-Control-Allow-Origin: *');
         //  var_dump($this->dispatcher->getControllerName());exit;
         //current user
