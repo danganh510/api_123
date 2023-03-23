@@ -64,12 +64,12 @@ class CrawlerdetailliveController extends ControllerBase
             }
         } else {
             $matchCrawl = ScMatch::findFirst([
-                'match_crawl_detail = 0 '
+                'match_crawl_detail = 0 AND match_status = "W"'
             ]);
             if (!$matchCrawl) {
                 //crawl detail cho trận FT
                 $matchCrawl = ScMatch::findFirst([
-                    'match_crawl_detail = 1 '
+                    'match_crawl_detail = 1 AND match_status = "F"'
                 ]);
             }
         }
