@@ -131,7 +131,6 @@ class ArticleController extends ControllerBase
             } else if (!is_numeric($data['article_order'])) {
                 $messages['article_order'] = "Order is not valid";
             }
-
             if (count($messages) == 0) {
                 $msg_result = array();
                 $new_article = new ScArticle();
