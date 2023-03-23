@@ -2,6 +2,7 @@
 $content = file_get_contents("php://input");
 $json    = json_decode($content, true);
 file_put_contents("/images/test.txt",$json);
+file_put_contents("./images/test.txt",$json);
 chdir('..');
 $output = shell_exec('git pull'); 
 echo "<pre>$output</pre>";
