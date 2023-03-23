@@ -15,7 +15,6 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 
     public function initialize()
     {
-        echo "123";exit;
         header('Access-Control-Allow-Origin: *');
         //  var_dump($this->dispatcher->getControllerName());exit;
         //current user
