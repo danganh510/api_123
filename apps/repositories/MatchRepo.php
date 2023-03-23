@@ -278,7 +278,7 @@ class MatchRepo extends Component
         $start_day = $today + 7 * 60 * 60;
         //thời gian bonus là +- 160 phút
         $bonus_start_day = $start_day - 160 * 60;
-        $end_day = $today + 24 * 60 * 60 +  +7 * 60 * 60;
+        $end_day = $today + 24 * 60 * 60 ;
         //thời gian bonus là +- 160 phút
         $bonus_end_day = $end_day + 160 * 60;
         $arrMatch = ScMatch::find([
