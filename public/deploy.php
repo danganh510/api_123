@@ -2,5 +2,5 @@
 chdir('..');
 $output = shell_exec('git pull'); 
 echo "<pre>$output</pre>";
-echo "finish";
+echo "finish1";
 die();
