@@ -16,8 +16,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
     public function initialize()
     {
         header('Access-Control-Allow-Origin: *');
-        //  var_dump($this->dispatcher->getControllerName());exit;
-        //current user
+    
         $this->auth = $this->session->get('auth');
         if (isset($this->auth['role'])) {
             $role_function  = array();
