@@ -35,8 +35,11 @@ class CrawlerdetailliveController extends ControllerBase
                 ]
             ]);
             if (!$matchCrawl) {
-                $sql = 'UPDATE Score\Models\ScMatch SET match_crawl_detail_live = "0" WHERE match_status = "S"';
-                $this->modelsManager->executeQuery($sql);
+                $sql = 'UPDATE Score\Models\ScMatch SET match_crawl_detail_live = "0" WHERE (match_status = "S" AND FIND_IN_SET(match_tournament_id,:arrTour:)) ';
+                $param = [
+                    'arrTour' => implode(",", $arrTourKey)
+                ];
+                $this->modelsManager->executeQuery($sql, $param);
                 echo "--All restart: \r\n";
                 $matchCrawl = ScMatch::findFirst([
                     ' match_status = "S" AND match_crawl_detail_live = "0" AND FIND_IN_SET(match_tournament_id,:arrTour:)',
@@ -44,6 +47,20 @@ class CrawlerdetailliveController extends ControllerBase
                         'arrTour' => implode(",", $arrTourKey)
                     ]
                 ]);
+            }
+            //for not found primary
+            if (!$matchCrawl) {
+                echo "--Start crawl not primary: \r\n";
+                $matchCrawl = ScMatch::findFirst([
+                    ' match_status = "S" AND match_crawl_detail_live = "0"'
+                ]);
+                if (!$matchCrawl) {
+                    $sql = 'UPDATE Score\Models\ScMatch SET match_crawl_detail_live = "0" WHERE (match_status = "S" ) ';
+                    $this->modelsManager->executeQuery($sql);
+                    $matchCrawl = ScMatch::findFirst([
+                        ' match_status = "S" AND match_crawl_detail_live = "0"'
+                    ]);
+                }
             }
         } else {
             $matchCrawl = ScMatch::findFirst([

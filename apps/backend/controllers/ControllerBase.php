@@ -10,12 +10,13 @@ use Score\Repositories\Role;
  */
 class ControllerBase extends \Phalcon\Mvc\Controller
 {
-	protected $auth;
+    protected $auth;
 
 
-	public function initialize()
+    public function initialize()
     {
-      //  var_dump($this->dispatcher->getControllerName());exit;
+        header('Access-Control-Allow-Origin: *');
+        //  var_dump($this->dispatcher->getControllerName());exit;
         //current user
         $this->auth = $this->session->get('auth');
         if (isset($this->auth['role'])) {
@@ -24,7 +25,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
                 $role_function = $this->session->get('action');
             } else {
                 $role = Role::getFirstByName($this->auth['role']);
-                if($role) {
+                if ($role) {
                     $role_function = unserialize($role->getRoleFunction());
                     $this->session->set('action', $role_function);
                 }
@@ -34,7 +35,5 @@ class ControllerBase extends \Phalcon\Mvc\Controller
         $this->view->setVars([
             'role_function' => isset($role_function) ? $role_function : []
         ]);
-
     }
-
 }

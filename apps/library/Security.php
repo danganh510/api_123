@@ -55,7 +55,8 @@ class Security extends Plugin
                 'apicache' => array('*'),
                 'backendlogin'    => array('*'),
                 'backendcrawler'    => array('*'),
-                'backendcrawlerdetail'    => array('*'),
+                'backendcrawlerdetaillive'    => array('*'),
+                'backendcrawlimage'    => array('*'),
             );
             foreach ($publicResources as $resource => $actions) { //$resource is key, $actions is value
                 $acl->addResource(new \Phalcon\Acl\Resource($resource), $actions);

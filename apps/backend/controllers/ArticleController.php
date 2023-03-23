@@ -164,7 +164,7 @@ class ArticleController extends ControllerBase
                     $msg_result['msg'] = $message;
                 }
                 $this->session->set('msg_result', $msg_result);
-                return $this->response->redirect("/dashboard/article");
+                return $this->response->redirect("/dashboard/list-article");
             }
         }
         $type = new Type();
@@ -419,7 +419,7 @@ class ArticleController extends ControllerBase
                 $msg_result['msg'] = $message_delete;
             }
             $this->session->set('msg_result', $msg_result);
-            return $this->response->redirect('/dashboard/article');
+            return $this->response->redirect('/dashboard/list-article');
         }
     }
 

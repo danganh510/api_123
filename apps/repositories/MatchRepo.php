@@ -110,6 +110,7 @@ class MatchRepo extends Component
             $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
         }
         $matchSave->setMatchOrder(1);
+        $matchSave->setMatchOrder(1);
         if ($matchSave->save()) {
             return [
                 'matchSave' => $matchSave,

@@ -45,11 +45,9 @@ class MatchController extends ControllerBase
         $arrTournament = $cacheTour->getCache();
         // $matchRepo = new MatchRepo();
         // $arrMatch = $matchRepo->getMatch($time, $status);
-        $flag_today = false;
         if ($this->my->getDays($time, time() + $time_zone * 60 * 60) == 0 && !$isLive) {
             $arrMatch = MatchRepo::getMatchToday();
             $arrMatch = $arrMatch->toArray();
-            $flag_today = true;
         } else {
             $arrMatch = $cacheMatch->getCache();
         }
@@ -66,7 +64,7 @@ class MatchController extends ControllerBase
             if (empty($arrTournament[$match['match_tournament_id']])) {
                 continue;
             }
-            if (!$isLive && !$flag_today) {
+            if (!$isLive) {
                 if ($this->my->getDays($time, $match['match_start_time'] + $time_zone * 60 * 60) != 0) {
                     continue;
                 }
@@ -94,6 +92,7 @@ class MatchController extends ControllerBase
                     'id' => $match['match_id'],
                     'time_start' => $match['match_start_time'],
                     'time' => $match['match_time'],
+                    'htScore' => $match['match_score_ht'],
                 ],
                 'homeTeam' => [
                     'id' => $home->getTeamId(),
@@ -158,7 +157,7 @@ class MatchController extends ControllerBase
         $matchInfo = ScMatch::query()
             ->innerJoin('Score\Models\ScTournament', 'match_tournament_id = t.tournament_id', 't')
             ->leftJoin('Score\Models\ScMatchInfo', 'match_id  = i.info_match_id', 'i')
-            ->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,
+            ->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,match_status,match_score_ht,
         i.info_summary,i.info_time,i.info_stats,t.tournament_name")
             ->where("match_id = :id:",  [
                 'id' => $id
@@ -177,6 +176,7 @@ class MatchController extends ControllerBase
             'name' => $matchInfo['match_name'],
             'startTime' => $matchInfo['match_start_time'],
             'time' => $matchInfo['match_time'],
+            'status' => $matchInfo['match_status'],
             'tournament' => $matchInfo['tournament_name'],
             'home' => $home->getTeamName(),
             'homeLogo' => $home->getTeamLogoMedium(),
@@ -186,6 +186,7 @@ class MatchController extends ControllerBase
             'awaySlug' => $away->getTeamSlug(),
             'homeScore' => $matchInfo['match_home_score'],
             'awayScore' => $matchInfo['match_away_score'],
+            'htScore' => $matchInfo['match_score_ht'],
             'summary' => $matchInfo['info_summary'],
             'timeLine' => $matchInfo['info_time'],
             'stats' => $matchInfo['info_stats'],
