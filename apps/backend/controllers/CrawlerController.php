@@ -75,12 +75,12 @@ class CrawlerController extends ControllerBase
                         array(
                             //      'headers' => $header,
                             RequestOptions::JSON => $request,
-                         //   RequestOptions::TIMEOUT => 2
+                            RequestOptions::TIMEOUT => 1,
+                            RequestOptions::HTTP_ERRORS => false,
                         )
                     );
                 } catch (Exception $e) {
-                    echo $e->getMessage();
-                    die();
+                   
                 }
                 $start_time_call = microtime(true);
                 $result = json_decode($response->getBody()->getContents(),true);
