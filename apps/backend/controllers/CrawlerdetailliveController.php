@@ -69,7 +69,7 @@ class CrawlerdetailliveController extends ControllerBase
             if (!$matchCrawl) {
                 //crawl detail cho trận FT
                 $matchCrawl = ScMatch::findFirst([
-                    'match_crawl_detail = 1 AND match_status = "F"'
+                    '(match_crawl_detail = 1 OR match_crawl_detail = 0) AND match_status = "F"'
                 ]);
             }
         }
