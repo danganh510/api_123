@@ -13,21 +13,20 @@ use Phalcon\Mvc\User\Component;
 class Selenium extends Component
 {
     public $driver;
-    public $count; //cache to count driver;
+    public $cache; //cache to count driver;
+    public $count;
 
     public function __construct($url)
     {
-        $cacheRepo = new CacheSelenium();
-        $this->count = $cacheRepo->getCache();
-        echo $this->count."\n\r";
-        if (!$this->count) {
-            $cacheRepo = new CacheSelenium();
-            $cacheRepo->setCache(1);
+        $this->cache = new CacheSelenium();
+        $count = $this->cache->getCache();
+        echo $count ."\r\n";
+        if (!$count) {
+            $this->cache->setCache(1);
         } else {
-            $cacheRepo = new CacheSelenium();
-            $cacheRepo->setCache($this->count + 1);
+            $this->cache->setCache($count + 1);
         }
-
+       
         $ip = '198.252.108.209';
 
         //$ip = "13.250.21.188";
@@ -118,8 +117,8 @@ class Selenium extends Component
     }
     public function quit()
     {
+        $count =  $this->cache->getCache();
+        $this->cache->setCache($count - 1);
         return $this->driver->quit();
-        $cacheRepo = new CacheSelenium();
-        $cacheRepo->setCache($this->count);
     }
 }
