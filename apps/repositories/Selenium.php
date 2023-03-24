@@ -13,9 +13,22 @@ use Phalcon\Mvc\User\Component;
 class Selenium extends Component
 {
     public $driver;
+    public $cache; //cache to count driver;
+    public $count;
 
     public function __construct($url)
     {
+        $this->cache = new CacheSelenium();
+        $this->count = $this->cache->getCache();
+        if (!$this->count) {
+            $this->cache->setCache(1);
+        } else if ($this->count > 4) {
+            echo "wait for old tab \n\r";
+            die();
+        } else {
+            $this->cache->setCache($this->count + 1);
+        }
+
         $ip = '198.252.108.209';
 
         //$ip = "13.250.21.188";
@@ -107,5 +120,6 @@ class Selenium extends Component
     public function quit()
     {
         return $this->driver->quit();
+        $this->cache->setCache($this->count);
     }
 }
