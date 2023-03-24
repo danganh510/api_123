@@ -44,7 +44,7 @@ class CloudUploadController extends ControllerBase
                         "file_size" => $_FILES['upload-files']['size']['key'],
                         "file_type" => $file_extension,
                         "file_type_info" => $file_extension,
-                        "file_url" =>  "/upload/".$fileName
+                        "file_url" =>  "https://123tyso.live/upload/".$fileName
                     );
                     $numberOfSuccess++;
                 }
