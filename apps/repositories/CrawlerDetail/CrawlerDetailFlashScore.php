@@ -304,6 +304,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 'homeValue' => $div->find(".stat__homeValue", 0)->text(),
                 'awayValue' => $div->find(".stat__awayValue", 0)->text(),
             ];
+            var_dump($arrTemp);exit;
             $start[] = $arrTemp;
         }
         return $start;
