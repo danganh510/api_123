@@ -15,6 +15,8 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 
     public function initialize()
     {
+        date_default_timezone_set('Atlantic/Canary');
+        
         header('Access-Control-Allow-Origin: *');
     
         $this->auth = $this->session->get('auth');
