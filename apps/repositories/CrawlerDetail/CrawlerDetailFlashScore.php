@@ -299,13 +299,16 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
         $divsStart = $divCrawl->find(".stat__row");
         foreach ($divsStart as $div) {
+            $categoryName = $div->find(".stat__categoryName", 0)->innertext;
+            $categoryName = preg_replace('/<div>(.*?)<\/div>/', '', $categoryName);
             $arrTemp = [
-                'category' => $div->find(".stat__categoryName", 0)->plaintext,
+                'category' => $categoryName,
                 'homeValue' => $div->find(".stat__homeValue", 0)->text(),
                 'awayValue' => $div->find(".stat__awayValue", 0)->text(),
             ];
             $start[] = $arrTemp;
         }
+        var_dump($divsStart);exit;
         return $start;
     }
 
