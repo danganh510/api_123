@@ -19,6 +19,7 @@ class Selenium extends Component
     {
         $cacheRepo = new CacheSelenium();
         $this->count = $cacheRepo->getCache();
+        var_dump($this->count);exit;
         if (!$this->count) {
             $cacheRepo = new CacheSelenium();
             $cacheRepo->setCache(1);
