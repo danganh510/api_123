@@ -306,8 +306,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             ];
             $start[] = $arrTemp;
         }
-        var_dump($start);exit;
-
         return $start;
     }
 
