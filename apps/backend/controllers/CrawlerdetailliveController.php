@@ -25,6 +25,7 @@ class CrawlerdetailliveController extends ControllerBase
         ini_set('max_execution_time', 20);
         $start_time_cron = time();
         $is_live =  $this->request->get("isLive");
+        $id = $this->request->get("id");
         $this->type_crawl = $this->request->get("type");
         if ($is_live) {
             $arrTourKey = ScTournament::getTourIdCrawl();
@@ -72,6 +73,12 @@ class CrawlerdetailliveController extends ControllerBase
                     '(match_crawl_detail = 1 OR match_crawl_detail = 0) AND match_status = "F"'
                 ]);
             }
+        }
+        if ($id) {
+            $matchCrawl = ScMatch::findFirst([
+                'match_id = :id:',
+                'bind' => ['id' => $id]
+            ]);
         }
         if (!$matchCrawl) {
             echo "Not found Match";
