@@ -12,7 +12,7 @@ class CrawlimageController extends ControllerBase
     public function indexAction()
     {
         $start_time_cron = time() + 0 * 24 * 60 * 60;
-        echo "Start crawl logo team small in " . $this->my->formatDateTime($start_time_cron) . "/n/r";
+        echo "Start crawl logo team small in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $arrTeam = ScTeam::findTeamLogoSmallNull(100);
         $crawlImage = new CrawlImage();
         $total = 0;
@@ -33,7 +33,7 @@ class CrawlimageController extends ControllerBase
     public function logomediumAction()
     {
         $start_time_cron = time() + 0 * 24 * 60 * 60;
-        echo "Start crawl logo team small in " . $this->my->formatDateTime($start_time_cron) . "/n/r";
+        echo "Start crawl logo team small in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $arrTeam = ScTeam::findTeamLogoMediumNull(10);
         $crawlImage = new CrawlImage();
         $total = 0;

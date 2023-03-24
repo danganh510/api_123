@@ -32,7 +32,7 @@ class CrawlerdetailController extends ControllerBase
 
         $time_plus = $this->request->get("timePlus");
         $start_time_cron = time() + 0 * 24 * 60 * 60;
-        echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "/n/r";
+        echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
 
         $start_time = microtime(true);
         try {

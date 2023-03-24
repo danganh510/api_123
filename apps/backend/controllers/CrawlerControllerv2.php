@@ -41,7 +41,7 @@ class Crawlerv2Controller extends ControllerBase
             $this->type_crawl = MatchCrawl::TYPE_SOFA;
         }
         $start_time_cron = time() + 0 * 24 * 60 * 60;
-        echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "/n/r";
+        echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live);
