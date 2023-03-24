@@ -300,8 +300,11 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $divsStart = $divCrawl->find(".stat__row");
         foreach ($divsStart as $div) {
             $categorDiv = $div->find(".stat__categoryName", 0);
-            $categorDiv->children(0)->outertext = "";
-            $categoryName = $categorDiv->text();
+            $children = $categorDiv->children; // get an array of children
+            foreach ($children as $child) {
+                $child->outertext = ''; // This removes the element, but MAY NOT remove it from the original $myDiv
+            }
+            $categoryName = $categorDiv->innertext;
             $arrTemp = [
                 'category' => $categoryName,
                 'homeValue' => $div->find(".stat__homeValue", 0)->text(),
