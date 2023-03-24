@@ -70,7 +70,7 @@ class CrawlerController extends ControllerBase
                 $clientGuzzle = new \GuzzleHttp\Client();
                 $url = 'http://123tyso.live/save-match';
                 try {
-                    $response = $clientGuzzle->post(
+                   $clientGuzzle->post(
                         $url,
                         array(
                             //      'headers' => $header,
@@ -82,9 +82,9 @@ class CrawlerController extends ControllerBase
                    
                 }
                 $start_time_call = microtime(true);
-                $result = json_decode($response->getBody()->getContents(),true);
+        //        $result = json_decode($response->getBody()->getContents(),true);
                 var_dump(microtime(true) - $start_time_call);
-                $total = $result['total'];
+                $total = count($list_match);
                 echo "status: ". $total;
 
                 // if ($total < 10) {
