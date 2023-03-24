@@ -55,47 +55,46 @@ class CrawlerController extends ControllerBase
         $arrMatchCrawl = [];
         $is_new = false;
         //start crawler
-        if (count($list_match) > 0) {
-            try {
-                statCrawler:
-                // $list_match = $crawler->CrawlMatchScore($divParent);
-                // echo (microtime(true) - $start_time) . "</br>";
-                listMatch:
-                $request = [
-                    'list_match' => $list_match,
-                    'time_plus' => $time_plus,
-                    'type_crawl' => $this->type_crawl,
-                    'is_live' => $is_live
-                ];
-                $clientGuzzle = new \GuzzleHttp\Client();
-                $url = 'http://123tyso.live/save-match';
-                try {
-                   $clientGuzzle->post(
-                        $url,
-                        array(
-                            //      'headers' => $header,
-                            RequestOptions::JSON => $request,
-                            RequestOptions::SYNCHRONOUS => true, // send the request synchronously
-                        )
-                    );
-                } catch (Exception $e) {
-                   
-                }
-                $start_time_call = microtime(true);
-        //        $result = json_decode($response->getBody()->getContents(),true);
-                var_dump(microtime(true) - $start_time_call);
-                $total = count($list_match);
-                echo "status: ". $total;
 
-                // if ($total < 10) {
-                //     sleep(5);
-                //     goto statCrawler;
-                // }
+        try {
+            statCrawler:
+            // $list_match = $crawler->CrawlMatchScore($divParent);
+            // echo (microtime(true) - $start_time) . "</br>";
+            listMatch:
+            $request = [
+                'list_match' => $list_match,
+                'time_plus' => $time_plus,
+                'type_crawl' => $this->type_crawl,
+                'is_live' => $is_live
+            ];
+            $clientGuzzle = new \GuzzleHttp\Client();
+            $url = 'http://123tyso.live/save-match';
+            try {
+                $clientGuzzle->post(
+                    $url,
+                    array(
+                        //      'headers' => $header,
+                        RequestOptions::JSON => $request,
+                        RequestOptions::SYNCHRONOUS => true, // send the request synchronously
+                    )
+                );
             } catch (Exception $e) {
-                echo $total;
-                echo $e->getMessage();
             }
+            $start_time_call = microtime(true);
+            //        $result = json_decode($response->getBody()->getContents(),true);
+            var_dump(microtime(true) - $start_time_call);
+            $total = count($list_match);
+            echo "status: " . $total;
+
+            // if ($total < 10) {
+            //     sleep(5);
+            //     goto statCrawler;
+            // }
+        } catch (Exception $e) {
+            echo $total;
+            echo $e->getMessage();
         }
+
         // $seleniumDriver->quit();
         // echo (microtime(true) - $start_time) . "</br>";
 
@@ -104,5 +103,4 @@ class CrawlerController extends ControllerBase
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
     }
-
 }
