@@ -75,6 +75,7 @@ class CrawlerController extends ControllerBase
                         array(
                             //      'headers' => $header,
                             RequestOptions::JSON => $request,
+                            RequestOptions::TIMEOUT => 1,
                             RequestOptions::SYNCHRONOUS => true, // send the request synchronously
                         )
                     );
