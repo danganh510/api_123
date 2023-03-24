@@ -93,6 +93,7 @@ class MatchController extends ControllerBase
                     'time_start' => $match['match_start_time'],
                     'time' => $match['match_time'],
                     'htScore' => $match['match_score_ht'],
+                    'slugName' => $match['match_name'],
                 ],
                 'homeTeam' => [
                     'id' => $home->getTeamId(),
