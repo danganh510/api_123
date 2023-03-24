@@ -16,7 +16,7 @@ class Selenium extends Component
 
     public function __construct($url)
     {
-        $ip = 'selenium-hub';
+        $ip = '198.252.108.209';
 
         //$ip = "13.250.21.188";
         $port = 4444;
