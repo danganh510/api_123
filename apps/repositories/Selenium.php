@@ -19,12 +19,10 @@ class Selenium extends Component
     {
         $cacheRepo = new CacheSelenium();
         $this->count = $cacheRepo->getCache();
+        echo $this->count."\n\r";
         if (!$this->count) {
             $cacheRepo = new CacheSelenium();
             $cacheRepo->setCache(1);
-        } else if ($this->count > 4) {
-            echo "wait for old tab \n\r";
-            die();
         } else {
             $cacheRepo = new CacheSelenium();
             $cacheRepo->setCache($this->count + 1);
