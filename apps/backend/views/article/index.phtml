@@ -175,7 +175,7 @@ $urlPage .= http_build_query(array("radMatch" => $radMatch));
 <script>
     $(document).ready(function() {
         $('button[name=search]').click(function() {
-            $('form[name=form-type]').prop('action', '<?php echo $this->url->get('/dashboard/article'); ?>');
+            $('form[name=form-type]').prop('action', '<?php echo $this->url->get('/dashboard/list-article'); ?>');
             $('form[name=form-type]').submit();
         });
 
