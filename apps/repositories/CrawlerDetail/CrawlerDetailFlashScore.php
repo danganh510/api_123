@@ -233,7 +233,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $awayScore = "";
         $time = "";
         $divScore = $divCrawl->find(".detailScore__matchInfo > div > span");
-        $startTime = $divCrawl->find(".duelParticipant__startTime > div",0);
+        $startTime = $divCrawl->find(".duelParticipant__startTime > div", 0);
         if ($startTime) {
             $startTime = $startTime->text();
         }
@@ -299,8 +299,11 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
         $divsStart = $divCrawl->find(".stat__row");
         foreach ($divsStart as $div) {
+            $categorDiv = $div->find(".stat__categoryName", 0);
+            $categorDiv->children(0)->outertext = "";
+            $categoryName = $categorDiv->text();
             $arrTemp = [
-                'category' => $div->find(".stat__categoryName", 0)->text(),
+                'category' => $categoryName,
                 'homeValue' => $div->find(".stat__homeValue", 0)->text(),
                 'awayValue' => $div->find(".stat__awayValue", 0)->text(),
             ];
