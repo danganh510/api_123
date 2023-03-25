@@ -132,12 +132,12 @@ if(strlen($this->dispatcher->getParam("txtSearch"))> 0){
 <script>
     $(document).ready(function(){
         $('button[name=search]').click(function() {
-            $('form[name=form-country]').prop('action','<?php echo $this->url->get('/country'); ?>');
+            $('form[name=form-country]').prop('action','<?php echo $this->url->get('/dashboard/list-country'); ?>');
             $('form[name=form-country]').submit();
         });
 
         $('.delete-all').click(function(){
-            $('form[name=form-country]').prop('action','<?php echo $this->url->get('/country/delete'); ?>');
+            $('form[name=form-country]').prop('action','<?php echo $this->url->get('/dashboard/delete-country'); ?>');
             $('form[name=form-country]').submit();
         });
     });
