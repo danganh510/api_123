@@ -22,7 +22,7 @@ class TournamentController extends ControllerBase
             if ($validator->validInt($keyword)) {
                 $sql->where("tournament_id = :keyword:", ["keyword" => $keyword]);
             } else {
-                $sql->where("tournament_name like CONCAT('%',:keyword:,'%') ");
+                $sql->where("tournament_name like CONCAT('%',:keyword:,'%') ", ["keyword" => $keyword]);
             }
             $this->dispatcher->setParam("txtSearch", $keyword);
         }
