@@ -18,14 +18,14 @@ class Selenium extends Component
 
     public function __construct($url)
     {
-        $this->cache = new CacheSelenium();
-        $count = $this->cache->getCache();
-        echo $count ."\r\n";
-        if (!$count) {
-            $this->cache->setCache(1);
-        } else {
-            $this->cache->setCache($count + 1);
-        }
+        // $this->cache = new CacheSelenium();
+        // $count = $this->cache->getCache();
+        // echo $count ."\r\n";
+        // if (!$count) {
+        //     $this->cache->setCache(1);
+        // } else {
+        //     $this->cache->setCache($count + 1);
+        // }
        
         $ip = SELENIUM_END_POINT;
 
@@ -117,8 +117,8 @@ class Selenium extends Component
     }
     public function quit()
     {
-        $count =  $this->cache->getCache();
-        $this->cache->setCache($count - 1);
+        // $count =  $this->cache->getCache();
+        // $this->cache->setCache($count - 1);
         return $this->driver->quit();
     }
 }
