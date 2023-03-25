@@ -67,20 +67,20 @@ class CrawlerFlashScoreBase extends CrawlerList
         }
         $isWeekend = $this->my->isweekend($this->day_time);
 
-        // if (true) {
-        //     $divClose = $this->seleniumDriver->findElements(".event__expander--close");
-        //     $divClose = array_reverse($divClose);
-        //     $click = 0;
-        //     foreach ($divClose as $key =>  $div) {
-        //         try {
-        //             $div->click();
-        //             //    sleep(0.1);
-        //             $click++;
-        //         } catch (Exception $e) {
-        //             echo "error85:";
-        //         }
-        //     }
-        // }
+        if (true) {
+            $divClose = $this->seleniumDriver->findElements(".event__expander--close");
+            $divClose = array_reverse($divClose);
+            $click = 0;
+            foreach ($divClose as $key =>  $div) {
+                try {
+                    $div->click();
+                    //    sleep(0.1);
+                    $click++;
+                } catch (Exception $e) {
+                    echo "error85:";
+                }
+            }
+        }
     }
     public function getTournament($div)
     {
