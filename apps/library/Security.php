@@ -55,6 +55,7 @@ class Security extends Plugin
                 'apicache' => array('*'),
                 'backendlogin'    => array('*'),
                 'backendcrawler'    => array('*'),
+                'backendcrawlertour'    => array('*'),
                 'backendcrawlerdetaillive'    => array('*'),
                 'backendcrawlimage'    => array('*'),
             );

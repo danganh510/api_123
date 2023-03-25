@@ -14,6 +14,11 @@ class CrawlerFlashScoreBase extends CrawlerList
         $this->day_time = $day_time;
         $this->isLive = $isLive;
     }
+    public function setupSiteTour()
+    {
+        $this->runSelenium();
+
+    }
     public function setupSite()
     {
         $time = microtime(true);
@@ -69,14 +74,13 @@ class CrawlerFlashScoreBase extends CrawlerList
             foreach ($divClose as $key =>  $div) {
                 try {
                     $div->click();
-                //    sleep(0.1);
+                    //    sleep(0.1);
                     $click++;
                 } catch (Exception $e) {
                     echo "error85:";
                 }
             }
         }
-
     }
     public function getTournament($div)
     {
@@ -125,6 +129,7 @@ class CrawlerFlashScoreBase extends CrawlerList
         } catch (Exception $e) {
         }
         $time = str_replace('&nbsp;', "", $time);
+        $time = str_replace(' ', "", $time);
         $dataMatch['time'] = trim($time);
 
         $dataMatch['home'] = $divMatch->find(".event__participant--home")[0]->text();
@@ -135,7 +140,7 @@ class CrawlerFlashScoreBase extends CrawlerList
 
         $home_score = $divMatch->find(".event__score--home");
         $dataMatch['home_score'] = isset($home_score[0]) ? $home_score[0]->innertext() : 0;
-      
+
         //find card red
         $home_card = $divMatch->find(".event__participant--home > .icon--redCard");
         $dataMatch['home_card_red'] = count($home_card);
@@ -146,7 +151,7 @@ class CrawlerFlashScoreBase extends CrawlerList
         $dataMatch['away'] = $divMatch->find(".event__participant--away")[0]->text();
         $away_image = $divMatch->find(".event__logo--away");
         $dataMatch['away_image'] = isset($away_image[0]) ? $away_image[0]->getAttribute("src") : '';
-   
+
         $away_score = $divMatch->find(".event__score--away");
         $dataMatch['away_score'] = isset($away_score[0]) ? $away_score[0]->innertext() : 0;
 

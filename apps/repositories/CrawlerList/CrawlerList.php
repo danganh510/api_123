@@ -25,12 +25,14 @@ class CrawlerList extends Component
     public $seleniumDriver;
     public $list_live_tournaments = [];
     public $round;
+    public $tour_link;
 
-    public function __construct($type_crawl, $time_plus = 0, $isLive = false)
+    public function __construct($type_crawl, $time_plus = 0, $isLive = false, $tour_link = "")
     {
         $this->type_crawl = $type_crawl;
         $this->time_plus = $time_plus;
         $this->isLive = $isLive;
+        $this->tour_link = $tour_link;
     }
     public function runSelenium()
     {
@@ -43,9 +45,15 @@ class CrawlerList extends Component
             case MatchCrawl::TYPE_FLASH_SCORE:
                 $this->url_crawl = $this->url_fl;
                 if ($this->isLive) {
+                    if ($this->tour_link) {
+                        $this->url_crawl = $this->url_fl . $this->tour_link;
+                        $crawler = new CrawlerFlashScoreTour($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
+                        break;
+                    }
                     $crawler = new CrawlerFlashScoreLive($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
                     break;
                 }
+               
                 $crawler = new CrawlerFlashScore($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
                 break;
             case MatchCrawl::TYPE_SOFA:

@@ -27,7 +27,7 @@ class Selenium extends Component
             $this->cache->setCache($count + 1);
         }
        
-        $ip = '198.252.108.209';
+        $ip = SELENIUM_END_POINT;
 
         //$ip = "13.250.21.188";
         $port = 4444;

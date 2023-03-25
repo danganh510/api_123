@@ -29,6 +29,8 @@ class SavematchController extends ControllerBase
         $time_plus = $this->requestParams['time_plus'];
         $this->type_crawl = $this->requestParams['type_crawl'];
         $is_live = $this->requestParams['is_live'];
+        $tour = $this->requestParams['tour'];
+
         $cacheTeam = new CacheTeam();
         $arrTeamOb = $cacheTeam->getCache();
 
@@ -81,9 +83,16 @@ class SavematchController extends ControllerBase
             $arrMatch = $arrMatch->toArray();
             $matchCache = new CacheMatch();
             $matchCache->setCache(json_encode($arrMatch));
-        } else {
+        } else if (!$tour) {
             $matchCache = new CacheMatchLive();
             $result = $matchCache->setCache(json_encode($arrMatchCrawl));
+        } else {
+            //to be conitnei
+            $matchCache = new CacheMatchLive();
+            $matchs = $matchCache->getCache();
+            foreach ($matchs as $match) {
+
+            }
         }
 
         //nếu có trận được tạo mới thì cache lại:

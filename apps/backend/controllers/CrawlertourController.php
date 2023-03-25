@@ -20,7 +20,7 @@ use Score\Repositories\MatchCrawl;
 use Score\Repositories\MatchRepo;
 use Score\Repositories\Tournament;
 
-class CrawlerController extends ControllerBase
+class CrawlertourController extends ControllerBase
 {
 
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
@@ -43,8 +43,11 @@ class CrawlerController extends ControllerBase
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
+
+        $tour_id = 299;
+        $tour = Tournament::findFirstById($tour_id);
         try {
-            $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live);
+            $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live,$tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -65,10 +68,11 @@ class CrawlerController extends ControllerBase
                 'list_match' => $list_match,
                 'time_plus' => $time_plus,
                 'type_crawl' => $this->type_crawl,
-                'is_live' => $is_live
+                'is_live' => $is_live,
+                'tour' => true
             ];
             $clientGuzzle = new \GuzzleHttp\Client();
-            $url = API_END_PONT.'/save-match';
+            $url = API_END_PONT . '/save-match';
             try {
                 $clientGuzzle->post(
                     $url,
