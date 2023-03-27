@@ -68,6 +68,10 @@ class CrawlerstructureController extends ControllerBase
 
             foreach ($blockCountry as $divCountry) {
                 $countryName = $divCountry->getText();
+                var_dump($countryName);
+                $selenium->quit();
+                exit;
+                
 
                 if ($countryName != $countryModel->getCountryName()) {
                     continue;
