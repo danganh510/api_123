@@ -89,7 +89,7 @@ class CrawlerstructureController extends ControllerBase
                 foreach ($arrDivTour as $key =>  $tour) {
                     $tourName = $tour->getText();
                     $href = $tour->getAttribute('href');
-                    $arrTour[] = [
+                    $arrTour[$key] = [
                         'name' => $tourName,
                         'slug' => MyRepo::create_slug($tourName),
                         'href' => $href,
@@ -97,17 +97,17 @@ class CrawlerstructureController extends ControllerBase
                         'countryName' => $countryName
                     ];
                     $tournament = new ScTournament();
-                    $tournament->setTournamentName($arrTour['name']);
-                    $tournament->setTournamentSlug($arrTour['slug']);
+                    $tournament->setTournamentName($arrTour[$key]['name']);
+                    $tournament->setTournamentSlug($arrTour[$key]['slug']);
                     $tournament->setTournamentImage("");
-                    $tournament->setTournamentType($arrTour['type']);
+                    $tournament->setTournamentType($arrTour[$key]['type']);
 
                     $tournament->setTournamentNameFlashScore($tourName);
                     $tournament->setTournamentHrefFlashscore($href);
                     $tournament->setTournamentActive("Y");
                     $tournament->setTournamentOrder($key);
 
-                    $tournament->setTournamentCountry($arrTour['countryName']);
+                    $tournament->setTournamentCountry($arrTour[$key]['countryName']);
                     $tournament->setTournamentCountryCode($countryModel->getCountryCode());
                     $save = $tournament->save();
                     if (!$save) {
