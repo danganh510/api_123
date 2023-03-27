@@ -13,6 +13,7 @@ use Score\Repositories\CrawlerSofaDetail;
 use Score\Repositories\Team;
 
 use Score\Models\ScMatch;
+use Score\Models\ScTournament;
 use Score\Repositories\Country;
 use Score\Repositories\CrawlerFlashScore;
 use Score\Repositories\CrawlerList;
@@ -38,8 +39,18 @@ class CrawlerstructureController extends ControllerBase
 
         $start_time = microtime(true);
         try {
-            $arrCountry = ScCountry::find();
-            $arrCountryName = array_column($arrCountry->toArray(), "country_name");
+            $limit = 1;
+
+            $countryModel = ScCountry::findFirst([
+                'country_order = 1'
+            ]);
+            if (!$countryModel) {
+                echo "notfound Country";
+                die();
+            }
+
+            $countryModel->setCountryOrder(2);
+            $countryModel->save();
 
             $selenium = new Selenium($this->url_fl);
             try {
@@ -47,37 +58,63 @@ class CrawlerstructureController extends ControllerBase
             } catch (Exception $e) {
                 echo "not found cookie";
             }
- 
+
             $selenium->clickButton(".lmc__itemMore");
             $blockCountry = $selenium->findElements(".lmc__block");
 
             $arrCountryCrawl = [];
             $arrTour = [];
-            $limit = 200;
             $total = 0;
 
             foreach ($blockCountry as $divCountry) {
                 $countryName = $divCountry->getText();
 
-                if (in_array($countryName, $arrCountryName) || in_array($countryName, $arrCountryCrawl)) {
+                if ($countryName != $countryModel->getCountryName()) {
                     continue;
                 }
-                if ($total > $limit) {
-                    continue;
-                }
-                $arrCountryCrawl[] = $countryName;
-                // $divCountry->click();
-                // $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
 
-                // foreach ($arrDivTour as $tour) {
-                //     $tourName = $tour->getText();
-                //     $href = $tour->getAttribute('href');
-                //     $arrTour[] = [
-                //         'name' => $tourName,
-                //         'href' => $href,
-                //         'countryName' => $countryName
-                //     ];
-                // }
+                $arrCountryCrawl[] = $countryName;
+                $type = "country";
+
+                if (in_array($countryName, ['Africa', 'Asia', 'Australia & Oceania', 'Europe', 'North & Central America', 'South America'])) {
+                    //tour in area
+                    $type = "area";
+                }
+                if ($countryName == "World") {
+                    $type = "global";
+                }
+                $divCountry->click();
+                $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
+
+                foreach ($arrDivTour as $key =>  $tour) {
+                    $tourName = $tour->getText();
+                    $href = $tour->getAttribute('href');
+                    $arrTour[] = [
+                        'name' => $tourName,
+                        'slug' => MyRepo::create_slug($tourName),
+                        'href' => $href,
+                        'type' => $type,
+                        'countryName' => $countryName
+                    ];
+                    $tournament = new ScTournament();
+                    $tournament->setTournamentName($arrTour['name']);
+                    $tournament->setTournamentSlug($arrTour['slug']);
+                    $tournament->setTournamentImage("");
+                    $tournament->setTournamentType($arrTour['type']);
+
+                    $tournament->setTournamentNameFlashScore($tourName);
+                    $tournament->setTournamentHrefFlashscore($href);
+                    $tournament->setTournamentActive("Y");
+                    $tournament->setTournamentOrder($key);
+
+                    $tournament->setTournamentCountry($arrTour['countryName']);
+                    $tournament->setTournamentCountryCode($countryModel->getCountryCode());
+                    $save = $tournament->save();
+                    if (!$save) {
+                        echo $tournament->getMessages();
+                        die();
+                    }
+                }
                 $total++;
             }
 
