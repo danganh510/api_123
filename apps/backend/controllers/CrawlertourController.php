@@ -43,8 +43,7 @@ class CrawlertourController extends ControllerBase
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
-
-        $tour_id = 299;
+        
         $tour = Tournament::findFirstById($tour_id);
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live,$tour->getTournamentHrefFlashscore());

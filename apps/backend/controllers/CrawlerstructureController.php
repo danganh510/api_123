@@ -126,7 +126,7 @@ class CrawlerstructureController extends ControllerBase
         }
         $selenium->quit();
 
-        echo (microtime(true) - $start_time) . "</br>";
+        echo (microtime(true) - $start_time) . "\n\r";
         end:
         echo "---total: " . $total;
 
