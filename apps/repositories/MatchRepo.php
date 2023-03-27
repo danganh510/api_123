@@ -160,9 +160,10 @@ class MatchRepo extends Component
                         //15.03. 07:00
                         $time = 0;
                         $arrTime = explode(".",$match_time);
-                        var_dump($arrTime);exit;
                         
                         $start_time = $this->my->formatDateYMD($arrTime[0]."/".$arrTime[1]. "/2023") . " " . $arrTime[2];
+                        var_dump($start_time);exit;
+                        
                         $start_time = strtotime($start_time);
                         $time_live = 0;
                         $status = self::MATH_STATUS_WAIT;
