@@ -43,6 +43,8 @@ class CrawlerList extends Component
         $day_time =  $this->my->formatDateYMD(time() + $this->time_plus * 24 * 60 * 60);
         switch ($this->type_crawl) {
             case MatchCrawl::TYPE_FLASH_SCORE:
+                var_dump($this->url_crawl);exit;
+                
                 $this->url_crawl = $this->url_fl;
                 if ($this->isLive) {
                     if ($this->tour_link) {
