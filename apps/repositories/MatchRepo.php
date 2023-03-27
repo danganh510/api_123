@@ -161,7 +161,6 @@ class MatchRepo extends Component
                         //15.03. 07:00
                         //07.05.00:00FRO
                         $match_time = str_replace("FRO","",$match_time);
-                        echo $match_time;
                         $time = 0;
                         $arrTime = explode(".",$match_time);
                       
