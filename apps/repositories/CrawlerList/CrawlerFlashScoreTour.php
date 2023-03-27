@@ -53,7 +53,7 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
                     $this->list_live_tournaments[] = $this->getTournament($div);
                     continue;
                 }
-                $divRound = $div->find(".event__participant",0);
+                $divRound = $div->find(".event__round",0);
                 if ($divRound) {
                     $round = $divRound->text();
                 }
