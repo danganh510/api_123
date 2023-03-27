@@ -156,12 +156,23 @@ class MatchRepo extends Component
                 break;
             default:
                 if (strpos($match_time, ":")) {
-                    $time = 0;
-                    $start_time = $this->my->formatDateYMD(time()) . " " . $match_time;
-                    $start_time = strtotime($start_time);
-                    $time_live = 0;
-                    $status = self::MATH_STATUS_WAIT;
-                    break;
+                    if (strpos($match_time, ".") == 2) {
+                        //15.03. 07:00
+                        $time = 0;
+                        $arrTime = explode(". ",$match_time);
+                        $start_time = $this->my->formatDateYMD($arrTime[0]. ".2023") . " " . $arrTime[1];
+                        $start_time = strtotime($start_time);
+                        $time_live = 0;
+                        $status = self::MATH_STATUS_WAIT;
+                        break;
+                    } else {
+                        $time = 0;
+                        $start_time = $this->my->formatDateYMD(time()) . " " . $match_time;
+                        $start_time = strtotime($start_time);
+                        $time_live = 0;
+                        $status = self::MATH_STATUS_WAIT;
+                        break;
+                    }
                 } elseif (strpos($match_time, "+")) {
                     $match_time = str_replace("'", "", $match_time);
                     $time_live = $match_time;
@@ -278,7 +289,7 @@ class MatchRepo extends Component
         $start_day = $today - 7 * 60 * 60;
         //thời gian bonus là +- 160 phút
         $bonus_start_day = $start_day - 160 * 60;
-        $end_day = $today + 24 * 60 * 60 ;
+        $end_day = $today + 24 * 60 * 60;
         //thời gian bonus là +- 160 phút
         $bonus_end_day = $end_day + 160 * 60;
         $arrMatch = ScMatch::find([

@@ -20,8 +20,10 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
         $htmlDiv = "";
         try {
 
-            $parentsDiv = $this->seleniumDriver->findElement('#live-table > section > div > .sportName');
-            $htmlDiv = $parentsDiv->getAttribute("outerHTML");
+            $parentsDiv = $this->seleniumDriver->findElements('.sportName');
+            foreach ($parentsDiv as $parentDiv) {
+                $htmlDiv .= $parentDiv->getAttribute("outerHTML");
+            }
         } catch (Exception $e) {
             echo $e->getMessage();
         }

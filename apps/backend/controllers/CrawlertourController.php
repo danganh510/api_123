@@ -43,8 +43,8 @@ class CrawlertourController extends ControllerBase
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
-        
-        $tour = Tournament::findFirstById($tour_id);
+
+        $tour = ScTournament::findFirst("tournament_active = 'Y'");
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live,$tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
@@ -71,7 +71,7 @@ class CrawlertourController extends ControllerBase
                 'tour' => true
             ];
             $clientGuzzle = new \GuzzleHttp\Client();
-            $url = API_END_PONT . '/save-match';
+            $url = 'http://123tiso.com/save-match';
             try {
                 $clientGuzzle->post(
                     $url,
