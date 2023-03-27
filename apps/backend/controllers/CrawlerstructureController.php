@@ -109,7 +109,7 @@ class CrawlerstructureController extends ControllerBase
                     $tournament->setTournamentOrder($key);
 
                     $tournament->setTournamentCountry($arrTour[$key]['countryName']);
-                    $tournament->setTournamentCountryCode($countryModel->getCountryCode());
+                    $tournament->setTournamentCountryCode(strtolower($countryModel->getCountryCode()));
                     $save = $tournament->save();
                     if (!$save) {
                         echo $tournament->getMessages();
