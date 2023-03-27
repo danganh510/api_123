@@ -53,11 +53,16 @@ class CrawlerstructureController extends ControllerBase
 
             $arrCountryCrawl = [];
             $arrTour = [];
+            $limit = 10;
+            $total = 0;
 
             foreach ($blockCountry as $divCountry) {
                 $countryName = $divCountry->getText();
 
                 if (in_array($countryName, $arrCountryName) || in_array($countryName, $arrCountryCrawl)) {
+                    continue;
+                }
+                if ($total > $limit) {
                     continue;
                 }
                 $arrCountryCrawl[] = $countryName;
@@ -73,6 +78,7 @@ class CrawlerstructureController extends ControllerBase
                         'countryName' => $countryName
                     ];
                 }
+                $total++;
             }
 
 
