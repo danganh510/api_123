@@ -21,9 +21,6 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
         try {
 
             $parentsDiv = $this->seleniumDriver->findElements('.sportName');
-            var_dump($parentsDiv);
-            $this->seleniumDriver->quit();
-            exit;
             foreach ($parentsDiv as $parentDiv) {
                 $htmlDiv .= $parentDiv->getAttribute("outerHTML");
             }
