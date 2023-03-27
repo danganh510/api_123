@@ -15,6 +15,7 @@ use Score\Repositories\Team;
 use Score\Models\ScMatch;
 use Score\Repositories\Country;
 use Score\Repositories\CrawlerFlashScore;
+use Score\Repositories\CrawlerList;
 use Score\Repositories\CrawlerSofa;
 use Score\Repositories\MatchCrawl;
 use Score\Repositories\MatchRepo;
@@ -25,7 +26,7 @@ use Score\Repositories\Tournament;
 
 class CrawlerstructureController extends ControllerBase
 {
-
+    public $url_fl = "https://www.flashscore.com";
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
     public function indexAction()
     {
@@ -40,11 +41,9 @@ class CrawlerstructureController extends ControllerBase
             $arrCountry = ScCountry::find();
             $arrCountryName = array_column($arrCountry->toArray(),"country_name");
 
-            $selenium = new Selenium($this->type_crawl);
+            $selenium = new Selenium($this->url_fl);
             $selenium->clickButton(".leftMenu__icon--arrow");
             $blockCountry = $selenium->findElements(".lmc__block");
-            $selenium->quit();
-var_dump($blockCountry);exit;
 
             $arrCountryCrawl = [];
             $arrTour = [];
