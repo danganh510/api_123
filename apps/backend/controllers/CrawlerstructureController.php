@@ -39,12 +39,20 @@ class CrawlerstructureController extends ControllerBase
         $start_time = microtime(true);
         try {
             $arrCountry = ScCountry::find();
-            $arrCountryName = array_column($arrCountry->toArray(),"country_name");
+            $arrCountryName = array_column($arrCountry->toArray(), "country_name");
 
             $selenium = new Selenium($this->url_fl);
+            try {
+                $selenium->clickButton("#onetrust-reject-all-handler");
+            } catch (Exception $e) {
+                echo "not found cookie";
+            }
+ 
             $selenium->clickButton(".lmc__itemMore");
             $blockCountry = $selenium->findElements(".lmc__block");
-var_dump($blockCountry);exit;
+            $selenium->quit();
+            var_dump($blockCountry);
+            exit;
 
             $arrCountryCrawl = [];
             $arrTour = [];
@@ -52,14 +60,14 @@ var_dump($blockCountry);exit;
             foreach ($blockCountry as $divCountry) {
                 $countryName = $divCountry->getText();
 
-                if (in_array($countryName,$arrCountryName) || in_array($countryName,$arrCountryCrawl)) {
+                if (in_array($countryName, $arrCountryName) || in_array($countryName, $arrCountryCrawl)) {
                     continue;
                 }
                 $arrCountryCrawl[] = $countryName;
                 $butonOpen = $divCountry->findElement(WebDriverBy::cssSelector(".lmc__sortIcon"));
                 $butonOpen->click();
                 $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
-                
+
                 foreach ($arrDivTour as $tour) {
                     $tourName = $tour->getText();
                     $href = $tour->getAttribute('href');
@@ -70,18 +78,20 @@ var_dump($blockCountry);exit;
                     ];
                 }
             }
-            $selenium->quit();
 
-            echo ( microtime(true) - $start_time). "</br>";
+
+            echo (microtime(true) - $start_time) . "</br>";
         } catch (Exception $e) {
             echo $e->getMessage();
             die();
         }
-        var_dump($arrCountryCrawl,$arrTour);exit;
-  
-        echo ( microtime(true) - $start_time). "</br>";
+        $selenium->quit();
+        var_dump($arrCountryCrawl, $arrTour);
+        exit;
+
+        echo (microtime(true) - $start_time) . "</br>";
         end:
-        echo "---total: ". $total;
+        echo "---total: " . $total;
 
         echo "---finish in " . (time() - $start_time_cron) . " second";
         die();
