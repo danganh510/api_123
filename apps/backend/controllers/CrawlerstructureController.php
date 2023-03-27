@@ -42,7 +42,7 @@ class CrawlerstructureController extends ControllerBase
             $arrCountryName = array_column($arrCountry->toArray(),"country_name");
 
             $selenium = new Selenium($this->url_fl);
-            $selenium->clickButton(".leftMenu__icon--arrow");
+            $selenium->clickButton(".lmc__itemMore");
             $blockCountry = $selenium->findElements(".lmc__block");
 
             $arrCountryCrawl = [];
