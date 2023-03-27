@@ -66,10 +66,10 @@ class MatchRepo extends Component
         }
 
         if ($timeInfo['time_live'] == "HT") {
-            if ($matchSave->getMatchTimeFt() == "") {
+            if ($matchSave->getMatchTimeFt() == "" && $timeInfo['status'] == self::MATH_STATUS_START) {
                 $matchSave->setMatchTimeFt(time());
             }
-            if ($matchSave->getMatchScoreHt() == "") {
+            if ($matchSave->getMatchScoreHt() == "" && $timeInfo['status'] == self::MATH_STATUS_START) {
                 $score_ht = $match->getHomeScore() . "-" . $match->getAwayScore();
                 $matchSave->setMatchScoreHt($score_ht);
             }
@@ -78,7 +78,7 @@ class MatchRepo extends Component
             if ($matchSave->getMatchTimeFt() == "") {
                 $matchSave->setMatchTimeFt(time());
             }
-            if ($matchSave->getMatchScoreFt() == "" && $timeInfo['status'] == self::MATH_STATUS_START) {
+            if ($matchSave->getMatchScoreFt() == "" && $timeInfo['status'] == self::MATH_STATUS_FINSH) {
                 $score_ft = $match->getHomeScore() . "-" . $match->getAwayScore();
                 $matchSave->setMatchScoreFt($score_ft);
             }
