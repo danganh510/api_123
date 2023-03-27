@@ -183,6 +183,7 @@ class MatchRepo extends Component
                             $temp .= $char;
                         }
                     }
+                    
                     $match_time = $temp;
                     if (strpos($match_time, ".")) {
                         //15.03. 07:00
