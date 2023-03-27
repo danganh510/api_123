@@ -159,8 +159,8 @@ class MatchRepo extends Component
                     if (strpos($match_time, ".") == 2) {
                         //15.03. 07:00
                         $time = 0;
-                        $arrTime = explode(". ",$match_time);
-                        $start_time = $this->my->formatDateYMD($arrTime[0]. ".2023") . " " . $arrTime[1];
+                        $arrTime = explode(".",$match_time);
+                        $start_time = $this->my->formatDateYMD($arrTime[0]."/".$arrTime[1]. "/2023") . " " . $arrTime[2];
                         $start_time = strtotime($start_time);
                         $time_live = 0;
                         $status = self::MATH_STATUS_WAIT;
