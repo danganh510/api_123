@@ -46,7 +46,7 @@ class CrawlerList extends Component
                 $this->url_crawl = $this->url_fl;
                 if ($this->isLive) {
                     if ($this->tour_link) {
-                        if (strpos($this->tour_link,$this->url_fl) == false) {
+                        if (strpos($this->url_fl,$this->tour_link) == false) {
                             $this->url_crawl = $this->url_fl . $this->tour_link;
                         }
                         var_dump($this->url_crawl);exit;
