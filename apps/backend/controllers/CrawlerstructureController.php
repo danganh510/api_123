@@ -61,8 +61,7 @@ class CrawlerstructureController extends ControllerBase
                     continue;
                 }
                 $arrCountryCrawl[] = $countryName;
-                $butonOpen = $divCountry->findElement(WebDriverBy::cssSelector(".lmc__sortIcon"));
-                $butonOpen->click();
+                $divCountry->click();
                 $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
 
                 foreach ($arrDivTour as $tour) {
