@@ -122,7 +122,11 @@ class CrawlerFlashScoreBase extends CrawlerList
         $dataMatch['href_detail'] = "/match/" . $id_insite;
         try {
             if (count($divMatch->find(".event__stage--block"))) {
-                $time = $divMatch->find(".event__stage--block")[0]->text();
+                if ($divMatch->find(".event__time",0)) {
+                    $time = $divMatch->$divMatch->find(".event__time",0)->text();
+                } else {
+                    $time = $divMatch->find(".event__stage--block")[0]->text();
+                }
             } else {
                 $time = $divMatch->find(".event__time")[0]->text();
             }
