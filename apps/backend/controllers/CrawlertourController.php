@@ -50,7 +50,6 @@ class CrawlertourController extends ControllerBase
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live,$tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
-            var_dump($list_match);exit;
             
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -74,6 +73,7 @@ class CrawlertourController extends ControllerBase
                 'is_live' => $is_live,
                 'tour' => true
             ];
+            die(json_encode($request));
             $clientGuzzle = new \GuzzleHttp\Client();
             $url = 'http://123tiso.com/save-match';
             try {
