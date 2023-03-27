@@ -53,7 +53,7 @@ class CrawlerstructureController extends ControllerBase
 
             $arrCountryCrawl = [];
             $arrTour = [];
-            $limit = 2;
+            $limit = 200;
             $total = 0;
 
             foreach ($blockCountry as $divCountry) {
@@ -66,18 +66,18 @@ class CrawlerstructureController extends ControllerBase
                     continue;
                 }
                 $arrCountryCrawl[] = $countryName;
-                $divCountry->click();
-                $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
+                // $divCountry->click();
+                // $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
 
-                foreach ($arrDivTour as $tour) {
-                    $tourName = $tour->getText();
-                    $href = $tour->getAttribute('href');
-                    $arrTour[] = [
-                        'name' => $tourName,
-                        'href' => $href,
-                        'countryName' => $countryName
-                    ];
-                }
+                // foreach ($arrDivTour as $tour) {
+                //     $tourName = $tour->getText();
+                //     $href = $tour->getAttribute('href');
+                //     $arrTour[] = [
+                //         'name' => $tourName,
+                //         'href' => $href,
+                //         'countryName' => $countryName
+                //     ];
+                // }
                 $total++;
             }
 

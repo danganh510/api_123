@@ -5,6 +5,7 @@ namespace Score\Models;
 class ScTournament extends \Phalcon\Mvc\Model
 {
     protected $tournament_id;
+    protected $tournament_type;
     protected $tournament_name;
     protected $tournament_slug;
     protected $tournament_name_flash_score;
@@ -37,6 +38,20 @@ class ScTournament extends \Phalcon\Mvc\Model
         $this->tournament_id  = $tournament_id;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getTournamentType()
+    {
+        return $this->tournament_type;
+    }
+    /**
+     * @param mixed $tournament_type
+     */
+    public function setTournamentType($tournament_type)
+    {
+        $this->tournament_type = $tournament_type;
+    }
     /**
      * @return mixed
      */
@@ -242,14 +257,15 @@ class ScTournament extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-    public static function getTourIdCrawl() {
+    public static function getTourIdCrawl()
+    {
         $arr = self::find([
             'columns' => "tournament_id",
             'tournament_crawl = "Y"',
             'orderBy' => "tournament_order ASC"
         ]);
-      
-        $arr = array_column($arr->toArray(),"tournament_id");
+
+        $arr = array_column($arr->toArray(), "tournament_id");
         return $arr;
     }
 }
