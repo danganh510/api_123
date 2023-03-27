@@ -123,7 +123,7 @@ class CrawlerFlashScoreBase extends CrawlerList
         try {
             if (count($divMatch->find(".event__stage--block"))) {
                 if ($divMatch->find(".event__time",0)) {
-                    $time = $divMatch->$divMatch->find(".event__time",0)->text();
+                    $time =$divMatch->find(".event__time",0)->text();
                 } else {
                     $time = $divMatch->find(".event__stage--block")[0]->text();
                 }
