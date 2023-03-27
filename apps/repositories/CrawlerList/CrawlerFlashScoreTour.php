@@ -16,7 +16,7 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
     }
     public function getHtmlParent()
     {
-        $this->setupSite();
+        $this->setupSiteTour();
         $htmlDiv = "";
         try {
 
