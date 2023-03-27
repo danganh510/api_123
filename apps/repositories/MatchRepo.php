@@ -175,30 +175,29 @@ class MatchRepo extends Component
                 break;
             default:
                 if (strpos($match_time, ":")) {
-           
+                    $temp = "";
+                    $arrString = str_split($match_time);
+                    //  var_dump($arrString);exit;
+                    foreach ($arrString as $char) {
+                        if (is_numeric($char) || in_array($char, ['.', ":"])) {
+                            $temp .= $char;
+                        }
+                    }
+                    $match_time = $temp;
                     if (strpos($match_time, ".")) {
                         //15.03. 07:00
-                       // $match_time = "07.05.00:00FRO";
-                      //  $match_time = str_replace("FRO","",$match_time);
-                        $temp = "";
-                        $arrString = str_split($match_time);
-                      //  var_dump($arrString);exit;
-                        foreach($arrString as $char) {
-                            if (is_numeric($char) || in_array($char,['.',":"])) {
-                                $temp .= $char;
-                            }
-                        }
-                        $match_time = $temp;
+                        // $match_time = "07.05.00:00FRO";
+                        //  $match_time = str_replace("FRO","",$match_time);
+
                         $time = 0;
-                        $arrTime = explode(".",$match_time);
-                      
-                        $start_time = $arrTime[1]."/".$arrTime[0]. "/2023" . " " . $arrTime[2];
-                     
+                        $arrTime = explode(".", $match_time);
+
+                        $start_time = $arrTime[1] . "/" . $arrTime[0] . "/2023" . " " . $arrTime[2];
+
                         $start_time = strtotime($start_time);
                         if ($start_time < time()) {
                             $time_live = "FT";
                             $status = self::MATH_STATUS_FINSH;
-
                         } else {
                             $time_live = 0;
                             $status = self::MATH_STATUS_WAIT;
