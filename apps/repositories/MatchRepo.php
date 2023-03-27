@@ -161,12 +161,18 @@ class MatchRepo extends Component
                         $time = 0;
                         $arrTime = explode(".",$match_time);
                         
-                        $start_time = $this->my->formatDateYMD($arrTime[0]."/".$arrTime[1]. "/2023") . " " . $arrTime[2];
-                        var_dump($start_time);exit;
+                        $start_time = $arrTime[0]."/".$arrTime[1]. "/2023" . " " . $arrTime[2];
                         
                         $start_time = strtotime($start_time);
                         $time_live = 0;
-                        $status = self::MATH_STATUS_WAIT;
+                        if ($start_time < time()) {
+                            $time_live = "FT";
+                            $status = self::MATH_STATUS_FINSH;
+
+                        } else {
+                            $time_live = 0;
+                            $status = self::MATH_STATUS_WAIT;
+                        }
                         break;
                     } else {
                         $time = 0;
