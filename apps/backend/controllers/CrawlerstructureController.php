@@ -86,6 +86,9 @@ class CrawlerstructureController extends ControllerBase
                 $divCountry->click();
                 sleep(2);
                 $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
+                var_dump(count($arrDivTour));
+                $selenium->quit();
+                die();
 
                 foreach ($arrDivTour as $key =>  $tour) {
                     $tourName = $tour->getText();
