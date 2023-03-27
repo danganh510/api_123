@@ -123,6 +123,7 @@ class MatchRepo extends Component
     }
     public function getTime($match_time, $time_plus)
     {
+        echo $match_time;
         switch ($match_time) {
             case "HT":
             case "Half Time":
@@ -156,15 +157,19 @@ class MatchRepo extends Component
                 break;
             default:
                 if (strpos($match_time, ":")) {
+                    echo "1";
                     if (strpos($match_time, ".")) {
+                        echo 2;
                         //15.03. 07:00
                         //07.05.00:00FRO
                         $match_time = str_replace("FRO","",$match_time);
+                        echo $match_time;
                         $time = 0;
                         $arrTime = explode(".",$match_time);
                         
                         $start_time = $arrTime[0]."/".$arrTime[1]. "/2023" . " " . $arrTime[2];
-                        
+                        echo $match_time;
+
                         $start_time = strtotime($start_time);
                         $time_live = 0;
                         if ($start_time < time()) {
