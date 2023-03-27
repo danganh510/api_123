@@ -17,7 +17,6 @@ class CrawlerFlashScoreBase extends CrawlerList
     public function setupSiteTour()
     {
         $this->runSelenium();
-
     }
     public function setupSite()
     {
@@ -122,8 +121,8 @@ class CrawlerFlashScoreBase extends CrawlerList
         $dataMatch['href_detail'] = "/match/" . $id_insite;
         try {
             if (count($divMatch->find(".event__stage--block"))) {
-                if ($divMatch->find(".event__time",0)) {
-                    $time =$divMatch->find(".event__time",0)->text();
+                if ($divMatch->find(".event__time", 0)) {
+                    $time = $divMatch->find(".event__time", 0)->text();
                 } else {
                     $time = $divMatch->find(".event__stage--block")[0]->text();
                 }

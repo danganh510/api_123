@@ -160,9 +160,9 @@ class MatchRepo extends Component
                     if (strpos($match_time, ".")) {
                         //15.03. 07:00
                         //07.05.00:00FRO
-                        $match_time = str_replace("FRO","",$match_time);
+                      //  $match_time = str_replace("FRO","",$match_time);
                         $temp = "";
-                        $arrString = explode("",$match_time);
+                        $arrString = str_split("",$match_time);
                         foreach($arrString as $char) {
                             if (is_numeric($char) || in_array($char,['.',":"])) {
                                 $temp .= $char;
