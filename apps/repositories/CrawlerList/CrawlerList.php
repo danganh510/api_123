@@ -122,7 +122,7 @@ class CrawlerList extends Component
     {
     }
     public function replaceTeamName($teamName) {
-        return str_replace(['GOAL', 'CORRECTION', '&nbsp;', 'penalty','Penalty','VAR - handball'], ['', '', '','','',''], $teamName);
+        return str_replace(['GOAL', 'CORRECTION', '&nbsp;', 'penalty','Penalty','VAR - handball',"VAR","VAR - offside"], ['', '', '','','','',"",""], $teamName);
     }
     public function saveMatch($data)
     {
