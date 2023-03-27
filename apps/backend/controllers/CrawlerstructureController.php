@@ -43,6 +43,9 @@ class CrawlerstructureController extends ControllerBase
             $selenium = new Selenium($this->type_crawl);
             $selenium->clickButton(".leftMenu__icon--arrow");
             $blockCountry = $selenium->findElements(".lmc__block");
+            $selenium->quit();
+var_dump($blockCountry);exit;
+
             $arrCountryCrawl = [];
             $arrTour = [];
 
