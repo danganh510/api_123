@@ -53,7 +53,7 @@ class CrawlerstructureController extends ControllerBase
 
             $arrCountryCrawl = [];
             $arrTour = [];
-            $limit = 10;
+            $limit = 2;
             $total = 0;
 
             foreach ($blockCountry as $divCountry) {
