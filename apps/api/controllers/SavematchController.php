@@ -83,19 +83,16 @@ class SavematchController extends ControllerBase
             $arrMatch = $arrMatch->toArray();
             $matchCache = new CacheMatch();
             $matchCache->setCache(json_encode($arrMatch));
-        } else if (!$tour) {
-              // islive
-            $matchCache = new CacheMatchLive();
-            $result = $matchCache->setCache(json_encode($arrMatchCrawl));
         } else {
-          
-            //to be conitnei
+            $time_end = time() + 3 * 60;
+            $time_begin = time() - 3 * 60;
+            $arrMatch = ScMatch::find(
+                "match_status = 'S' OR (match_status = 'F' AND match_time_finish < $time_end) OR (match_status = 'W' AND match_start_time > $time_begin) "
+            );
+            $arrMatch = $arrMatch->toArray();
             $matchCache = new CacheMatchLive();
-            $matchs = $matchCache->getCache();
-            foreach ($matchs as $match) {
-
-            }
-        }
+            $matchCache->setCache(json_encode($arrMatch));
+        } 
 
         //nếu có trận được tạo mới thì cache lại:
         if ($is_new || ($is_live !== true && $total > 1)) {
@@ -130,7 +127,7 @@ class SavematchController extends ControllerBase
                 ];
             }
         }
-        
+
         return [
             'code' => 200,
             'status' => 'success',
