@@ -156,9 +156,9 @@ class MatchRepo extends Component
                 break;
             default:
                 if (strpos($match_time, ":")) {
-                    echo $match_time;exit;
+           
                     if (strpos($match_time, ".")) {
-                        echo 2;
+                        echo $match_time;exit;
                         //15.03. 07:00
                         //07.05.00:00FRO
                         $match_time = str_replace("FRO","",$match_time);
