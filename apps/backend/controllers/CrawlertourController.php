@@ -73,7 +73,7 @@ class CrawlertourController extends ControllerBase
                 'is_live' => $is_live,
                 'tour' => true
             ];
-            die(json_encode($request));
+   
             $clientGuzzle = new \GuzzleHttp\Client();
             $url = 'http://123tiso.com/save-match';
             try {
