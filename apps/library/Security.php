@@ -58,6 +58,7 @@ class Security extends Plugin
                 'backendcrawlertour'    => array('*'),
                 'backendcrawlerdetaillive'    => array('*'),
                 'backendcrawlimage'    => array('*'),
+                'backendcrawlerstructure'    => array('*'),
             );
             foreach ($publicResources as $resource => $actions) { //$resource is key, $actions is value
                 $acl->addResource(new \Phalcon\Acl\Resource($resource), $actions);
