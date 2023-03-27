@@ -78,12 +78,12 @@ class MatchRepo extends Component
             if ($matchSave->getMatchTimeFt() == "") {
                 $matchSave->setMatchTimeFt(time());
             }
-            if ($matchSave->getMatchScoreFt() == "") {
+            if ($matchSave->getMatchScoreFt() == "" && $timeInfo['status'] == self::MATH_STATUS_START) {
                 $score_ft = $match->getHomeScore() . "-" . $match->getAwayScore();
                 $matchSave->setMatchScoreFt($score_ft);
             }
-            if ($matchSave->getMatchTimeFinish() == "") {
-                $matchSave->setMatchTimeFinish(time());
+            if ($matchSave->getMatchTimeFinish() == "" && $timeInfo['status'] == self::MATH_STATUS_FINSH) {
+                $matchSave->setMatchTimeFinish($timeInfo['start_time'] + 90 * 60);
             }
         }
 
