@@ -63,6 +63,25 @@ class MatchRepo extends Component
                 //use crawl api
                 $matchSave->setMatchStartTime($timeInfo['start_time']);
             }
+        } else {
+            if ($timeInfo['start_time'] < $matchSave->getMatchStartTime()) {
+                return [
+                    'matchSave' => false,
+                    'is_new' => false
+                ];
+            }
+            if ($match->getHomeScore()  < $matchSave->getMatchHomeScore()) {
+                return [
+                    'matchSave' => false,
+                    'is_new' => false
+                ];
+            }
+            if ($match->getAwayScore()  < $matchSave->getMatchAwayScore()) {
+                return [
+                    'matchSave' => false,
+                    'is_new' => false
+                ];
+            }
         }
 
         if ($timeInfo['time_live'] == "HT") {
