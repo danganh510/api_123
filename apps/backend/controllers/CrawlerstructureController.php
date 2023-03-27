@@ -7,6 +7,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Goutte\Client;
 use GuzzleHttp\Psr7\Request;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
+use Score\Models\ScArea;
 use Score\Models\ScCountry;
 use Score\Repositories\CrawlerScore;
 use Score\Repositories\CrawlerSofaDetail;
@@ -45,12 +46,22 @@ class CrawlerstructureController extends ControllerBase
                 'country_order = 1'
             ]);
             if (!$countryModel) {
-                echo "notfound Country";
-                die();
+                $area = ScArea::findFirst([
+                    'area_order = 1'
+                ]);
+                $countryCode = $area->getAreaId();
+                $countryNameDB = $area->getAreaName();
+                $area->setAreaOrder(2);
+                $area->save();
+            } else {
+                $countryCode = $countryModel->getCountryCode();
+                $countryNameDB = $countryModel->getCountryName();
+                $countryModel->setCountryOrder(2);
+                $countryModel->save();
+
             }
 
-            $countryModel->setCountryOrder(2);
-            $countryModel->save();
+       
 
             $selenium = new Selenium($this->url_fl);
             try {
@@ -65,11 +76,12 @@ class CrawlerstructureController extends ControllerBase
             $arrCountryCrawl = [];
             $arrTour = [];
             $total = 0;
+          
 
             foreach ($blockCountry as $divCountry) {
                 $countryName = $divCountry->getText();
 
-                if ($countryName != $countryModel->getCountryName()) {
+                if ($countryName != $countryNameDB) {
                     continue;
                 }
 
@@ -109,7 +121,7 @@ class CrawlerstructureController extends ControllerBase
                     $tournament->setTournamentOrder($key);
 
                     $tournament->setTournamentCountry($arrTour[$key]['countryName']);
-                    $tournament->setTournamentCountryCode(strtolower($countryModel->getCountryCode()));
+                    $tournament->setTournamentCountryCode(strtolower($countryCode));
                     $save = $tournament->save();
                     if (!$save) {
                         echo $tournament->getMessages();
@@ -128,6 +140,7 @@ class CrawlerstructureController extends ControllerBase
 
         echo (microtime(true) - $start_time) . "\n\r";
         end:
+        echo "---for: " . $countryNameDB;
         echo "---total: " . $total;
 
         echo "---finish in " . (time() - $start_time_cron) . " second";
