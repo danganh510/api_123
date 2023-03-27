@@ -72,10 +72,7 @@ class CrawlerstructureController extends ControllerBase
                 if ($countryName != $countryModel->getCountryName()) {
                     continue;
                 }
-                echo $countryName;
-                echo $countryModel->getCountryName();
-                $selenium->quit();
-                exit;
+       
                 $arrCountryCrawl[] = $countryName;
                 $type = "country";
 
