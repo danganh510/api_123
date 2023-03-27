@@ -42,6 +42,7 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
         }
 
         $parentDivs = $parentDiv->find("div");
+        $round = "";
 
         foreach ($parentDivs as $key => $div) {
             //   goto test;
@@ -52,10 +53,14 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
                     $this->list_live_tournaments[] = $this->getTournament($div);
                     continue;
                 }
+                $divRound = $div->find(".event__participant",0);
+                if ($divRound) {
+                    $round = $divRound->text();
+                }
                 //match
                 $divMatch = $div->find(".event__participant");
                 if (!empty($divMatch)) {
-                    $list_live_match[] = $this->getMatch($div);
+                    $list_live_match[] = $this->getMatch($div,$round);
 
                     // echo "time get match: " . (microtime(true) - $time_1) . "</br>";
                 }

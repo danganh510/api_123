@@ -155,7 +155,11 @@ class CrawlerList extends Component
         $liveMatch->setAway($data['away']);
         $liveMatch->setAwayScore(is_numeric($data['away_score']) ? $data['away_score'] : 0);
         $liveMatch->setHrefDetail($data['href_detail']);
-        $liveMatch->setRound($this->round);
+        if ($data['round']) {
+            $liveMatch->setRound($data['round']);
+        } else {
+            $liveMatch->setRound($this->round);
+        }
         $liveMatch->setTournament($this->list_live_tournaments[count($this->list_live_tournaments) - 1]);
         $liveMatch->setCountryCode($this->list_live_tournaments[count($this->list_live_tournaments) - 1]->getCountryCode());
         if (isset($data['home_image'])) {

@@ -112,7 +112,7 @@ class CrawlerFlashScoreBase extends CrawlerList
 
         return $tournamentModel;
     }
-    public function getMatch($divMatch)
+    public function getMatch($divMatch, $round = "")
     {
 
         $dataMatch = [];
@@ -154,6 +154,8 @@ class CrawlerFlashScoreBase extends CrawlerList
 
         $away_score = $divMatch->find(".event__score--away");
         $dataMatch['away_score'] = isset($away_score[0]) ? $away_score[0]->innertext() : 0;
+
+        $dataMatch['round'] = $round;
 
         $liveMatch = $this->saveMatch($dataMatch);
         return $liveMatch;
