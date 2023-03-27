@@ -84,6 +84,7 @@ class CrawlerstructureController extends ControllerBase
                     $type = "global";
                 }
                 $divCountry->click();
+                sleep(2);
                 $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
 
                 foreach ($arrDivTour as $key =>  $tour) {
