@@ -68,11 +68,11 @@ class CrawlerstructureController extends ControllerBase
 
             foreach ($blockCountry as $divCountry) {
                 $countryName = $divCountry->getText();
- 
+
                 if ($countryName != $countryModel->getCountryName()) {
                     continue;
                 }
-       
+
                 $arrCountryCrawl[] = $countryName;
                 $type = "country";
 
@@ -84,7 +84,7 @@ class CrawlerstructureController extends ControllerBase
                     $type = "global";
                 }
                 $divCountry->click();
-                sleep(2);
+                sleep(1);
                 $arrDivTour = $divCountry->findElements(WebDriverBy::cssSelector(".lmc__templateHref"));
 
                 foreach ($arrDivTour as $key =>  $tour) {
@@ -109,25 +109,22 @@ class CrawlerstructureController extends ControllerBase
                     $tournament->setTournamentOrder($key);
 
                     $tournament->setTournamentCountry($arrTour[$key]['countryName']);
-                    $tournament->setTournamentCountryCode($countryModel->getCountryCode());
+                    $tournament->setTournamentCountryCode($couFntryModel->getCountryCode());
                     $save = $tournament->save();
                     if (!$save) {
                         echo $tournament->getMessages();
                         die();
                     }
+                    $total++;
                 }
-                $total++;
             }
 
-
-            echo (microtime(true) - $start_time) . "</br>";
+       //     echo (microtime(true) - $start_time) . "</br>";
         } catch (Exception $e) {
             echo $e->getMessage();
             die();
         }
         $selenium->quit();
-        var_dump($arrCountryCrawl, $arrTour);
-        exit;
 
         echo (microtime(true) - $start_time) . "</br>";
         end:
