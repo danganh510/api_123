@@ -123,9 +123,6 @@ class MatchRepo extends Component
     }
     public function getTime($match_time, $time_plus)
     {
-        echo $match_time;
-        echo strpos($match_time, ":");
-        exit;
         switch ($match_time) {
             case "HT":
             case "Half Time":
@@ -159,7 +156,7 @@ class MatchRepo extends Component
                 break;
             default:
                 if (strpos($match_time, ":")) {
-                    echo "1";
+                    echo $match_time;exit;
                     if (strpos($match_time, ".")) {
                         echo 2;
                         //15.03. 07:00
