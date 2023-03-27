@@ -50,6 +50,8 @@ class CrawlertourController extends ControllerBase
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live,$tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
+            var_dump($list_match);exit;
+            
         } catch (Exception $e) {
             echo $e->getMessage();
             // $seleniumDriver->quit();
