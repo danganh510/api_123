@@ -156,7 +156,7 @@ class MatchRepo extends Component
                 break;
             default:
                 if (strpos($match_time, ":")) {
-                    if (strpos($match_time, ".") == 2) {
+                    if (strpos($match_time, ".")) {
                         //15.03. 07:00
                         $time = 0;
                         $arrTime = explode(".",$match_time);
