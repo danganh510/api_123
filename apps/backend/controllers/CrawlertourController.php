@@ -37,14 +37,16 @@ class CrawlertourController extends ControllerBase
 
 
         if (!$this->type_crawl) {
-            $this->type_crawl = MatchCrawl::TYPE_SOFA;
+            $this->type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
         }
         $start_time_cron = time() + 0 * 24 * 60 * 60;
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
 
-        $tour = ScTournament::findFirst("tournament_active = 'Y'");
+        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y'");
+        $tour->setTournamentIsCrawling("N");
+        $tour->save();
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live,$tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
