@@ -166,9 +166,7 @@ class MatchRepo extends Component
                         $arrTime = explode(".",$match_time);
                       
                         $start_time = $arrTime[0]."/".$arrTime[1]. "/2023" . " " . $arrTime[2];
-                        var_dump($arrTime,$start_time);exit;
-                        ;
-                        exit;
+                     
                         $start_time = strtotime($start_time);
                         if ($start_time < time()) {
                             $time_live = "FT";
