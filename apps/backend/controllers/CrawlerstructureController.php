@@ -49,6 +49,10 @@ class CrawlerstructureController extends ControllerBase
                 $area = ScArea::findFirst([
                     'area_order = 1'
                 ]);
+                if (!$area) {
+                    echo "Finish";
+                    die();
+                }
                 $countryCode = $area->getAreaId();
                 $countryNameDB = $area->getAreaName();
                 $area->setAreaOrder(2);
