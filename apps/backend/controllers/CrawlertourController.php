@@ -45,6 +45,10 @@ class CrawlertourController extends ControllerBase
         $list_match = [];
 
         $tour = ScTournament::findFirst("tournament_is_crawling = 'Y'");
+        if (!$tour) {
+            echo "not found tour\n\r";
+            die();
+        }
         $tour->setTournamentIsCrawling("N");
         $tour->save();
         try {
