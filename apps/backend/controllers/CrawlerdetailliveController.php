@@ -90,7 +90,7 @@ class CrawlerdetailliveController extends ControllerBase
         } else {
             $flag_crawl = $matchCrawl->getMatchCrawlDetail() + 1;
             $flag_crawl = (int) $flag_crawl;
-            //    $matchCrawl->setMatchCrawlDetail($flag_crawl);
+            $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
         $matchCrawl->save();
 
