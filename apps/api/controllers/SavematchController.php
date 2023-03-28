@@ -96,7 +96,7 @@ class SavematchController extends ControllerBase
         }
 
         //nếu có trận được tạo mới thì cache lại:
-        if ($is_new || ($is_live !== true && $total > 1)) {
+        if ($is_new || ($is_live !== true)) {
             $arrTeam = ScTeam::find("team_active = 'Y'");
             $arrTeam = $arrTeam->toArray();
             $arrTeamCache = [];
