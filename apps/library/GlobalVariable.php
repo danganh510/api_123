@@ -5,8 +5,10 @@ use Phalcon\Mvc\User\Component;
 class GlobalVariable extends Component
 {
     public $preg_match;
-	public $acceptUploadTypes;
+    public $acceptUploadTypes;
     public $timeZone;
+    public $timeCrawl;
+    public $curTimeCrawl;
     public $curTime;
     public $localTime;
     public $defaultLocation;
@@ -31,42 +33,44 @@ class GlobalVariable extends Component
     public $mainCurrency;
     public $tableSEO;
 
-    public $time_size_low_start ;
-    public $time_size_low_end ;
+    public $time_size_low_start;
+    public $time_size_low_end;
 
 
     public function __construct()
-	{
+    {
         $this->time_size_low_start = 18;
         $this->time_size_low_end = 6;
 
         $this->preg_match = "[/^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/]";
-        date_default_timezone_set('UTC');//default for Application - NOT ONLY for current script
-        $this->timeZone = 7*3600;
+        date_default_timezone_set('UTC'); //default for Application - NOT ONLY for current script
+        $this->timeZone = 7 * 3600;
+        $this->timeCrawl = -1 * 3600;
         $this->curTime = time();
+        $this->curTimeCrawl = $this->curTime + $this->timeCrawl;
         $this->localTime = time() + $this->timeZone;
         //$this->timeZoneStr = 'UTC -04:00';
-        $this->defaultLocation ='gx';
-        $this->defaultLanguage ='vi';
+        $this->defaultLocation = 'gx';
+        $this->defaultLanguage = 'vi';
         $this->defaultCountry = "gb";
         $this->mainCurrency = 'VND';
-	    //accept upload file types
-		$this->acceptUploadTypes = array(
-			"image/jpeg" => array("type" => "image", "ext" => ".jpg"),
-			"image/pjpeg" => array("type" => "image", "ext" => ".jpg"),
-			"image/png" => array("type" => "image", "ext" => ".png"),
-			"image/bmp" => array("type" => "image", "ext" => ".bmp"),
-			"image/x-windows-bmp" => array("type" => "image", "ext" => ".bmp"),
-			"image/x-icon" => array("type" => "image", "ext" => ".ico"),
-			"image/ico" => array("type" => "image", "ext" => ".ico"),
-			"image/gif" => array("type" => "image", "ext" => ".gif"),
-			"text/plain" => array("type" => "file", "ext" => ".txt"),
-			"application/msword" => array("type" => "file", "ext" => ".doc"),
-			"application/vnd.openxmlformats-officedocument.wordprocessingml.document" => array("type" => "file", "ext" => ".docx"),
-			"application/vnd.ms-excel" => array("type" => "file", "ext" => ".xls"),
-			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" => array("type" => "file", "ext" => ".xlsx"),
-			"application/pdf" => array("type" => "file", "ext" => ".pdf"),
-		);
+        //accept upload file types
+        $this->acceptUploadTypes = array(
+            "image/jpeg" => array("type" => "image", "ext" => ".jpg"),
+            "image/pjpeg" => array("type" => "image", "ext" => ".jpg"),
+            "image/png" => array("type" => "image", "ext" => ".png"),
+            "image/bmp" => array("type" => "image", "ext" => ".bmp"),
+            "image/x-windows-bmp" => array("type" => "image", "ext" => ".bmp"),
+            "image/x-icon" => array("type" => "image", "ext" => ".ico"),
+            "image/ico" => array("type" => "image", "ext" => ".ico"),
+            "image/gif" => array("type" => "image", "ext" => ".gif"),
+            "text/plain" => array("type" => "file", "ext" => ".txt"),
+            "application/msword" => array("type" => "file", "ext" => ".doc"),
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" => array("type" => "file", "ext" => ".docx"),
+            "application/vnd.ms-excel" => array("type" => "file", "ext" => ".xls"),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" => array("type" => "file", "ext" => ".xlsx"),
+            "application/pdf" => array("type" => "file", "ext" => ".pdf"),
+        );
 
         //accept upload file types
         $this->contentTypeImages = array(
