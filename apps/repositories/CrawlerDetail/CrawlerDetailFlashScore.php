@@ -30,6 +30,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             'start' => $start,
             'tracker' => $tracker
         ];
+        var_dump($result);exit;
         return $result;
     }
     /**
