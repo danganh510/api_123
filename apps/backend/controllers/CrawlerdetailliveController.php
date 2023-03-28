@@ -90,7 +90,7 @@ class CrawlerdetailliveController extends ControllerBase
         } else {
             $flag_crawl = $matchCrawl->getMatchCrawlDetail() + 1;
             $flag_crawl = (int) $flag_crawl;
-        //    $matchCrawl->setMatchCrawlDetail($flag_crawl);
+            //    $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
         $matchCrawl->save();
 
@@ -131,10 +131,14 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
             $time = $detail['match']['timeNow'];
-            $matchRepo = new MatchRepo();
-            var_dump($time);
-            $timeInfo = $matchRepo->getTime($time,0);
-var_dump($timeInfo);exit;
+            if ($time) {
+                $matchRepo = new MatchRepo();
+                var_dump($time);
+                $timeInfo = $matchRepo->getTime($time, 0);
+                var_dump($timeInfo);
+                exit;
+            }
+
             if ($start_time) {
                 $matchCrawl->setMatchStartTime($start_time);
             }
