@@ -219,8 +219,7 @@ class MatchRepo extends Component
                     $time = 0;
                     foreach ($arrTime as $time_1) {
                         if (is_numeric($time_1)) {
-                            if (is_numeric($time_1)) 
-                            $time += $time_1;
+                            $time += (int) $time_1;
                         } else {
                             echo "ERROR: " . $time_1;
                         }
@@ -231,10 +230,8 @@ class MatchRepo extends Component
                 } elseif (strpos($match_time, "'")) {
                     $arrTime = explode("'", $match_time);
                     $time = 0;
-                    var_dump($arrTime);exit;
                     foreach ($arrTime as $time_1) {
-                        if (is_numeric($time_1)) 
-                        $time += $time_1;
+                        $time += (int) $time_1;
                     }
                     $start_time = time() - $time * 60;
 
