@@ -131,12 +131,11 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
             $time = $detail['match']['timeNow'];
+            var_dump($time);exit;
             if ($time) {
                 $matchRepo = new MatchRepo();
-                var_dump($time);
                 $timeInfo = $matchRepo->getTime($time, 0);
-                var_dump($timeInfo);
-                exit;
+                $matchCrawl->setMatchTime($timeInfo['time_live']);
             }
 
             if ($start_time) {
