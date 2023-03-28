@@ -238,7 +238,7 @@ class MatchRepo extends Component
                     $start_time = time() - $time * 60;
 
                     $arrTime = explode("'", $match_time);
-                    $time_live = implode("'", $arrTime);
+                    $time_live = $time;
 
                     $status = self::MATH_STATUS_START;
                     break;
