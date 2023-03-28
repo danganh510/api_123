@@ -13,6 +13,7 @@ use Score\Repositories\MatchCrawl;
 use Score\Models\ScMatchInfo;
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
+use Score\Repositories\MatchRepo;
 use Score\Repositories\MyRepo;
 use Score\Repositories\Team;
 
@@ -89,7 +90,7 @@ class CrawlerdetailliveController extends ControllerBase
         } else {
             $flag_crawl = $matchCrawl->getMatchCrawlDetail() + 1;
             $flag_crawl = (int) $flag_crawl;
-            $matchCrawl->setMatchCrawlDetail($flag_crawl);
+        //    $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
         $matchCrawl->save();
 
@@ -129,6 +130,10 @@ class CrawlerdetailliveController extends ControllerBase
             $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;
             $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
+            $time = $detail['match']['startTime'];
+            $matchRepo = new MatchRepo();
+            $timeInfo = $matchRepo->getTime($time,0);
+var_dump($timeInfo);exit;
             if ($start_time) {
                 $matchCrawl->setMatchStartTime($start_time);
             }

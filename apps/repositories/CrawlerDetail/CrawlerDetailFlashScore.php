@@ -28,7 +28,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             'match' => $info['match'],
             'info' => $info['info'],
             'start' => $start,
-            'tracker' => $tracker
+            'tracker' => $tracker,
         ];
         return $result;
     }
