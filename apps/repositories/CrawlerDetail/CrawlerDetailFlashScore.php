@@ -69,7 +69,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         } catch (Exception $e) {
             goto end;
         }
-        sleep(1);
+        sleep(0.5);
         $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
         $htmlDivStart = $parentDiv->getAttribute("outerHTML");
 
@@ -88,7 +88,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         } catch (Exception $e) {
             goto end;
         }
-        sleep(1);
+        sleep(0.5);
         $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
         $htmlTRacker = $parentDiv->getAttribute("outerHTML");
 
