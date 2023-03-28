@@ -127,6 +127,7 @@ class CrawlerdetailliveController extends ControllerBase
         ) {
             $start_time = strtotime($detail['match']['startTime']);
             $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;
+            var_dump($start_time);exit;
             $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
             if ($start_time) {
