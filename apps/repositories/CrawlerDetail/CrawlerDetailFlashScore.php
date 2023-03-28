@@ -234,6 +234,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $time = "";
         $divScore = $divCrawl->find(".detailScore__matchInfo > div > span");
         $startTime = $divCrawl->find(".duelParticipant__startTime > div", 0);
+        $divTime =  $divCrawl->find(".detailScore__matchInfo > div > .eventTime",0);
         if ($startTime) {
             $startTime = $startTime->text();
         }
@@ -243,10 +244,12 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         if (isset($divScore[2])) {
             $awayScore = $divScore[2]->innertext();
         }
-        if (isset($divScore[4])) {
-            $time = $divScore[4]->innertext();
+        if ($divTime) {
+            $time = $divTime->innertext();
         } else {
-            $time = $divScore[3]->innertext();
+            $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus",0);
+
+            $time = $divStatus->innertext();
 
         }
         $logo = $divCrawl->find(".participant__image");
