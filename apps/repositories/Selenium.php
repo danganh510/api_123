@@ -26,7 +26,7 @@ class Selenium extends Component
         // } else {
         //     $this->cache->setCache($count + 1);
         // }
-       
+
         $ip = SELENIUM_END_POINT;
 
         //$ip = "13.250.21.188";
@@ -44,7 +44,10 @@ class Selenium extends Component
         }
         // exit;
         $host = "http://$ip:4444/wd/hub"; // URL của máy chủ Selenium
-        $this->driver = RemoteWebDriver::create($host, DesiredCapabilities::chrome());
+        $chromeOptions = new \Facebook\WebDriver\Chrome\ChromeOptions();
+        // Bật chế độ headless
+        $chromeOptions->addArguments(['--headless']);
+        $this->driver = RemoteWebDriver::create($host, $chromeOptions->toCapabilities());
         $this->setURL($url);
     }
     public function setURL($url = 'https://www.sofascore.com/football')
