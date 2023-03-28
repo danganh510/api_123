@@ -47,6 +47,12 @@ class Selenium extends Component
         $chromeOptions = new \Facebook\WebDriver\Chrome\ChromeOptions();
         // Bật chế độ headless
         $chromeOptions->addArguments(['--headless']);
+        // Tắt hình ảnh
+        $chromeOptions->addArguments(['--blink-settings=imagesEnabled=false']);
+        // Tắt phông chữ
+        $chromeOptions->addArguments(['--disable-extensions-file-access-check']);
+        // Tắt video và âm thanh
+        $chromeOptions->addArguments(['--disable-audio-output']);
         $this->driver = RemoteWebDriver::create($host, $chromeOptions->toCapabilities());
         $this->setURL($url);
     }
