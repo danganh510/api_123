@@ -43,7 +43,19 @@ class CrawlertourController extends ControllerBase
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
-
+        $enpoint =  API_END_PONT."/get-list-match";
+        $clientGuzzle = new \GuzzleHttp\Client();
+        try {
+            $arrListMatchLive =$clientGuzzle->get(
+                $enpoint
+            );
+        } catch (Exception $e) {
+        }
+        if (empty($arrListMatchLive->getBody())) {
+            echo "Not found match\n\r";
+        }
+        $arrListMatchLive = json_decode($arrListMatchLive->getBody(),true);
+var_dump($arrListMatchLive);exit;
         $tour = ScTournament::findFirst("tournament_is_crawling = 'Y'");
         if (!$tour) {
             echo "not found tour\n\r";
