@@ -58,19 +58,18 @@ class CrawlertourController extends ControllerBase
         $arrTourId = array_keys($arrListMatchLive);
         $strTour = implode(",", $arrTourId);
         $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
-        var_dump($tour);
-        exit;
+       
         if (!$tour) {
             $sql = "UPDATE Score\Models\ScMatch SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}') ";
             $this->modelsManager->executeQuery($sql);
             $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
 
             if (!$tour) {
-
                 echo "not found tour\n\r";
                 die();
             }
         }
+        
         $tour->setTournamentIsCrawling("N");
         $tour->save();
         try {
@@ -98,7 +97,7 @@ class CrawlertourController extends ControllerBase
                 'is_live' => $is_live,
                 'tour' => true
             ];
-            //   die(json_encode($request));
+               die(json_encode($request));
 
 
             $clientGuzzle = new \GuzzleHttp\Client();
