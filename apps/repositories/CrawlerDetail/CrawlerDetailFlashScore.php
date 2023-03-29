@@ -245,12 +245,12 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             $awayScore = $divScore[2]->innertext();
         }
         if ($divTime) {
-            $time = $divTime->innertext();
+            $time = $divTime->text();
         } else {
             $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus",0);
 
             if ($divStatus) {
-                $time = $divStatus->innertext();
+                $time = $divStatus->text();
             }
         }
         $logo = $divCrawl->find(".participant__image");
