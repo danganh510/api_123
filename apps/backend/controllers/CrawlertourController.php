@@ -35,6 +35,7 @@ class CrawlertourController extends ControllerBase
         $this->type_crawl = $this->request->get("type");
         $total = 0;
 
+        $time = microtime(true);
 
         if (!$this->type_crawl) {
             $this->type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
@@ -72,6 +73,7 @@ class CrawlertourController extends ControllerBase
         
         $tour->setTournamentIsCrawling("N");
         $tour->save();
+        var_dump(microtime(true) - $time);
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live, $tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
