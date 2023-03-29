@@ -16,7 +16,9 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
     }
     public function getHtmlParent()
     {
+        $time = microtime(true);
         $this->setupSiteTour();
+        var_dump(microtime(true) - $time);
         $htmlDiv = "";
         try {
             if ($this->isLive) {
@@ -34,6 +36,8 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
             echo $e->getMessage();
         }
         $this->seleniumDriver->quit();
+        var_dump(microtime(true) - $time);
+
         return $htmlDiv;
     }
     public function crawlList()
