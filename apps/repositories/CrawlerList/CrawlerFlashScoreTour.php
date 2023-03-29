@@ -19,10 +19,16 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
         $this->setupSiteTour();
         $htmlDiv = "";
         try {
-
-            $parentsDiv = $this->seleniumDriver->findElements('.sportName');
-            foreach ($parentsDiv as $parentDiv) {
-                $htmlDiv .= $parentDiv->getAttribute("outerHTML");
+            if ($this->isLive) {
+                $parentsDiv = $this->seleniumDriver->findElement('.sportName');
+                if ($parentsDiv) {
+                    $htmlDiv = $parentsDiv->getAttribute("outerHTML");
+                }
+            } else {
+                $parentsDiv = $this->seleniumDriver->findElements('.sportName');
+                foreach ($parentsDiv as $parentDiv) {
+                    $htmlDiv .= $parentDiv->getAttribute("outerHTML");
+                }
             }
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -54,14 +60,14 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
                     continue;
                 }
                 $classRound = $div->getAttribute('class');
-                if (strpos($classRound,"event__round") !== false) {
+                if (strpos($classRound, "event__round") !== false) {
                     $round = $div->text();
                     continue;
                 }
                 //match
                 $divMatch = $div->find(".event__participant");
                 if (!empty($divMatch)) {
-                    $list_live_match[] = $this->getMatch($div,$round);
+                    $list_live_match[] = $this->getMatch($div, $round);
 
                     // echo "time get match: " . (microtime(true) - $time_1) . "</br>";
                 }
