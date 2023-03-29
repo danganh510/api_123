@@ -56,8 +56,9 @@ class CrawlertourController extends ControllerBase
         }
         $arrListMatchLive = json_decode($arrListMatchLive->getBody(),true);
         $arrTourId = array_keys($arrListMatchLive);
-        var_dump($arrTourId);exit;
-        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y'");
+        $strTour = implode(",",$arrTourId);
+        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,{$strTour})");
+        var_dump($tour);exit;
         if (!$tour) {
             echo "not found tour\n\r";
             die();
