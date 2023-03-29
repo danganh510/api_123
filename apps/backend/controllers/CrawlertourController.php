@@ -43,10 +43,10 @@ class CrawlertourController extends ControllerBase
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
-        $enpoint =  API_END_PONT."/get-list-match";
+        $enpoint =  API_END_PONT . "/get-list-match";
         $clientGuzzle = new \GuzzleHttp\Client();
         try {
-            $arrListMatchLive =$clientGuzzle->get(
+            $arrListMatchLive = $clientGuzzle->get(
                 $enpoint
             );
         } catch (Exception $e) {
@@ -54,22 +54,28 @@ class CrawlertourController extends ControllerBase
         if (empty($arrListMatchLive->getBody())) {
             echo "Not found match\n\r";
         }
-        $arrListMatchLive = json_decode($arrListMatchLive->getBody(),true);
+        $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
         $arrTourId = array_keys($arrListMatchLive);
-        $strTour = implode(",",$arrTourId);
-        var_dump($strTour);exit;
-        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,{$strTour})");
-        var_dump($tour);exit;
+        $strTour = implode(",", $arrTourId);
+        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
+        var_dump($tour);
+        exit;
         if (!$tour) {
-            echo "not found tour\n\r";
-            die();
+            $sql = "UPDATE Score\Models\ScMatch SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}') ";
+            $this->modelsManager->executeQuery($sql);
+            $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
+
+            if (!$tour) {
+
+                echo "not found tour\n\r";
+                die();
+            }
         }
         $tour->setTournamentIsCrawling("N");
         $tour->save();
         try {
-            $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live,$tour->getTournamentHrefFlashscore());
+            $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live, $tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
-            
         } catch (Exception $e) {
             echo $e->getMessage();
             // $seleniumDriver->quit();
@@ -92,9 +98,9 @@ class CrawlertourController extends ControllerBase
                 'is_live' => $is_live,
                 'tour' => true
             ];
-         //   die(json_encode($request));
-            
-   
+            //   die(json_encode($request));
+
+
             $clientGuzzle = new \GuzzleHttp\Client();
             $url = 'http://123tiso.com/save-match';
             try {
