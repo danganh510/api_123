@@ -56,7 +56,7 @@ class Selenium extends Component
         $this->driver = RemoteWebDriver::create($host, $chromeOptions->toCapabilities());
         $time = microtime(true);
         $this->setURL($url);
-        var_dump(microtime(true) - $time);
+     //   var_dump(microtime(true) - $time);
     }
     public function setURL($url = 'https://www.sofascore.com/football')
     {

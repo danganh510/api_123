@@ -63,6 +63,7 @@ class CrawlertourController extends ControllerBase
         if (!$tour) {
             $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}') ";
             $this->modelsManager->executeQuery($sql);
+            echo "All reset \r\n";
             $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
 
             if (!$tour) {
