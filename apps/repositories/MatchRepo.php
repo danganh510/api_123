@@ -142,6 +142,7 @@ class MatchRepo extends Component
     }
     public function getTime($match_time, $time_plus)
     {
+        $match_time = trim($match_time);
         switch ($match_time) {
             case "HT":
             case "Half Time":
