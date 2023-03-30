@@ -41,6 +41,7 @@ class CrawlertourController extends ControllerBase
             $this->type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
         }
         $start_time_cron = time() + 0 * 24 * 60 * 60;
+        echo "============================";
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
@@ -74,7 +75,8 @@ class CrawlertourController extends ControllerBase
         
         $tour->setTournamentIsCrawling("N");
         $tour->save();
-        var_dump(microtime(true) - $time);
+        echo "Tour Id: ".$tour->getTournamentId();
+       // var_dump(microtime(true) - $time);
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live, $tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
