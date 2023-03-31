@@ -88,14 +88,16 @@ class CrawlerFlashScoreBase extends CrawlerList
         $name = $div->find(".event__title--name", 0)->innertext();
 
         $country_name =  strtolower($country_name);
+        $country_name = str_replace(["&amp;"],["&"],$country_name);
         $group = "";
-        if ((strpos($name, "Group") || strpos($name, "Offs") || strpos($name, "Apertura") || strpos($name, "Clausura"))
+        if ((strpos($name, "Group") || strpos($name, "Offs") || strpos($name, "Apertura") || strpos($name, "Clausura") || strpos($name, "Clausura") ||  strpos($name, "places"))
 
-            && strpos($name, " - ")
+            && strpos($name, "-")
         ) {
-            $nameDetail = explode(" - ", $name);
-            $name = $nameDetail[0];
-            $group = $nameDetail[1];
+            $nameDetail = explode("-", $name);
+            $name = trim($nameDetail[0]);
+            $group = isset($nameDetail[1]) ? $nameDetail[1] . (isset($nameDetail[2]) ? $nameDetail[1] : "") : "";
+            $group = trim($group);
         }
         $hrefTour = "/football/" . MyRepo::create_slug($country_name) . "/" . $this->create_slug(strtolower($name));
 
