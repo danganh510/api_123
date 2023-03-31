@@ -97,6 +97,7 @@ class CrawlerFlashScoreBase extends CrawlerList
             $nameDetail = explode("-", $name);
             $name = trim($nameDetail[0]);
             $group = isset($nameDetail[1]) ? $nameDetail[1] . (isset($nameDetail[2]) ? $nameDetail[1] : "") : "";
+            $group = isset($nameDetail[3]) ? $group . $nameDetail[3] : "";
             $group = trim($group);
         }
         $hrefTour = "/football/" . MyRepo::create_slug($country_name) . "/" . $this->create_slug(strtolower($name));
