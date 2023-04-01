@@ -83,10 +83,10 @@ class SavematchController extends ControllerBase
             $cache = new CacheTeam();
             $cache->set("all");
         }
-        if ($is_cache_tour) {
-            $cache = new CacheTour();
-            $cache->set("all");
-        }
+        // if ($is_cache_tour) {
+        //     $cache = new CacheTour();
+        //     $cache->set("all");
+        // }
         delete_cache:
 
         var_dump($is_live);exit;
