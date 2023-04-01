@@ -102,6 +102,7 @@ class CrawlerFlashScoreBase extends CrawlerList
             $group = isset($nameDetail[3]) ? $group . $nameDetail[3] : "";
             $group = trim($group);
         }
+        $this->round = $group;
 
         $hrefTour = "/football/" . MyRepo::create_slug($country_name) . "/" . $this->create_slug(strtolower($name));
 
@@ -174,7 +175,11 @@ class CrawlerFlashScoreBase extends CrawlerList
         $away_score = $divMatch->find(".event__score--away");
         $dataMatch['away_score'] = isset($away_score[0]) ? $away_score[0]->innertext() : 0;
 
-        $dataMatch['round'] = $round;
+        if ($round) {
+            $dataMatch['round'] = $round;
+        } else {
+            $dataMatch['round'] = $this->round;
+        }
 
         $liveMatch = $this->saveMatch($dataMatch);
         return $liveMatch;
