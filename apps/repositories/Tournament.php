@@ -78,14 +78,12 @@ class Tournament extends Component
             $tournament->setTournamentActive("Y");
             $tournament->setTournamentOrder($tournamentInfo->getId());
             $tournament->save();
-            var_dump($tournament);
             $is_cache_tour = true;
         }
         if (!$tournament->getTournamentCountryCode()) {
             $tournament->setTournamentCountry($tournamentInfo->getCountryName());
             $tournament->setTournamentCountryCode($tournamentInfo->getCountryCode());
             $tournament->save();
-            var_dump($tournament);
             $is_cache_tour = true;
         }
 

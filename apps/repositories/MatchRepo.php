@@ -144,6 +144,7 @@ class MatchRepo extends Component
         }
         var_dump($matchSave->getMessages());
         var_dump($match);
+        die($matchSave->getMessages());
         return false;
     }
     public function getTime($match_time, $time_plus)
