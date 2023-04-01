@@ -23,7 +23,7 @@ class ControllerBase extends Controller
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
         header('Access-Control-Max-Age: 86400');
         header('Access-Control-Allow-Headers: *');
-        date_default_timezone_set('Atlantic/Canary');
+   //     date_default_timezone_set('Atlantic/Canary');
 
 
         // var_dump($headerBear);
