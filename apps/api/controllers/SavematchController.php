@@ -101,6 +101,7 @@ class SavematchController extends ControllerBase
             $matchCache = new CacheMatch();
             $matchCache->setCache(json_encode($arrMatch));
         } else {
+            var_dump($is_live);exit;
             $time_end = time() + 3 * 60;
             $time_begin = time() - 3 * 60;
             $time_now = time();
