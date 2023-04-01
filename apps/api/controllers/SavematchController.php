@@ -88,7 +88,7 @@ class SavematchController extends ControllerBase
             $cache->set("all");
         }
         delete_cache:
-        if (($is_live !== true && $total > 1)) {
+        if (($is_live !== true)) {
             $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
             $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
             $arrMatch = ScMatch::find(
