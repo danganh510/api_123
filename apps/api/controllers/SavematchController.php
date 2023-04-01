@@ -73,8 +73,6 @@ class SavematchController extends ControllerBase
                 $total++;
                 //  echo "Save match success --- ";
             } else {
-
-                var_dump($result);exit;
                 echo "Save match false ---";
             }
             if ($result['is_new']) {
@@ -92,7 +90,7 @@ class SavematchController extends ControllerBase
         delete_cache:
 
      
-        if (($is_live !== true)) {
+        if (($is_live !== true) && $total) {
             $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
             $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
             $arrMatch = ScMatch::find(
