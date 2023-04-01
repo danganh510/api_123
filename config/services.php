@@ -570,6 +570,11 @@ $di['router'] = function () {
         "controller" => "deletecachetool",
         "action" => "deleteallcache"
     ));
+    $router->add("/auto-update-time", array(
+        "module" => "backend",
+        "controller" => "updatetime",
+        "action" => "index"
+    ));
 
     //API CACHE
     $router->add('/get-team', array(
