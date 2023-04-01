@@ -20,11 +20,16 @@ class MatchRepo extends Component
 
         $is_new = false;
         $timeInfo = $this->getTime($match->getTime(), $time_plus);
-
-        var_dump($timeInfo);exit;
-        $month = date("m",$timeInfo['start_time']);
-        $year = date("Y",  $timeInfo['start_time']);
-        $day = date("d",  $timeInfo['start_time']);
+        if (is_numeric($timeInfo['start_time']) && $timeInfo['start_time'] !== 0) {
+            $month = date("m",$timeInfo['start_time']);
+            $year = date("Y",  $timeInfo['start_time']);
+            $day = date("d",  $timeInfo['start_time']);
+        } else {
+            $month = date("m",time());
+            $year = date("Y",  time());
+            $day = date("d",  time());
+        }
+ 
         $matchSave = ScMatch::findFirst([
             "match_home_id = :home_id: AND match_away_id = :away_id: 
             AND (match_start_day = :day: OR match_start_day = :day1: OR match_start_day = :day2: )
@@ -65,7 +70,7 @@ class MatchRepo extends Component
                 $matchSave->setMatchStartTime($timeInfo['start_time']);
             }
         } else {
-            if ($timeInfo['start_time'] < $matchSave->getMatchStartTime()) {
+            if (is_numeric($timeInfo['time_live']) && ($timeInfo['time_live'] < $matchSave->getMatchTime())) {
                 return [
                     'matchSave' => false,
                     'is_new' => false
@@ -175,6 +180,12 @@ class MatchRepo extends Component
                 $time_live = "Interrupted";
                 $status = self::MATH_STATUS_FINSH;
                 break;
+            case "Awaiting updates":
+                    $time = 90;
+                    $start_time = 0;
+                    $time_live = "Awaiting updates";
+                    $status = self::MATH_STATUS_WAIT;
+                    break;
             case "After Penalties":
                     $time = 90;
                     $start_time = time() - $time * 60;
