@@ -28,21 +28,30 @@ class UpdatetimeController extends ControllerBase
         $arrMatch = ScMatch::find(
             "match_status = 'S' OR (match_status = 'F' AND match_time_finish < $time_end  AND match_time_finish > $time_now) OR (match_status = 'W' AND match_start_time > $time_begin AND match_start_time < $time_now) "
         );
+        $total = 0;
 
         $arrMatchNew = [];
         foreach ($arrMatch as $match) {
             if (is_numeric($match->getMatchTime()) && $match->getMatchStatus() == "S") {
-                if (time() - $match->getMatchStartTime() > $match->getMatchTime() * 60) {
-                    var_dump(time(), $match->getMatchStartTime(),$match->getMatchTime());
-                    $match->setMatchTime($match->getMatchTime() + 1);
-                    $match->save();
+                if ($match->getMatchTime() < 45) {
+                    if (time() - $match->getMatchStartTime() > $match->getMatchTime() * 60) {
+                        $match->setMatchTime($match->getMatchTime() + 1);
+                        $match->save();
+                    }
+                } else {
+                    if ($match->getMatchTime() < 90 && $match->getMatchTime() != 45) {
+                        $match->setMatchTime($match->getMatchTime() + 1);
+                        $match->save();
+                    }
                 }
 
+                $total++;
             }
             $arrMatchNew[] = $match->toArray();
         }
         $matchCache = new CacheMatchLive();
         $matchCache->setCache(json_encode($arrMatchNew));
+        echo "---total: " . $total ."\r\n";
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
     }
