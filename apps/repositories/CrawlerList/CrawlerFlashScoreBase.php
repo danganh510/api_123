@@ -115,7 +115,7 @@ class CrawlerFlashScoreBase extends CrawlerList
                     'country_name' => $country_name
                 ]
             ]);
-            $country_code = $model ? $model->getAreaId() : "";
+            $country_code = $model ? $model->area_id : "";
         }
         $tournamentModel = new MatchTournament();
         $tournamentModel->setCountryName(strtolower($country_name));
