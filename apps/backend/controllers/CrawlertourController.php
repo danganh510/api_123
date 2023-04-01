@@ -59,17 +59,27 @@ class CrawlertourController extends ControllerBase
         $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
         $arrTourId = array_keys($arrListMatchLive);
         $strTour = implode(",", $arrTourId);
-        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
+        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND tournament_crawl = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
        
         if (!$tour) {
-            $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}') ";
+            $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}') AND tournament_crawl = 'Y'";
             $this->modelsManager->executeQuery($sql);
             echo "All reset \r\n";
-            $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
+            $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') AND tournament_crawl = 'Y'");
 
             if (!$tour) {
-                echo "not found tour\n\r";
-                die();
+                $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') ");
+                if ($tour) {
+                    $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}')";
+                    $this->modelsManager->executeQuery($sql);
+                    echo "All reset \r\n";
+                    $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') ");
+                    if (!$tour) {
+                        echo "Not found";
+                        die();
+                    }
+
+                }
             }
         }
         
