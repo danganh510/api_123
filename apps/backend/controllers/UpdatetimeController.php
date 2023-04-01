@@ -33,6 +33,7 @@ class UpdatetimeController extends ControllerBase
         foreach ($arrMatch as $match) {
             if (is_numeric($match->getMatchTime()) && $match->getMatchStatus() == "S") {
                 if (time() - $match->getMatchStartTime() > $match->getMatchTime() * 60) {
+                    var_dump(time(), $match->getMatchStartTime(),$match->getMatchTime());
                     $match->setMatchTime($match->getMatchTime() + 1);
                     $match->save();
                 }
