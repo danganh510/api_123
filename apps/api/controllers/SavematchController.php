@@ -2,6 +2,7 @@
 
 namespace Score\Api\Controllers;
 
+use ConstEnv;
 use Exception;
 use Score\Models\ScMatch;
 use Score\Repositories\Team;
@@ -32,12 +33,17 @@ class SavematchController extends ControllerBase
         $tour = $this->requestParams['tour'];
 
         $cacheTeam = new CacheTeam();
-        $arrTeamOb = $cacheTeam->getCache();
+        $arrTeamOb = $cacheTeam->get(ConstEnv::CACHE_TYPE_NAME_FLASH);
+
+        $cacheTour = new CacheTour();
+        $arrTour = $cacheTour->get(ConstEnv::CACHE_TYPE_NAME_FLASH);
 
         $matchRepo = new MatchRepo();
         $total = 0;
         $is_new = false;
         $arrMatchCrawl = [];
+        $is_cache_team = false;
+        $is_cache_tour = false;
         foreach ($list_match as $match_info) {
             $match = new MatchCrawl();
             $match->setData($match_info);
@@ -45,9 +51,9 @@ class SavematchController extends ControllerBase
             $tournamentCrawl = new MatchTournament();
             $tournamentCrawl->setData($match->getTournament());
 
-            $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl);
-            $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl);
-            $tournament = Tournament::saveTournament($tournamentCrawl, $this->type_crawl);
+            $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl,$is_cache_team);
+            $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl,$is_cache_team);
+            $tournament = Tournament::saveTournament($tournamentCrawl, $this->type_crawl, $arrTour,$is_cache_tour);
 
             if (!$home) {
                 echo "can't save home team";
@@ -72,6 +78,14 @@ class SavematchController extends ControllerBase
             if ($result['is_new']) {
                 $is_new = true;
             }
+        }
+        if ($is_cache_team) {
+            $cache = new CacheTeam();
+            $cache->set("all");
+        }
+        if ($is_cache_tour) {
+            $cache = new CacheTour();
+            $cache->set("all");
         }
         delete_cache:
         if (($is_live !== true && $total > 1)) {

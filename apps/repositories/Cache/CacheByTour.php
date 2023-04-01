@@ -6,10 +6,10 @@ use Phalcon\Mvc\User\Component;
 use Phalcon\Cache\Backend\File as BackFile;
 use Phalcon\Cache\Frontend\Data as FrontData;
 
-class CacheTour extends Component
-{
+class CacheByTour extends Component
+{ 
     const PRE_SESSION_CACHE = "";
-    const filePath = __DIR__ . "/../Cache/Tour/";
+    const filePath = __DIR__ . "/../Cache/CrawlTournament/";
     static $frontCache = null;
     static $backCache = null;
     public function __construct()
@@ -33,17 +33,17 @@ class CacheTour extends Component
     }
     public  function getCache()
     {
-        $sessionId = self::PRE_SESSION_CACHE . "_Tour";
+        $sessionId = self::PRE_SESSION_CACHE . "_Match_Live";
 
         $cache = self::getBackCache();
         $cacheKey = self::cacheKeyClients($sessionId);
         $clients = $cache->get($cacheKey);
 
-        return json_decode($clients,true);
+        return json_decode($clients);
     }
     public  function deleteCache()
     {
-        $sessionId = self::PRE_SESSION_CACHE . "_Tour";
+        $sessionId = self::PRE_SESSION_CACHE . "_Match_Live";
         $cache = self::getBackCache();
         $cacheKey = $this->cacheKeyClients($sessionId);
 
@@ -59,16 +59,16 @@ class CacheTour extends Component
         // $result =  $cache->set($cacheKey);
         return $result;
     }
-    public function setCache($arrTeam)
+    public function setCache($arrMatch)
     {
-        $sessionId = self::PRE_SESSION_CACHE . "_Tour";
+        $sessionId = self::PRE_SESSION_CACHE . "_Match_Live";
         $cache = self::getBackCache();
         $cacheKey = $this->cacheKeyClients($sessionId);
         try {
             if (!is_dir(self::filePath)) {
                 mkdir(self::filePath);
             }
-            $result =  $cache->save($cacheKey, $arrTeam);
+            $result =  $cache->save($cacheKey, $arrMatch);
         } catch (\Exception $e) {
             return false;
         }

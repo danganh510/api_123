@@ -65,7 +65,8 @@ class CrawlerController extends ControllerBase
                 'list_match' => $list_match,
                 'time_plus' => $time_plus,
                 'type_crawl' => $this->type_crawl,
-                'is_live' => $is_live
+                'is_live' => $is_live,
+                'is_list' => true,
             ];
          //   die(json_encode($request));exit;
             $clientGuzzle = new \GuzzleHttp\Client();

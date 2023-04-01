@@ -49,13 +49,14 @@ class Team extends Component
         $teamModel->setData($arrTeam[$team]);
         return $teamModel;
     }
-    public static function saveTeam($team_name, $image, $country_code, $arrTeam, $type)
+    public static function saveTeam($team_name, $image, $country_code, $arrTeam, $type , &$is_cache_team = false)
     {
-        // $team = Team::findByNameArray($team_name, MyRepo::create_slug($team_name),$arrTeam,$country_code);
-        // if (!$team) {
-
-        // }
-        $team = Team::findByName($team_name, MyRepo::create_slug($team_name), $country_code);
+        if (isset($arrTeam[$team_name])) {
+            $team = new ScTeam();
+            $team->setData($arrTeam[$team_name]);
+        } else {
+            $team = Team::findByName($team_name, MyRepo::create_slug($team_name), $country_code);
+        }
         if (!$team) {
             $team = new ScTeam();
             $team->setTeamName($team_name);
@@ -74,11 +75,14 @@ class Team extends Component
                     break;
             }
             $team->setTeamActive("Y");
+            $team->save();
+            $is_cache_team = true;
         }
         if (!$team->getTeamCountryCode()) {
             $team->setTeamCountryCode($country_code);
+            $team->save();
+            $is_cache_team = true;
         }
-        $team->save();
 
         return $team;
     }

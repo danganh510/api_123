@@ -21,6 +21,15 @@ class ScTournament extends \Phalcon\Mvc\Model
     protected $tournament_is_crawling;
     protected $tournament_active;
 
+    public function setData($data = null)
+    {
+        if ($data) {
+            foreach ($data as $key => $value) {
+                $this->$key = $value;
+            }
+        }
+        return $this;
+    }
 
 
     /**

@@ -31,9 +31,7 @@ include __DIR__ . '/../vendor/autoload.php';
  * Read configuration
  */
 $config = include __DIR__ . "/config.php";
-if (!defined('URL_SITE')) {
-    define('URL_SITE', 'https://www.forexcec.com');
-}
+
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
@@ -51,6 +49,7 @@ $loader->registerNamespaces(array(
         __DIR__ . '/../apps/repositories/Crawler/',
         __DIR__ . '/../apps/repositories/CrawlerList/',
         __DIR__ . '/../apps/repositories/CrawlerDetail/',
+        __DIR__ . '/../apps/repositories/Cache/',
     ],
     'Score\Utils' => __DIR__ . '/../apps/library/Utils/'
 ));
@@ -572,6 +571,17 @@ $di['router'] = function () {
         "action" => "deleteallcache"
     ));
 
+    //API CACHE
+    $router->add('/get-team', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "getcacheteam"
+    ));
+    $router->add('/get-tour', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "getcachetournament"
+    ));
 
 
     //API

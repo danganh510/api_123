@@ -45,10 +45,16 @@ class Tournament extends Component
             ]
         ]);
     }
-    public static function saveTournament($tournamentInfo, $type_crawl)
+    public static function saveTournament($tournamentInfo, $type_crawl, $arrTournament = [], &$is_cache_tour = false)
     {
         $slug = MyRepo::create_slug($tournamentInfo->getTournamentName());
-        $tournament = self::findByName($tournamentInfo->getTournamentName(), $tournamentInfo->getCountryCode(), $slug);
+        if (isset($arrTournament[$tournamentInfo->getTournamentName()])) {
+            $tournament = new ScTournament();
+            $tournament->setData($arrTournament[$tournamentInfo->getTournamentName() . "_" . $tournamentInfo->getCountryCode()]);
+        } else {
+            $tournament = self::findByName($tournamentInfo->getTournamentName(), $tournamentInfo->getCountryCode(), $slug);
+        }
+
         if (!$tournament) {
             $tournament = new ScTournament();
             $tournament->setTournamentName($tournamentInfo->getTournamentName());
@@ -71,12 +77,15 @@ class Tournament extends Component
             }
             $tournament->setTournamentActive("Y");
             $tournament->setTournamentOrder($tournamentInfo->getId());
+            $tournament->save();
+            $is_cache_tour = true;
         }
         if (!$tournament->getTournamentCountryCode()) {
             $tournament->setTournamentCountry($tournamentInfo->getCountryName());
             $tournament->setTournamentCountryCode($tournamentInfo->getCountryCode());
+            $tournament->save();
+            $is_cache_tour = true;
         }
-        $tournament->save();
 
 
         return $tournament;

@@ -2,14 +2,16 @@
 
 namespace Score\Repositories;
 
+use ConstEnv;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Cache\Backend\File as BackFile;
 use Phalcon\Cache\Frontend\Data as FrontData;
+use Score\Models\ScTournament;
 
-class CacheTeam extends Component
+class CacheTour extends Component
 {
     const PRE_SESSION_CACHE = "";
-    const filePath = __DIR__ . "/../Cache/Team/";
+    const filePath = __DIR__ . "/../Cache/Tour/";
     static $frontCache = null;
     static $backCache = null;
     public function __construct()
@@ -21,6 +23,37 @@ class CacheTeam extends Component
             mkdir(self::filePath);
         }
     }
+    public function get($type)
+    {
+        $arrTour = $this->getCache($type);
+        if (empty($arrTeam)) {
+            $arrTour = ScTournament::find("tournament_active = 'Y'");
+            $arrTour = $arrTour->toArray();
+            $arrTourCache = [];
+
+            switch ($type) {
+                case ConstEnv::CACHE_TYPE_ID:
+                    foreach ($arrTour as $tour) {
+                        $arrTourCache[$tour['tournament_id']] = $tour;
+                    }
+                    break;
+                case ConstEnv::CACHE_TYPE_NAME:
+                    foreach ($arrTour as $tour) {
+                        $arrTourCache[$tour['tournament_name'] . "_" . $tour['tournament_country_code']] = $tour;
+                    }
+                    break;
+                case ConstEnv::CACHE_TYPE_NAME_FLASH:
+                    foreach ($arrTour as $tour) {
+                        $arrTourCache[$tour['tournament_name_flash_score'] . "_" . $tour['tournament_country_code']] = $tour;
+                    }
+                    break;
+            }
+            $tourCache = new CacheTour();
+            $result = $tourCache->setCache($arrTourCache, $type);
+            $arrTour = $tourCache->getCache($type);
+        }
+        return $arrTour;
+    }
     public function clearCacheExpried()
     {
         $cacheKeys = self::$backCache->queryKeys();
@@ -31,19 +64,19 @@ class CacheTeam extends Component
             }
         }
     }
-    public  function getCache()
+    public  function getCache($type)
     {
-        $sessionId = self::PRE_SESSION_CACHE . "_Team";
+        $sessionId = self::PRE_SESSION_CACHE . $type;
 
         $cache = self::getBackCache();
         $cacheKey = self::cacheKeyClients($sessionId);
         $clients = $cache->get($cacheKey);
 
-        return json_decode($clients,true);
+        return json_decode($clients, true);
     }
-    public  function deleteCache()
+    public  function deleteCache($type)
     {
-        $sessionId = self::PRE_SESSION_CACHE . "_Team";
+        $sessionId = self::PRE_SESSION_CACHE . $type;
         $cache = self::getBackCache();
         $cacheKey = $this->cacheKeyClients($sessionId);
 
@@ -59,16 +92,16 @@ class CacheTeam extends Component
         // $result =  $cache->set($cacheKey);
         return $result;
     }
-    public function setCache($arrTeam)
+    public function setCache($arrTeam, $type)
     {
-        $sessionId = self::PRE_SESSION_CACHE . "_Team";
+        $sessionId = self::PRE_SESSION_CACHE . $type;
         $cache = self::getBackCache();
         $cacheKey = $this->cacheKeyClients($sessionId);
         try {
             if (!is_dir(self::filePath)) {
                 mkdir(self::filePath);
             }
-            $result =  $cache->save($cacheKey, $arrTeam);
+            $result =  $cache->save($cacheKey, json_encode($arrTeam));
         } catch (\Exception $e) {
             return false;
         }
@@ -89,7 +122,7 @@ class CacheTeam extends Component
     public static function getFrontCache()
     {
         if (self::$frontCache == null) {
-            self::$frontCache = new FrontData(['lifetime' => 24 * 60 * 60]);
+            self::$frontCache = new FrontData(['lifetime' => 48 * 60 * 60]);
         }
 
         return self::$frontCache;
