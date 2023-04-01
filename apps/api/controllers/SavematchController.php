@@ -109,40 +109,6 @@ class SavematchController extends ControllerBase
             $matchCache->setCache(json_encode($arrMatch));
         }
 
-        //nếu có trận được tạo mới thì cache lại:
-        if ($is_new || ($is_live !== true)) {
-            $arrTeam = ScTeam::find("team_active = 'Y'");
-            $arrTeam = $arrTeam->toArray();
-            $arrTeamCache = [];
-            foreach ($arrTeam as $team) {
-                $arrTeamCache[$team['team_id']] = $team;
-            }
-            $teamCache = new CacheTeam();
-            $teamCache->setCache(json_encode($arrTeamCache));
-
-            echo "cache total: " . count($arrTeamCache) . " team /r/n";
-            //cache tour
-            $arrTour = ScTournament::find("tournament_active = 'Y'");
-            $arrTour = $arrTour->toArray();
-            $arrTourCache = [];
-            foreach ($arrTour as $tour) {
-                $arrTourCache[$tour['tournament_id']] = $tour;
-            }
-            $tourCache = new CacheTour();
-            $result = $tourCache->setCache(json_encode($arrTourCache));
-            if ($result) {
-                return [
-                    'code' => 200,
-                    'status' => 'success',
-                ];
-            } else {
-                return [
-                    'code' => 200,
-                    'status' => 'false',
-                ];
-            }
-        }
-
         return [
             'code' => 200,
             'status' => 'success',
