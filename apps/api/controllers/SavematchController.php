@@ -110,6 +110,7 @@ class SavematchController extends ControllerBase
             $arrMatch = $arrMatch->toArray();
             $matchCache = new CacheMatchLive();
             $result = $matchCache->setCache(json_encode($arrMatch));
+            echo "123";
   var_dump($result);exit;
         }
 
