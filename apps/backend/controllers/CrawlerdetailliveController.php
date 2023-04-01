@@ -105,7 +105,6 @@ class CrawlerdetailliveController extends ControllerBase
         //tab: info,tracker,statistics
         $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
         $detail = $crawler->getInstance();
-        var_dump($detail);exit;
         $infoModel = ScMatchInfo::findFirst([
             'info_match_id = :id:',
             'bind' => [
@@ -129,8 +128,7 @@ class CrawlerdetailliveController extends ControllerBase
             !empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
             && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])
         ) {
-            $start_time = strtotime($detail['match']['startTime']);
-            $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;
+
             $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
             $time = $detail['match']['timeNow'];
@@ -140,12 +138,14 @@ class CrawlerdetailliveController extends ControllerBase
                 $matchCrawl->setMatchTime($timeInfo['time_live']);
                 $matchCrawl->setMatchStatus($timeInfo['status']);
             }
-
+        }
+        if ($detail['match']['startTime'] && isset($detail['match']['startTime'])) {
+            $start_time = strtotime($detail['match']['startTime']);
+            $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;
             if ($start_time) {
                 $matchCrawl->setMatchStartTime($start_time);
             }
         }
-
 
         //save logo team:
         $homeTeam = ScTeam::findFirstById($matchCrawl->getMatchHomeId());
