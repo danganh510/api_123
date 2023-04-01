@@ -54,6 +54,51 @@ class CacheTour extends Component
         }
         return $arrTour;
     }
+    public function set($type)
+    {
+        $arrTour = $this->getCache($type);
+        if (empty($arrTeam)) {
+            $arrTour = ScTournament::find("tournament_active = 'Y'");
+            $arrTour = $arrTour->toArray();
+            $arrTourCache = [];
+
+            switch ($type) {
+                case ConstEnv::CACHE_TYPE_ID:
+                    foreach ($arrTour as $tour) {
+                        $arrTourCache[$tour['tournament_id']] = $tour;
+                    }
+                    $tourCache = new CacheTour();
+                    $tourCache->setCache($arrTourCache, ConstEnv::CACHE_TYPE_ID);
+                    break;
+                case ConstEnv::CACHE_TYPE_NAME:
+                    foreach ($arrTour as $tour) {
+                        $arrTourCache[$tour['tournament_name'] . "_" . $tour['tournament_country_code']] = $tour;
+                    }
+                    $tourCache = new CacheTour();
+                    $tourCache->setCache($arrTourCache, ConstEnv::CACHE_TYPE_ID);
+                    break;
+                case ConstEnv::CACHE_TYPE_NAME_FLASH:
+                    foreach ($arrTour as $tour) {
+                        $arrTourCache[$tour['tournament_name_flash_score'] . "_" . $tour['tournament_country_code']] = $tour;
+                    }
+                    $tourCache = new CacheTour();
+                    $tourCache->setCache($arrTourCache, ConstEnv::CACHE_TYPE_ID);
+                    break;
+                default:
+                    foreach ($arrTour as $tour) {
+                        $arrTourCache[$tour['tournament_id']] = $tour;
+                        $arrTourCacheName[$tour['tournament_name'] . "_" . $tour['tournament_country_code']] = $tour;
+                        $arrTourCacheFlashName[$tour['tournament_name_flash_score'] . "_" . $tour['tournament_country_code']] = $tour;
+                    }
+                    $tourCache = new CacheTour();
+                    $tourCache->setCache($arrTourCache, ConstEnv::CACHE_TYPE_ID);
+                    $tourCache = new CacheTour();
+                    $tourCache->setCache($arrTourCacheName, ConstEnv::CACHE_TYPE_NAME);
+                    $tourCache = new CacheTour();
+                    $tourCache->setCache($arrTourCacheFlashName, ConstEnv::CACHE_TYPE_NAME_FLASH);
+            }
+        }
+    }
     public function clearCacheExpried()
     {
         $cacheKeys = self::$backCache->queryKeys();

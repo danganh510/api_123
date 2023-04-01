@@ -84,13 +84,11 @@ class SavematchController extends ControllerBase
             $cache = new CacheTeam();
             $cache->set("all");
         }
-        // if ($is_cache_tour) {
-        //     $cache = new CacheTour();
-        //     $cache->set("all");
-        // }
+        if ($is_cache_tour) {
+            $cache = new CacheTour();
+            $cache->set("all");
+        }
         delete_cache:
-
-  
         if (($is_live != true)) {
             $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
             $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
@@ -110,7 +108,7 @@ class SavematchController extends ControllerBase
             $arrMatch = $arrMatch->toArray();
             $matchCache = new CacheMatchLive();
             $result = $matchCache->setCache(json_encode($arrMatch));
- 
+
         }
 
         return [
