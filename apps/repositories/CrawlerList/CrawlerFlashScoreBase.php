@@ -108,7 +108,7 @@ class CrawlerFlashScoreBase extends CrawlerList
 
         $country_code = ScCountry::findFirstCodeByName($country_name);
         if (!$country_code) {
-            $model = ScArea::find([
+            $model = ScArea::findFirst([
                 'columns' => 'area_id',
                 "area_name = :country_name: OR LOWER(area_name) = :country_name:",
                 'bind' => [
