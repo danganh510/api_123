@@ -105,6 +105,7 @@ class CrawlerdetailliveController extends ControllerBase
         //tab: info,tracker,statistics
         $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
         $detail = $crawler->getInstance();
+        var_dump($detail);exit;
         $infoModel = ScMatchInfo::findFirst([
             'info_match_id = :id:',
             'bind' => [
