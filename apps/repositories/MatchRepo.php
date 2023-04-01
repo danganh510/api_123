@@ -136,6 +136,7 @@ class MatchRepo extends Component
         }
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchOrder(1);
+        var_dump($matchSave->getMessages());exit;
         if ($matchSave->save()) {
             return [
                 'matchSave' => $matchSave,
