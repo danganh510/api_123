@@ -40,10 +40,10 @@ class MatchController extends ControllerBase
         $events = [];
 
         $cacheTeam = new CacheTeam();
-        $arrTeam = $cacheTeam->getCache(ConstEnv::CACHE_TYPE_ID);
+        $arrTeam = $cacheTeam->get(ConstEnv::CACHE_TYPE_ID);
 
         $cacheTour = new CacheTour();
-        $arrTournament = $cacheTour->getCache(ConstEnv::CACHE_TYPE_ID);
+        $arrTournament = $cacheTour->get(ConstEnv::CACHE_TYPE_ID);
         // $matchRepo = new MatchRepo();
         // $arrMatch = $matchRepo->getMatch($time, $status);
         if ($this->my->getDays($time, time() + $time_zone * 60 * 60) == 0 && !$isLive) {
