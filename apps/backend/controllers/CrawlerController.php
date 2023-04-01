@@ -67,6 +67,7 @@ class CrawlerController extends ControllerBase
                 'type_crawl' => $this->type_crawl,
                 'is_live' => $is_live
             ];
+            var_dump($request);exit;
             $clientGuzzle = new \GuzzleHttp\Client();
             $url = API_END_PONT.'/save-match';
             try {
