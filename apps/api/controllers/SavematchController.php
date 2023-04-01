@@ -30,6 +30,7 @@ class SavematchController extends ControllerBase
         $time_plus = $this->requestParams['time_plus'];
         $this->type_crawl = $this->requestParams['type_crawl'];
         $is_live = $this->requestParams['is_live'];
+        $is_live = (boolean) $is_live;
         $tour = $this->requestParams['tour'];
 
         $cacheTeam = new CacheTeam();
