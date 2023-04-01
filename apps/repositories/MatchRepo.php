@@ -20,6 +20,8 @@ class MatchRepo extends Component
 
         $is_new = false;
         $timeInfo = $this->getTime($match->getTime(), $time_plus);
+
+        var_dump($timeInfo);exit;
         $month = date("m",$timeInfo['start_time']);
         $year = date("Y",  $timeInfo['start_time']);
         $day = date("d",  $timeInfo['start_time']);
