@@ -2,6 +2,7 @@
 
 namespace Score\Api\Controllers;
 
+use ConstEnv;
 use Score\Models\ScMatch;
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
@@ -39,7 +40,7 @@ class MatchController extends ControllerBase
         $events = [];
 
         $cacheTeam = new CacheTeam();
-        $arrTeam = $cacheTeam->getCache();
+        $arrTeam = $cacheTeam->getCache(ConstEnv::CACHE_TYPE_ID);
 
         $cacheTour = new CacheTour();
         $arrTournament = $cacheTour->getCache();
