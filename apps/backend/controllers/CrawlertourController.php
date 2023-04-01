@@ -102,7 +102,7 @@ class CrawlertourController extends ControllerBase
                 'is_live' => $is_live,
                 'tour' => true
             ];
-                die(json_encode($request));
+       //         die(json_encode($request));
 
 
             $clientGuzzle = new \GuzzleHttp\Client();
