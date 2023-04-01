@@ -3,6 +3,7 @@
 namespace Score\Repositories;
 
 use Exception;
+use Score\Models\ScArea;
 use Score\Models\ScCountry;
 
 class CrawlerFlashScoreBase extends CrawlerList
@@ -88,9 +89,10 @@ class CrawlerFlashScoreBase extends CrawlerList
         $name = $div->find(".event__title--name", 0)->innertext();
 
         $country_name =  strtolower($country_name);
-        $country_name = str_replace(["&amp;"],["&"],$country_name);
+        $country_name = str_replace(["&amp;"], ["&"], $country_name);
         $group = "";
-        if ((strpos($name, "Group") || strpos($name, "Offs") || strpos($name, "Apertura") || strpos($name, "Clausura") || strpos($name, "Clausura") ||  strpos($name, "places"))
+        if ((strpos($name, "Group") || strpos($name, "Offs") || strpos($name, "Apertura") || strpos($name, "Clausura")
+                || strpos($name, "Clausura") ||  strpos($name, "places") ||  strpos($name, "stage"))
 
             && strpos($name, "-")
         ) {
@@ -100,9 +102,20 @@ class CrawlerFlashScoreBase extends CrawlerList
             $group = isset($nameDetail[3]) ? $group . $nameDetail[3] : "";
             $group = trim($group);
         }
+
         $hrefTour = "/football/" . MyRepo::create_slug($country_name) . "/" . $this->create_slug(strtolower($name));
 
         $country_code = ScCountry::findFirstCodeByName($country_name);
+        if (!$country_code) {
+            $model = ScArea::find([
+                'columns' => 'area_id',
+                "area_name = :country_name: OR LOWER(area_name) = :country_name:",
+                'bind' => [
+                    'country_name' => $country_name
+                ]
+            ]);
+            $country_code = $model ? $model->getAreaId() : "";
+        }
         $tournamentModel = new MatchTournament();
         $tournamentModel->setCountryName(strtolower($country_name));
         $tournamentModel->setCountryCode(strtolower($country_code));
