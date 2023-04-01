@@ -90,7 +90,7 @@ class SavematchController extends ControllerBase
         // }
         delete_cache:
 
-     
+     var_dump($is_live);exit;
         if (($is_live !== true)) {
             $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
             $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
@@ -101,7 +101,6 @@ class SavematchController extends ControllerBase
             $matchCache = new CacheMatch();
             $matchCache->setCache(json_encode($arrMatch));
         } else {
-            var_dump($is_live);exit;
             $time_end = time() + 3 * 60;
             $time_begin = time() - 3 * 60;
             $time_now = time();
