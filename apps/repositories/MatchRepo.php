@@ -136,16 +136,18 @@ class MatchRepo extends Component
         }
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchOrder(1);
-        var_dump($matchSave->getMessages());exit;
+
         if ($matchSave->save()) {
             return [
                 'matchSave' => $matchSave,
                 'is_new' => $is_new
             ];
+        } else {
+            var_dump($matchSave->getMessages());
+            exit;
+            var_dump($match);
         }
-        var_dump($matchSave->getMessages());
-        var_dump($match);
-        die($matchSave->getMessages());
+    
         return false;
     }
     public function getTime($match_time, $time_plus)
