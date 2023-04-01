@@ -20,9 +20,9 @@ class MatchRepo extends Component
 
         $is_new = false;
         $timeInfo = $this->getTime($match->getTime(), $time_plus);
-        $month = date("m", time() + $time_plus * 24 * 60 * 60);
-        $year = date("Y",  time() + $time_plus * 24 * 60 * 60);
-        $day = date("d",  time() + $time_plus * 24 * 60 * 60);
+        $month = date("m",$timeInfo['start_time']);
+        $year = date("Y",  $timeInfo['start_time']);
+        $day = date("d",  $timeInfo['start_time']);
         $matchSave = ScMatch::findFirst([
             "match_home_id = :home_id: AND match_away_id = :away_id: 
             AND (match_start_day = :day: OR match_start_day = :day1: OR match_start_day = :day2: )
@@ -37,7 +37,6 @@ class MatchRepo extends Component
                 'day2' => $day - 2
             ]
         ]);
-var_dump($matchSave);exit;
         if (!$matchSave) {
             $is_new = true;
             $matchSave = new ScMatch();
