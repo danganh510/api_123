@@ -52,6 +52,7 @@ class CacheController extends ControllerBase
         $arrMatch = $arrMatch->toArray();
         $matchCache = new CacheMatchLive();
         $result = $matchCache->setCache(json_encode($arrMatch));
+        die($result);
     }
 
 
