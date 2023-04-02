@@ -98,7 +98,8 @@ class CrawlerdetailliveController extends ControllerBase
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0);
                 $matchCrawl->setMatchTime($timeInfo['time_live']);
-                $matchCrawl->setMatchStatus($timeInfo['status']);
+                //còn 1 lỗi
+               // $matchCrawl->setMatchStatus($timeInfo['status']);
             }
         }
         if ($detail['match']['startTime'] && isset($detail['match']['startTime'])) {
