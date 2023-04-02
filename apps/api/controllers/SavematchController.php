@@ -89,20 +89,23 @@ class SavematchController extends ControllerBase
             $cache->set("all");
         }
         if ($is_list == true && $is_live == true) {
-            $arrMatchIdLive = array_column($arrMatchCrawl,"match_id");
             $cache = new CacheMatchIdLive();
             $cache->setCache($arrMatchIdLive);
         }
         elete_cache:
         if (($is_live != true)) {
-            $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
-            $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
-            $arrMatch = ScMatch::find(
-                "match_start_time > $timestamp_before_7 AND match_start_time < $timestamp_affter_7"
-            );
+            $cache = new CacheMatchIdLive();
+            $arrMatchIdLive = $cache->getCache();
+    
+            $arrMatch = ScMatch::find([
+                'FIND_IN_SET(match_id,:arrId:)',
+                'bind' => [
+                    'arrId' => implode(",",$arrMatchIdLive)
+                ]
+            ]);
             $arrMatch = $arrMatch->toArray();
-            $matchCache = new CacheMatch();
-            $matchCache->setCache(json_encode($arrMatch));
+            $matchCache = new CacheMatchLive();
+            $result = $matchCache->setCache(json_encode($arrMatch));
         } else {
             $time_end = time() + 3 * 60;
             $time_begin = time() - 3 * 60;
