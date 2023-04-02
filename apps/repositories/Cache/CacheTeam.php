@@ -11,13 +11,13 @@ use Score\Models\ScTeam;
 class CacheTeam extends Component
 {
     const PRE_SESSION_CACHE = "";
-    const filePath = __DIR__ . "/../Cache/Team/";
+    const filePath = __DIR__ . "/../../Cache/Team/";
     static $frontCache = null;
     static $backCache = null;
     public function __construct()
     {
-        if (!is_dir(__DIR__ . "/../Cache")) {
-            mkdir(__DIR__ . "/../Cache");
+        if (!is_dir(__DIR__ . "/../../Cache")) {
+            mkdir(__DIR__ . "/../../Cache");
         }
         if (!is_dir(self::filePath)) {
             mkdir(self::filePath);
