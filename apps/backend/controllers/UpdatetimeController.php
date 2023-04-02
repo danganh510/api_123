@@ -32,26 +32,29 @@ class UpdatetimeController extends ControllerBase
 
         $arrMatchNew = [];
         foreach ($arrMatch as $match) {
-            if (is_numeric($match->getMatchTime()) && $match->getMatchStatus() == "S") {
-                if ($match->getMatchTime() < 45) {
-                    if (time() - $match->getMatchStartTime() > $match->getMatchTime() * 60) {
-                        $match->setMatchTime($match->getMatchTime() + 1);
-                        $match->save();
+            if (time() - $match->getMatchInsertTime() > 40) {
+                if (is_numeric($match->getMatchTime()) && $match->getMatchStatus() == "S") {
+                    if ($match->getMatchTime() < 45) {
+                        if (time() - $match->getMatchStartTime() > $match->getMatchTime() * 60) {
+                            $match->setMatchTime($match->getMatchTime() + 1);
+                            $match->save();
+                        }
+                    } else {
+                        if ($match->getMatchTime() < 90 && $match->getMatchTime() != 45) {
+                            $match->setMatchTime($match->getMatchTime() + 1);
+                            $match->save();
+                        }
                     }
-                } else {
-                    if ($match->getMatchTime() < 90 && $match->getMatchTime() != 45) {
-                        $match->setMatchTime($match->getMatchTime() + 1);
-                        $match->save();
-                    }
-                }
 
-                $total++;
+                    $total++;
+                }
             }
+
             $arrMatchNew[] = $match->toArray();
         }
         $matchCache = new CacheMatchLive();
         $matchCache->setCache(json_encode($arrMatchNew));
-        echo "---total: " . $total ."\r\n";
+        echo "---total: " . $total . "\r\n";
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
     }

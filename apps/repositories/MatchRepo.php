@@ -21,15 +21,15 @@ class MatchRepo extends Component
         $is_new = false;
         $timeInfo = $this->getTime($match->getTime(), $time_plus);
         if (is_numeric($timeInfo['start_time']) && $timeInfo['start_time'] !== 0) {
-            $month = date("m",$timeInfo['start_time']);
+            $month = date("m", $timeInfo['start_time']);
             $year = date("Y",  $timeInfo['start_time']);
             $day = date("d",  $timeInfo['start_time']);
         } else {
-            $month = date("m",time());
+            $month = date("m", time());
             $year = date("Y",  time());
             $day = date("d",  time());
         }
- 
+
         $matchSave = ScMatch::findFirst([
             "match_home_id = :home_id: AND match_away_id = :away_id: 
             AND (match_start_day = :day: OR match_start_day = :day1: OR match_start_day = :day2: )
@@ -50,7 +50,6 @@ class MatchRepo extends Component
             $matchSave->setMatchName($home->getTeamSlug() . "-vs-" . $away->getTeamSlug());
             $matchSave->setMatchHomeId($home->getTeamId());
             $matchSave->setMatchAwayId($away->getTeamId());
-            $matchSave->setMatchInsertTime(time());
 
             if (!$timeInfo['start_time']) {
                 $timeInfo['start_time'] = $match->getTime();
@@ -136,6 +135,7 @@ class MatchRepo extends Component
         }
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchOrder(1);
+        $matchSave->setMatchInsertTime(time());
 
         if ($matchSave->save()) {
             return [
@@ -147,7 +147,7 @@ class MatchRepo extends Component
             exit;
             var_dump($match);
         }
-    
+
         return false;
     }
     public function getTime($match_time, $time_plus)
@@ -185,17 +185,17 @@ class MatchRepo extends Component
                 $status = self::MATH_STATUS_FINSH;
                 break;
             case "Awaiting updates":
-                    $time = 90;
-                    $start_time = 0;
-                    $time_live = "Awaiting updates";
-                    $status = self::MATH_STATUS_WAIT;
-                    break;
+                $time = 90;
+                $start_time = 0;
+                $time_live = "Awaiting updates";
+                $status = self::MATH_STATUS_WAIT;
+                break;
             case "After Penalties":
-                    $time = 90;
-                    $start_time = time() - $time * 60;
-                    $time_live = "After Penalties";
-                    $status = self::MATH_STATUS_FINSH;
-                    break;
+                $time = 90;
+                $start_time = time() - $time * 60;
+                $time_live = "After Penalties";
+                $status = self::MATH_STATUS_FINSH;
+                break;
             default:
                 if (strpos($match_time, ":")) {
                     $temp = "";
@@ -206,7 +206,7 @@ class MatchRepo extends Component
                             $temp .= $char;
                         }
                     }
-                    
+
                     $match_time = $temp;
                     if (strpos($match_time, ".")) {
                         //15.03. 07:00
