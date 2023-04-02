@@ -230,7 +230,7 @@ class MatchRepo extends Component
                     } else {
                         if ($type == "detail") {
                             $arrTime = explode(":",$match_time);
-                            $time_live = $arrTime[0];
+                            $time_live = $arrTime[0] + 1;
                             $start_time = 0;
                             $status = self::MATH_STATUS_START;
                             break;
