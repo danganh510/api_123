@@ -13,6 +13,7 @@ use Score\Repositories\MatchCrawl;
 use Score\Models\ScMatchInfo;
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
+use Score\Repositories\MatchDetailRepo;
 use Score\Repositories\MatchRepo;
 use Score\Repositories\MyRepo;
 use Score\Repositories\Team;
@@ -30,20 +31,12 @@ class CrawlerdetailliveController extends ControllerBase
         $is_live =  $this->request->get("isLive");
         $id = $this->request->get("id");
         $this->type_crawl = $this->request->get("type");
+        $detailRepo = new MatchDetailRepo();
         if ($is_live) {
             $arrTourKey = ScTournament::getTourIdCrawl();
-            $matchCrawl = ScMatch::findFirst([
-                ' match_status = "S" AND match_crawl_detail_live = "0" AND FIND_IN_SET(match_tournament_id,:arrTour:)',
-                'bind' => [
-                    'arrTour' => implode(",", $arrTourKey)
-                ]
-            ]);
+            $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
             if (!$matchCrawl) {
-                $sql = 'UPDATE Score\Models\ScMatch SET match_crawl_detail_live = "0" WHERE (match_status = "S" AND FIND_IN_SET(match_tournament_id,:arrTour:)) ';
-                $param = [
-                    'arrTour' => implode(",", $arrTourKey)
-                ];
-                $this->modelsManager->executeQuery($sql, $param);
+                $detailRepo->resetFlagTourKey($arrTourKey);
                 echo "--All restart: \r\n";
                 $matchCrawl = ScMatch::findFirst([
                     ' match_status = "S" AND match_crawl_detail_live = "0" AND FIND_IN_SET(match_tournament_id,:arrTour:)',
@@ -94,6 +87,7 @@ class CrawlerdetailliveController extends ControllerBase
             $flag_crawl = (int) $flag_crawl;
             $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
+        $matchCrawl->setMatchInsertTime(time());
         $matchCrawl->save();
 
         echo $matchCrawl->getMatchId() . "---";

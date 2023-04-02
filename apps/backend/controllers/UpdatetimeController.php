@@ -37,11 +37,13 @@ class UpdatetimeController extends ControllerBase
                     if ($match->getMatchTime() < 45) {
                         if (time() - $match->getMatchStartTime() > $match->getMatchTime() * 60) {
                             $match->setMatchTime($match->getMatchTime() + 1);
+                            $match->setMatchInsertTime(time());
                             $match->save();
                         }
                     } else {
                         if ($match->getMatchTime() < 90 && $match->getMatchTime() != 45) {
                             $match->setMatchTime($match->getMatchTime() + 1);
+                            $match->setMatchInsertTime(time());
                             $match->save();
                         }
                     }
