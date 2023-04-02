@@ -44,6 +44,8 @@ class UpdatetimeController extends ControllerBase
                                 var_dump($match->getMessages());
                             }
                             $arrUpdte[] = $match->getMatchId();
+                            $total++;
+
                         }
                     } else {
                         if ($match->getMatchTime() < 90 && $match->getMatchTime() != 45) {
@@ -54,10 +56,10 @@ class UpdatetimeController extends ControllerBase
                                 var_dump($match->getMessages());
                             }
                             $arrUpdte[] = $match->getMatchId();
+                            $total++;
                         }
                     }
 
-                    $total++;
                 }
             }
 
@@ -66,7 +68,9 @@ class UpdatetimeController extends ControllerBase
         $matchCache = new CacheMatchLive();
         $matchCache->setCache(json_encode($arrMatchNew));
         echo "---total: " . $total . "\r\n";
-        echo "---Ids update: ".implode(", ",$arrUpdte)."\r\n";
+        if (!empty($arrUpdte)) {
+            echo "---Ids update: " . implode(", ", $arrUpdte) . "\r\n";
+        }
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
     }

@@ -31,51 +31,11 @@ class CrawlerdetailliveController extends ControllerBase
         $is_live =  $this->request->get("isLive");
         $id = $this->request->get("id");
         $this->type_crawl = $this->request->get("type");
+        
         $detailRepo = new MatchDetailRepo();
-        if ($is_live) {
-            $arrTourKey = ScTournament::getTourIdCrawl();
-            $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
-            if (!$matchCrawl) {
-                $detailRepo->resetFlagTourKey($arrTourKey);
-                echo "--All restart: \r\n";
-                $matchCrawl = ScMatch::findFirst([
-                    ' match_status = "S" AND match_crawl_detail_live = "0" AND FIND_IN_SET(match_tournament_id,:arrTour:)',
-                    'bind' => [
-                        'arrTour' => implode(",", $arrTourKey)
-                    ]
-                ]);
-            }
-            //for not found primary
-            if (!$matchCrawl) {
-                echo "--Start crawl not primary: \r\n";
-                $matchCrawl = ScMatch::findFirst([
-                    ' match_status = "S" AND match_crawl_detail_live = "0"'
-                ]);
-                if (!$matchCrawl) {
-                    $sql = 'UPDATE Score\Models\ScMatch SET match_crawl_detail_live = "0" WHERE (match_status = "S" ) ';
-                    $this->modelsManager->executeQuery($sql);
-                    $matchCrawl = ScMatch::findFirst([
-                        ' match_status = "S" AND match_crawl_detail_live = "0"'
-                    ]);
-                }
-            }
-        } else {
-            $matchCrawl = ScMatch::findFirst([
-                'match_crawl_detail = 0 AND match_status = "W"'
-            ]);
-            if (!$matchCrawl) {
-                //crawl detail cho trận FT
-                $matchCrawl = ScMatch::findFirst([
-                    '(match_crawl_detail = 1 OR match_crawl_detail = 0) AND match_status = "F"'
-                ]);
-            }
-        }
-        if ($id) {
-            $matchCrawl = ScMatch::findFirst([
-                'match_id = :id:',
-                'bind' => ['id' => $id]
-            ]);
-        }
+
+        $matchCrawl = $detailRepo->getMatchCrawl($is_live,$id);
+
         if (!$matchCrawl) {
             echo "Not found Match";
             die();
