@@ -150,7 +150,7 @@ class MatchRepo extends Component
 
         return false;
     }
-    public function getTime($match_time, $time_plus)
+    public function getTime($match_time, $time_plus, $type = "list")
     {
         $match_time = trim($match_time);
         switch ($match_time) {
@@ -228,12 +228,19 @@ class MatchRepo extends Component
                         }
                         break;
                     } else {
-                        $time = 0;
-                        $start_time = $this->my->formatDateYMD(time()) . " " . $match_time;
-                        $start_time = strtotime($start_time);
-                        $time_live = 0;
-                        $status = self::MATH_STATUS_WAIT;
-                        break;
+                        if ($type == "detail") {
+                            $arrTime = explode(":",$match_time);
+                            $time_live = $arrTime[0];
+                            $status = self::MATH_STATUS_START;
+                            break;
+                        } else {
+                            $time = 0;
+                            $start_time = $this->my->formatDateYMD(time()) . " " . $match_time;
+                            $start_time = strtotime($start_time);
+                            $time_live = 0;
+                            $status = self::MATH_STATUS_WAIT;
+                            break;
+                        }
                     }
                 } elseif (strpos($match_time, "+")) {
                     $match_time = str_replace("'", "", $match_time);

@@ -94,6 +94,7 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
             $time = $detail['match']['timeNow'];
+            $time = trim($time);
             if ($time) {
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0);
