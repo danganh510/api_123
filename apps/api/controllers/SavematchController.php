@@ -73,11 +73,11 @@ class SavematchController extends ControllerBase
             }
             $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl);
             if (isset($result['matchSave'])) {
-                $arrMatchCrawl[] = $result['matchSave'];
+                $arrMatchCrawl[] = $result['matchSave']->toArray();
                 $total++;
                 //  echo "Save match success --- ";
             } else {
-                echo json_encode($result['messages']);
+                echo json_encode($result['matchSave']);
             }
             if ($result['is_new']) {
                 $is_new = true;
@@ -92,12 +92,9 @@ class SavematchController extends ControllerBase
             $cache->set("all");
         }
         if ($is_list == true && $is_live == true) {
-echo "132";exit;
             $arrMatchIdLive = array_column($arrMatchCrawl,"match_id");
-            var_dump($arrMatchCrawl);exit;
-
             $cache = new CacheMatchIdLive();
-            $checkCache =  $cache->setCache($arrMatchIdLive);
+            $cache->setCache($arrMatchIdLive);
         }
         elete_cache:
         if (($is_live != true)) {
@@ -110,15 +107,14 @@ echo "132";exit;
             $matchCache = new CacheMatch();
             $matchCache->setCache(json_encode($arrMatch));
         } else {
-            $cache = new CacheMatchIdLive();
-            $arrMatchIdLive = $cache->getCache();
-        
-            $arrMatch = ScMatch::find([
-                'FIND_IN_SET(match_id,:arrId:)',
-                'bind' => [
-                    'arrId' => implode(",",$arrMatchIdLive)
-                ]
-            ]);
+            $time_end = time() + 3 * 60;
+            $time_begin = time() - 3 * 60;
+            $time_now = time();
+            $arrMatch = ScMatch::find(
+                "match_status = 'S' OR 
+                (match_status = 'F' AND match_time_finish < $time_end  AND match_time_finish > $time_now) 
+                OR (match_status = 'W' AND match_start_time > $time_begin AND match_start_time < $time_now) "
+            );
             $arrMatch = $arrMatch->toArray();
             $matchCache = new CacheMatchLive();
             $result = $matchCache->setCache(json_encode($arrMatch));
