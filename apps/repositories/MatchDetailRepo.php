@@ -50,7 +50,7 @@ class MatchDetailRepo extends Component
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
             if ($dayOfWeek == '6' ||  $dayOfWeek == '7') {
 
-                if ($currentHour >= 12 && $currentHour <= 16) {
+                if ($currentHour >= 11 && $currentHour <= 16) {
                     return false;
                 }
             }
