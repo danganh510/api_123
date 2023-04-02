@@ -31,6 +31,7 @@ class UpdatetimeController extends ControllerBase
         $total = 0;
 
         $arrMatchNew = [];
+        $arrUpdte = [];
         foreach ($arrMatch as $match) {
             if (time() - $match->getMatchInsertTime() > 40) {
                 if (is_numeric($match->getMatchTime()) && $match->getMatchStatus() == "S") {
@@ -42,6 +43,7 @@ class UpdatetimeController extends ControllerBase
                             if (!$result) {
                                 var_dump($match->getMessages());
                             }
+                            $arrUpdte[] = $match->getMatchId();
                         }
                     } else {
                         if ($match->getMatchTime() < 90 && $match->getMatchTime() != 45) {
@@ -51,6 +53,7 @@ class UpdatetimeController extends ControllerBase
                             if (!$result) {
                                 var_dump($match->getMessages());
                             }
+                            $arrUpdte[] = $match->getMatchId();
                         }
                     }
 
@@ -63,6 +66,7 @@ class UpdatetimeController extends ControllerBase
         $matchCache = new CacheMatchLive();
         $matchCache->setCache(json_encode($arrMatchNew));
         echo "---total: " . $total . "\r\n";
+        echo "---Ids update: ".implode(", ",$arrUpdte)."\r\n";
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
     }
