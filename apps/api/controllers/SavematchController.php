@@ -94,7 +94,8 @@ class SavematchController extends ControllerBase
         if ($is_list == true && $is_live == true) {
             $arrMatchIdLive = array_column($arrMatchCrawl,"match_id");
             $cache = new CacheMatchIdLive();
-            $cache->setCache($arrMatchIdLive);
+            $checkCache =  $cache->setCache($arrMatchIdLive);
+            var_dump($checkCache);exit;
         }
         elete_cache:
         if (($is_live != true)) {
