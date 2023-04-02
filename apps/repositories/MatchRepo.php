@@ -134,7 +134,6 @@ class MatchRepo extends Component
             $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
         }
         $matchSave->setMatchOrder(1);
-        $matchSave->setMatchOrder(1);
         $matchSave->setMatchInsertTime(time());
         $result = $matchSave->save();
         if ($result) {
@@ -252,8 +251,6 @@ class MatchRepo extends Component
                     foreach ($arrTime as $time_1) {
                         if (is_numeric($time_1)) {
                             $time += (int) $time_1;
-                        } else {
-                            echo "ERROR: " . $time_1;
                         }
                     }
                     $start_time = time() - $time * 60;
