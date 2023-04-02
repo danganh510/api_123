@@ -74,7 +74,7 @@ class SavematchController extends ControllerBase
                 $total++;
                 //  echo "Save match success --- ";
             } else {
-                echo "Save match false ---";
+                echo json_encode($result['matchSave']);
             }
             if ($result['is_new']) {
                 $is_new = true;
