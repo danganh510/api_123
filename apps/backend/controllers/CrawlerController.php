@@ -72,7 +72,7 @@ class CrawlerController extends ControllerBase
             $clientGuzzle = new \GuzzleHttp\Client();
             $url = API_END_PONT.'/save-match';
             try {
-                $clientGuzzle->post(
+                $response = $clientGuzzle->post(
                     $url,
                     array(
                         //      'headers' => $header,
@@ -86,6 +86,7 @@ class CrawlerController extends ControllerBase
             //        $result = json_decode($response->getBody()->getContents(),true);
             $total = count($list_match);
             echo "status: " . $total;
+            echo $response->getBody()->getContents();
 
             // if ($total < 10) {
             //     sleep(5);
