@@ -11,7 +11,7 @@ use Score\Models\ScTournament;
 class CacheMatchIdLive extends Component
 {
     const PRE_SESSION_CACHE = "";
-    const filePath = __DIR__ . "/../Cache/Match/";
+    const filePath = __DIR__ . "/../../Cache/Match/";
     static $frontCache = null;
     static $backCache = null;
     public function __construct()
