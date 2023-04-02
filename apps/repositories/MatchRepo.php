@@ -44,7 +44,6 @@ class MatchRepo extends Component
                 'day2' => $day - 2
             ]
         ]);
-        var_dump($matchSave);exit;
         if (!$matchSave) {
             $is_new = true;
             $matchSave = new ScMatch();
@@ -137,8 +136,8 @@ class MatchRepo extends Component
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchInsertTime(time());
-
-        if ($matchSave->save()) {
+        $result = $matchSave->save();
+        if ($result) {
             return [
                 'matchSave' => $matchSave,
                 'is_new' => $is_new
