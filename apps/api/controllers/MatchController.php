@@ -142,12 +142,16 @@ class MatchController extends ControllerBase
                     ],
                     'match' => [
                         $match['match_id'] => $matchInfo
-                    ]
+                    ],
+                    'order' => $arrTournament[$match['match_tournament_id']]['tournament_order'],
 
                 ];
             }
         }
         end:
+        usort($events, function($a, $b) {
+            return $b['order'] - $a['order'];
+        });
         return $events;
         //get match and tournament
 
