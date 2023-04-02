@@ -16,14 +16,17 @@ class MatchDetailRepo extends Component
         $arrTourKey = ScTournament::getTourIdCrawl();
         $matchCrawl = MatchDetailRepo::getMatchStartHT($arrTourKey);
         if (!$matchCrawl) {
-            $matchCrawl = MatchDetailRepo::getMatchStartTour();
+            $this->resetFlagTourNomal($arrTourKey);
+            $matchCrawl = MatchDetailRepo::getMatchStartHT($arrTourKey);
             if (!$matchCrawl) {
-                $this->resetFlagTourStart();
                 $matchCrawl = MatchDetailRepo::getMatchStartTour();
+                if (!$matchCrawl) {
+                    $this->resetFlagTourStart();
+                    $matchCrawl = MatchDetailRepo::getMatchStartTour();
+                }
             }
         }
         return $matchCrawl;
-
     }
     public function getMatchCrawl($is_live, $id)
     {
@@ -62,7 +65,7 @@ class MatchDetailRepo extends Component
                 $matchCrawl = MatchDetailRepo::getMatchFinish();
             }
         }
- 
+
         return $matchCrawl;
     }
     public static function getMatchStartTourKey($arrTourKey)
@@ -106,6 +109,14 @@ class MatchDetailRepo extends Component
     public function resetFlagTourKey($arrTourKey)
     {
         $sql = 'UPDATE Score\Models\ScMatch SET match_crawl_detail_live = "0" WHERE (match_status = "S" AND FIND_IN_SET(match_tournament_id,:arrTour:)) ';
+        $param = [
+            'arrTour' => implode(",", $arrTourKey)
+        ];
+        return $this->modelsManager->executeQuery($sql, $param);
+    }
+    public function resetFlagTourNomal($arrTourKey)
+    {
+        $sql = 'UPDATE Score\Models\ScMatch SET match_crawl_detail_live = "0" WHERE (match_status = "S" ) AND (NOT FIND_IN_SET(match_tournament_id,:arrTour:))';
         $param = [
             'arrTour' => implode(",", $arrTourKey)
         ];

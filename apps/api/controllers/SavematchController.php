@@ -31,7 +31,6 @@ class SavematchController extends ControllerBase
         $this->type_crawl = $this->requestParams['type_crawl'];
         $is_live = $this->requestParams['is_live'];
         $is_live = (boolean) $is_live;
-        $tour = $this->requestParams['tour'];
 
         $cacheTeam = new CacheTeam();
         $arrTeamOb = $cacheTeam->get(ConstEnv::CACHE_TYPE_NAME_FLASH);
