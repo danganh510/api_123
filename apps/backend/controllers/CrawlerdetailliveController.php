@@ -40,9 +40,9 @@ class CrawlerdetailliveController extends ControllerBase
             //is Live
             $matchCrawl = $detailRepo->getMatchCrawlNomal();
         } else {
-            $matchCrawl = $detailRepo->getMatchCrawl($is_live,$id);
+            $matchCrawl = $detailRepo->getMatchCrawl($is_live, $id);
         }
-        
+
 
         if (!$matchCrawl) {
             echo "Not found Match";
@@ -122,6 +122,14 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->save();
         }
         $matchCrawl->save();
+        if ($is_live) {
+            $cache =  file_get_contents("http://123tyso.live//cache-match-live");
+            if ($cache) {
+                echo "Cache suscces\r\n";
+            } else {
+                echo "Cache fail\r\n";
+            }
+        }
         end:
         echo "---finish in " . (time() - $start_time_cron) . " second ---- \n\r";
         die();
