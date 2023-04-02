@@ -19,6 +19,7 @@ use Score\Repositories\CrawlerList;
 use Score\Repositories\MatchCrawl;
 use Score\Repositories\MatchRepo;
 use Score\Repositories\Tournament;
+use Score\Repositories\TournamentCrawlRepo;
 
 class CrawlertourController extends ControllerBase
 {
@@ -33,6 +34,7 @@ class CrawlertourController extends ControllerBase
         $time_plus = $this->request->get("timePlus");
         $is_live = (bool)  $this->request->get("isLive");
         $this->type_crawl = $this->request->get("type");
+        $is_nomal = $this->request->get("isNomal");
         $total = 0;
 
         $time = microtime(true);
@@ -59,34 +61,21 @@ class CrawlertourController extends ControllerBase
         $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
         $arrTourId = array_keys($arrListMatchLive);
         $strTour = implode(",", $arrTourId);
-        $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND tournament_crawl = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
-       
-        if (!$tour) {
-            $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}') AND tournament_crawl = 'Y'";
-            $this->modelsManager->executeQuery($sql);
-            echo "All reset \r\n";
-            $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') AND tournament_crawl = 'Y'");
-
-            if (!$tour) {
-                $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') ");
-                if ($tour) {
-                    $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}')";
-                    $this->modelsManager->executeQuery($sql);
-                    echo "All reset \r\n";
-                    $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') ");
-                    if (!$tour) {
-                        echo "Not found";
-                        die();
-                    }
-
-                }
-            }
+        $tourCrawlRepo = new TournamentCrawlRepo();
+        if ($is_nomal) {
+            $tour = $tourCrawlRepo->getTournamentNomal($strTour);
+        } else {
+            $tour = $tourCrawlRepo->getTournament($strTour);
         }
-        
+        if (!$tour) {
+            echo "Not found";
+            die();
+        }
+
         $tour->setTournamentIsCrawling("N");
         $tour->save();
-        echo "Tour Id: ".$tour->getTournamentId()." \r\n";
-       // var_dump(microtime(true) - $time);
+        echo "Tour Id: " . $tour->getTournamentId() . " \r\n";
+        // var_dump(microtime(true) - $time);
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live, $tour->getTournamentHrefFlashscore());
             $list_match = $crawler->getInstance();
@@ -109,10 +98,10 @@ class CrawlertourController extends ControllerBase
                 'list_match' => $list_match,
                 'time_plus' => $time_plus,
                 'type_crawl' => $this->type_crawl,
-                'is_live' => (boolean) $is_live,
+                'is_live' => (bool) $is_live,
                 'tour' => true
             ];
-       //         die(json_encode($request));
+            //         die(json_encode($request));
 
 
             $clientGuzzle = new \GuzzleHttp\Client();

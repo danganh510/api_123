@@ -13,7 +13,8 @@ class MatchDetailRepo extends Component
 {
     public function getMatchCrawlNomal()
     {
-        $matchCrawl = MatchDetailRepo::getMatchStartHT();
+        $arrTourKey = ScTournament::getTourIdCrawl();
+        $matchCrawl = MatchDetailRepo::getMatchStartHT($arrTourKey);
         if (!$matchCrawl) {
             $matchCrawl = MatchDetailRepo::getMatchStartTour();
             if (!$matchCrawl) {
@@ -85,10 +86,13 @@ class MatchDetailRepo extends Component
     }
 
     //ưu tiên HT trước
-    public static function getMatchStartHT()
+    public static function getMatchStartHT($arrTourKey)
     {
         return ScMatch::findFirst([
-            'match_status = "S" AND match_crawl_detail_live = "0" AND match_time = "HT"'
+            'match_status = "S" AND match_crawl_detail_live = "0" AND match_time = "HT" AND (NOT FIND_IN_SET(match_tournament_id,:arrTour:))',
+            'bind' => [
+                'arrTour' => implode(",", $arrTourKey)
+            ]
         ]);
     }
     public static function getMatchWait()
