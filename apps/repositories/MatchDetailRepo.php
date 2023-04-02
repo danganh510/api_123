@@ -23,7 +23,7 @@ class MatchDetailRepo extends Component
             }
         }
         return $matchCrawl;
-        
+
     }
     public function getMatchCrawl($is_live, $id)
     {
@@ -62,12 +62,7 @@ class MatchDetailRepo extends Component
                 $matchCrawl = MatchDetailRepo::getMatchFinish();
             }
         }
-        if ($id) {
-            $matchCrawl = ScMatch::findFirst([
-                'match_id = :id:',
-                'bind' => ['id' => $id]
-            ]);
-        }
+ 
         return $matchCrawl;
     }
     public static function getMatchStartTourKey($arrTourKey)
