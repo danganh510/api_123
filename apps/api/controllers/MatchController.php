@@ -149,9 +149,9 @@ class MatchController extends ControllerBase
             }
         }
         end:
-        // usort($events, function($a, $b) {
-        //     return $b['order'] - $a['order'];
-        // });
+        uasort($events, function($a, $b) {
+            return $b['order'] - $a['order'];
+        });
         return $events;
         //get match and tournament
 
