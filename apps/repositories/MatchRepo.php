@@ -44,6 +44,7 @@ class MatchRepo extends Component
                 'day2' => $day - 2
             ]
         ]);
+        var_dump($matchSave);exit;
         if (!$matchSave) {
             $is_new = true;
             $matchSave = new ScMatch();
