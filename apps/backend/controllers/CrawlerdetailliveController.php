@@ -42,6 +42,7 @@ class CrawlerdetailliveController extends ControllerBase
         } else {
             $matchCrawl = $detailRepo->getMatchCrawl($is_live,$id);
         }
+        
 
         if (!$matchCrawl) {
             echo "Not found Match";

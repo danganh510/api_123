@@ -23,6 +23,7 @@ class MatchDetailRepo extends Component
             }
         }
         return $matchCrawl;
+        
     }
     public function getMatchCrawl($is_live, $id)
     {
