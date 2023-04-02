@@ -72,6 +72,7 @@ class SavematchController extends ControllerBase
                 continue;
             }
             $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl);
+            var_dump($result);exit;
             if (isset($result['matchSave'])) {
                 $arrMatchCrawl[] = $result['matchSave'];
                 var_dump($arrMatchCrawl);exit;
