@@ -137,6 +137,7 @@ class MatchRepo extends Component
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchInsertTime(time());
         $result = $matchSave->save();
+        var_dump($result);exit;
         if ($result) {
             return [
                 'matchSave' => $matchSave,
