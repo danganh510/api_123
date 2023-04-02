@@ -39,6 +39,20 @@ class CacheController extends ControllerBase
         $arrTour = $cacheTour->get($type);
         die(json_encode($arrTour));
     }
+    public function cachematchliveAction()
+    {
+        $time_end = time() + 3 * 60;
+        $time_begin = time() - 3 * 60;
+        $time_now = time();
+        $arrMatch = ScMatch::find(
+            "match_status = 'S' OR 
+                (match_status = 'F' AND match_time_finish < $time_end  AND match_time_finish > $time_now) 
+                OR (match_status = 'W' AND match_start_time > $time_begin AND match_start_time < $time_now) "
+        );
+        $arrMatch = $arrMatch->toArray();
+        $matchCache = new CacheMatchLive();
+        $result = $matchCache->setCache(json_encode($arrMatch));
+    }
 
 
     function countryAction()

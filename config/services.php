@@ -575,8 +575,14 @@ $di['router'] = function () {
         "controller" => "updatetime",
         "action" => "index"
     ));
+    
 
     //API CACHE
+    $router->add('/cache-match-live', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "cachematchlive"
+    ));
     $router->add('/get-team', array(
         "module" => "api",
         "controller" => 'cache',
