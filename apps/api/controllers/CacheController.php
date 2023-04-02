@@ -11,6 +11,7 @@ use Score\Repositories\Team;
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
 use Score\Repositories\CacheMatch;
+use Score\Repositories\CacheMatchIdLive;
 use Score\Repositories\CacheMatchLive;
 use Score\Repositories\CacheTeam;
 use Score\Repositories\CacheTour;
@@ -41,14 +42,15 @@ class CacheController extends ControllerBase
     }
     public function cachematchliveAction()
     {
-        $time_end = time() + 3 * 60;
-        $time_begin = time() - 3 * 60;
-        $time_now = time();
-        $arrMatch = ScMatch::find(
-            "match_status = 'S' OR 
-                (match_status = 'F' AND match_time_finish < $time_end  AND match_time_finish > $time_now) 
-                OR (match_status = 'W' AND match_start_time > $time_begin AND match_start_time < $time_now) "
-        );
+        $cache = new CacheMatchIdLive();
+        $arrMatchIdLive = $cache->getCache();
+    
+        $arrMatch = ScMatch::find([
+            'FIND_IN_SET(match_id,:arrId:)',
+            'bind' => [
+                'arrId' => implode(",",$arrMatchIdLive)
+            ]
+        ]);
         $arrMatch = $arrMatch->toArray();
         $matchCache = new CacheMatchLive();
         $result = $matchCache->setCache(json_encode($arrMatch));

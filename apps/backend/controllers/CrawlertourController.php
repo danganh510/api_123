@@ -99,7 +99,7 @@ class CrawlertourController extends ControllerBase
                 'time_plus' => $time_plus,
                 'type_crawl' => $this->type_crawl,
                 'is_live' => (bool) $is_live,
-                'tour' => true
+                'is_list' => false,
             ];
             //         die(json_encode($request));
 

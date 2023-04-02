@@ -74,7 +74,7 @@ class CrawlerFlashScoreBase extends CrawlerList
             foreach ($divClose as $key =>  $div) {
                 try {
                     $div->click();
-                    //    sleep(0.1);
+                        sleep(0.1);
                     $click++;
                 } catch (Exception $e) {
                     echo "error85:";
