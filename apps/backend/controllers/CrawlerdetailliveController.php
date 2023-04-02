@@ -31,10 +31,18 @@ class CrawlerdetailliveController extends ControllerBase
         $is_live =  $this->request->get("isLive");
         $id = $this->request->get("id");
         $this->type_crawl = $this->request->get("type");
-        
-        $detailRepo = new MatchDetailRepo();
+        $is_nomal = $this->request->get("isNomal");
 
-        $matchCrawl = $detailRepo->getMatchCrawl($is_live,$id);
+
+        $detailRepo = new MatchDetailRepo();
+        if (!$is_nomal) {
+            $is_nomal = false;
+            $matchCrawl = $detailRepo->getMatchCrawl($is_live,$id);
+        } else {
+            $matchCrawl = $detailRepo->getMatchCrawl($is_live,$id);
+        }
+        
+
 
         if (!$matchCrawl) {
             echo "Not found Match";

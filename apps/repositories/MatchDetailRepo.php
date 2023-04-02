@@ -11,6 +11,18 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class MatchDetailRepo extends Component
 {
+    public function getMatchCrawlNomal()
+    {
+        $matchCrawl = MatchDetailRepo::getMatchStartHT();
+        if (!$matchCrawl) {
+            $matchCrawl = MatchDetailRepo::getMatchStartTour();
+            if (!$matchCrawl) {
+                $this->resetFlagTourStart();
+                $matchCrawl = MatchDetailRepo::getMatchStartTour();
+            }
+        }
+        return $matchCrawl;
+    }
     public function getMatchCrawl($is_live, $id)
     {
         if ($is_live) {
@@ -34,11 +46,11 @@ class MatchDetailRepo extends Component
             //7h tới 11h tối thứ 7 cn tắt detail
             $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
             $currentHour = date('G');
-            echo "Today is: ".$dayOfWeek." and ".$currentHour." Hour \r\n";
+            echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
             if ($dayOfWeek == '6' ||  $dayOfWeek == '7') {
-         
+
                 if ($currentHour >= 12 && $currentHour <= 16) {
-                   return false;
+                    return false;
                 }
             }
 
@@ -69,6 +81,14 @@ class MatchDetailRepo extends Component
     {
         return ScMatch::findFirst([
             ' match_status = "S" AND match_crawl_detail_live = "0"'
+        ]);
+    }
+
+    //ưu tiên HT trước
+    public static function getMatchStartHT()
+    {
+        return ScMatch::findFirst([
+            'match_status = "S" AND match_crawl_detail_live = "0" AND match_time = "HT"'
         ]);
     }
     public static function getMatchWait()
