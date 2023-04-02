@@ -74,6 +74,7 @@ class SavematchController extends ControllerBase
             $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl);
             if (isset($result['matchSave'])) {
                 $arrMatchCrawl[] = (array) $result['matchSave'];
+                var_dump($arrMatchCrawl);exit;
                 $total++;
                 //  echo "Save match success --- ";
             } else {
@@ -92,7 +93,7 @@ class SavematchController extends ControllerBase
             $cache->set("all");
         }
         if ($is_list == true && $is_live == true) {
-            var_dump($arrMatchCrawl);exit;
+       
             $arrMatchIdLive = array_column($arrMatchCrawl,"match_id");
             $cache = new CacheMatchIdLive();
             $checkCache =  $cache->setCache($arrMatchIdLive);
