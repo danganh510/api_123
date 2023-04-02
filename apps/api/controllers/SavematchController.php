@@ -92,11 +92,12 @@ class SavematchController extends ControllerBase
             $cache->set("all");
         }
         if ($is_list == true && $is_live == true) {
-       
+
             $arrMatchIdLive = array_column($arrMatchCrawl,"match_id");
+            var_dump($arrMatchCrawl);exit;
+
             $cache = new CacheMatchIdLive();
             $checkCache =  $cache->setCache($arrMatchIdLive);
-            var_dump($checkCache,$arrMatchCrawl);exit;
         }
         elete_cache:
         if (($is_live != true)) {
