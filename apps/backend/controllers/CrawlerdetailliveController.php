@@ -49,7 +49,7 @@ class CrawlerdetailliveController extends ControllerBase
                 'bind' => ['id' => $id]
             ]);
         }
-
+        
         if (!$matchCrawl) {
             echo "Not found Match";
             die();
@@ -105,7 +105,11 @@ class CrawlerdetailliveController extends ControllerBase
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
                 $matchCrawl->setMatchTime($timeInfo['time_live']);
-                $matchCrawl->setMatchStatus($timeInfo['status']);
+                if ($id == 5162) {
+                    var_dump($time, $timeInfo);
+                }
+                //còn 1 lỗi
+                 $matchCrawl->setMatchStatus($timeInfo['status']);
             }
         }
         if ($detail['match']['startTime'] && isset($detail['match']['startTime'])) {
