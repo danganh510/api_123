@@ -231,6 +231,7 @@ class MatchRepo extends Component
                         if ($type == "detail") {
                             $arrTime = explode(":",$match_time);
                             $time_live = $arrTime[0];
+                            $start_time = 0;
                             $status = self::MATH_STATUS_START;
                             break;
                         } else {
