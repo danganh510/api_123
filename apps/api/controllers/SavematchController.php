@@ -92,7 +92,7 @@ class SavematchController extends ControllerBase
             $cache = new CacheMatchIdLive();
             $cache->setCache($arrMatchIdLive);
         }
-        elete_cache:
+        delete_cache:
         if (($is_live != true)) {
             $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
             $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
