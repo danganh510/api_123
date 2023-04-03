@@ -15,7 +15,7 @@ class MatchDetailRepo extends Component
     {
         //uu tien check cac match_status = S and time_start < time() - 120 * 60
         $matchCrawl = ScMatch::findFirst([
-            'match_status = "S" AND match_start_time < :TIME:',
+            'match_status = "S" OR match_status = "W" AND match_start_time < :TIME:',
             'bind' => [
                 'TIME' => time() - 130 * 60
             ]
@@ -23,6 +23,7 @@ class MatchDetailRepo extends Component
         if ($matchCrawl) {
             return $matchCrawl;
         }
+    
         $arrTourKey = ScTournament::getTourIdCrawl();
         $matchCrawl = MatchDetailRepo::getMatchStartHT($arrTourKey);
         if (!$matchCrawl) {
