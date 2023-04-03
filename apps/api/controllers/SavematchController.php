@@ -31,10 +31,10 @@ class SavematchController extends ControllerBase
         $time_plus = $this->requestParams['time_plus'];
         $this->type_crawl = $this->requestParams['type_crawl'];
         $is_live = $this->requestParams['is_live'];
-        $is_live = (boolean) $is_live;
+        $is_live = (bool) $is_live;
 
         $is_list = $this->requestParams['is_list'];
-        $is_list = (boolean) $is_list;
+        $is_list = (bool) $is_list;
 
         $cacheTeam = new CacheTeam();
         $arrTeamOb = $cacheTeam->get(ConstEnv::CACHE_TYPE_NAME_FLASH);
@@ -55,9 +55,9 @@ class SavematchController extends ControllerBase
             $tournamentCrawl = new MatchTournament();
             $tournamentCrawl->setData($match->getTournament());
 
-            $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl,$is_cache_team);
-            $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl,$is_cache_team);
-            $tournament = Tournament::saveTournament($tournamentCrawl, $this->type_crawl, $arrTour,$is_cache_tour);
+            $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl, $is_cache_team);
+            $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl, $is_cache_team);
+            $tournament = Tournament::saveTournament($tournamentCrawl, $this->type_crawl, $arrTour, $is_cache_tour);
 
             if (!$home) {
                 echo "can't save home team";
@@ -94,31 +94,27 @@ class SavematchController extends ControllerBase
         }
         elete_cache:
         if (($is_live != true)) {
+            $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
+            $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
+            $arrMatch = ScMatch::find(
+                "match_start_time > $timestamp_before_7 AND match_start_time < $timestamp_affter_7"
+            );
+            $arrMatch = $arrMatch->toArray();
+            $matchCache = new CacheMatch();
+            $matchCache->setCache(json_encode($arrMatch));
+        } else {
             $cache = new CacheMatchIdLive();
             $arrMatchIdLive = $cache->getCache();
-    
+
             $arrMatch = ScMatch::find([
                 'FIND_IN_SET(match_id,:arrId:)',
                 'bind' => [
-                    'arrId' => implode(",",$arrMatchIdLive)
+                    'arrId' => implode(",", $arrMatchIdLive)
                 ]
             ]);
             $arrMatch = $arrMatch->toArray();
             $matchCache = new CacheMatchLive();
             $result = $matchCache->setCache(json_encode($arrMatch));
-        } else {
-            $time_end = time() + 3 * 60;
-            $time_begin = time() - 3 * 60;
-            $time_now = time();
-            $arrMatch = ScMatch::find(
-                "match_status = 'S' OR 
-                (match_status = 'F' AND match_time_finish < $time_end  AND match_time_finish > $time_now) 
-                OR (match_status = 'W' AND match_start_time > $time_begin AND match_start_time < $time_now) "
-            );
-            $arrMatch = $arrMatch->toArray();
-            $matchCache = new CacheMatchLive();
-            $result = $matchCache->setCache(json_encode($arrMatch));
-
         }
 
         return [

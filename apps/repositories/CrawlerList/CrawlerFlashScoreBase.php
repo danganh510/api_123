@@ -80,6 +80,9 @@ class CrawlerFlashScoreBase extends CrawlerList
                     echo "error85:";
                 }
             }
+            if (!$this->isLive) {
+                sleep(2);
+            }
         }
     }
     public function getTournament($div)
