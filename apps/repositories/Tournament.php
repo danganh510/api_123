@@ -91,6 +91,8 @@ class Tournament extends Component
             $tournament->save();
             $is_cache_tour = true;
         }
+        var_dump($tournament->getMessages());exit;
+        
         return $tournament;
     }
 }
