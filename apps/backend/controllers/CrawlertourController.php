@@ -28,6 +28,12 @@ class CrawlertourController extends ControllerBase
 
     public function indexAction()
     {
+        $currentHour = date('G');
+        $currentMinutes = date('i');
+        if ($currentHour >= 1 && $currentHour <= 2 && $currentMinutes >=0 && $currentMinutes < 20) {
+            echo "Now is: " . $currentHour . " Hour \r\n";
+            die();
+        }
 
         ini_set('max_execution_time', -1);
 
