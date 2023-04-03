@@ -36,6 +36,10 @@ class MatchDetailRepo extends Component
                 }
             }
         }
+        if (!$matchCrawl) {
+            //crawl detail cho trận FT
+            $matchCrawl = MatchDetailRepo::getMatchFinish();
+        }
         return $matchCrawl;
     }
     public function getMatchCrawl($is_live, $id)
@@ -62,18 +66,19 @@ class MatchDetailRepo extends Component
             $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
             $currentHour = date('G');
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
-            if ($dayOfWeek == '6' ||  $dayOfWeek == '7') {
+            if ($dayOfWeek == '1' ||  $dayOfWeek == '7') {
 
                 if ($currentHour >= 11 && $currentHour <= 16) {
-                    return false;
+                    echo "Wait for crawl list";
+                    die();
                 }
             }
 
             $matchCrawl = MatchDetailRepo::getMatchWait();
-            if (!$matchCrawl) {
-                //crawl detail cho trận FT
-                $matchCrawl = MatchDetailRepo::getMatchFinish();
-            }
+        }
+        if (!$matchCrawl) {
+            //crawl detail cho trận FT
+            $matchCrawl = MatchDetailRepo::getMatchFinish();
         }
 
         return $matchCrawl;
