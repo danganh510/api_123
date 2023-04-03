@@ -54,6 +54,7 @@ class Tournament extends Component
         } else {
             $tournament = self::findByName($tournamentInfo->getTournamentName(), $tournamentInfo->getCountryCode(), $slug);
         }
+        var_dump($tournament);exit;
 
         if (!$tournament) {
             $tournament = new ScTournament();
