@@ -142,7 +142,8 @@ class MatchRepo extends Component
                 'is_new' => $is_new
             ];
         } else {
-            var_dump($matchSave->getMessages());exit;
+            var_dump($matchSave->getMessages());
+            exit;
             return [
                 'messages' => $matchSave->getMessages()
             ];
@@ -196,6 +197,12 @@ class MatchRepo extends Component
                 $time_live = "After Penalties";
                 $status = self::MATH_STATUS_FINSH;
                 break;
+            case "AfterPen.":
+                $time = 90;
+                $start_time = time() - $time * 60;
+                $time_live = "After Penalties";
+                $status = self::MATH_STATUS_FINSH;
+                break;
             default:
                 if (strpos($match_time, ":")) {
                     $temp = "";
@@ -229,7 +236,7 @@ class MatchRepo extends Component
                         break;
                     } else {
                         if ($type == "detail") {
-                            $arrTime = explode(":",$match_time);
+                            $arrTime = explode(":", $match_time);
                             $time_live = $arrTime[0] + 1;
                             $start_time = 0;
                             $status = self::MATH_STATUS_START;
