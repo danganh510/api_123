@@ -73,7 +73,7 @@ class CrawlertourController extends ControllerBase
         } else {
             $tour = $tourCrawlRepo->getTournament($strTour);
         }
-        $tour = ScTournament::findFirst("2827");
+        //$tour = ScTournament::findFirst("2827");
         if (!$tour) {
             echo "Not found";
             die();
@@ -108,7 +108,7 @@ class CrawlertourController extends ControllerBase
                 'is_live' => (bool) $is_live,
                 'is_list' => false,
             ];
-                     die(json_encode($request));
+             //        die(json_encode($request));
 
 
             $clientGuzzle = new \GuzzleHttp\Client();
