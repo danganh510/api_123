@@ -13,6 +13,16 @@ class MatchDetailRepo extends Component
 {
     public function getMatchCrawlNomal()
     {
+        //uu tien check cac match_status = S and time_start < time() - 120 * 60
+        $matchCrawl = ScMatch::findFirst([
+            'match_status = "S" AND match_start_time < :TIME:',
+            'bind' => [
+                'TIME' => time() - 130 * 60
+            ]
+        ]);
+        if ($matchCrawl) {
+            return $matchCrawl;
+        }
         $arrTourKey = ScTournament::getTourIdCrawl();
         $matchCrawl = MatchDetailRepo::getMatchStartHT($arrTourKey);
         if (!$matchCrawl) {
