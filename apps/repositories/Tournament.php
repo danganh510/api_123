@@ -77,6 +77,10 @@ class Tournament extends Component
                     break;
             }
             $tournament->setTournamentActive("Y");
+            $type = is_numeric($tournamentInfo->getCountryCode()) ? "area" : "country";
+            $tournament->setTournamentType($type);
+            $tournament->setTournamentCrawl("N");
+            $tournament->setTournamentIsCrawling("N");
             $tournament->setTournamentOrder($tournamentInfo->getId());
             $tournament->save();
             $is_cache_tour = true;
@@ -87,8 +91,6 @@ class Tournament extends Component
             $tournament->save();
             $is_cache_tour = true;
         }
-
-var_dump($is_cache_tour,$tournament->getMessages());exit;
         return $tournament;
     }
 }
