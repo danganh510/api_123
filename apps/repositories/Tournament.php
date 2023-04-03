@@ -88,7 +88,7 @@ class Tournament extends Component
             $is_cache_tour = true;
         }
 
-var_dump($is_cache_tour,$tournament);exit;
+var_dump($is_cache_tour,$tournament->getMessages());exit;
         return $tournament;
     }
 }
