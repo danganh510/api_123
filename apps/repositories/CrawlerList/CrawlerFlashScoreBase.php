@@ -99,7 +99,7 @@ class CrawlerFlashScoreBase extends CrawlerList
         $country_name = str_replace(["&amp;"], ["&"], $country_name);
         $group = "";
         if ((strpos($name, "Group") || strpos($name, "Offs") || strpos($name, "Apertura") || strpos($name, "Clausura")
-                || strpos($name, "Clausura") ||  strpos($name, "places") ||  strpos($name, "stage") ||  strpos($name, "Round"))
+                || strpos($name, "Clausura") ||  strpos($name, "places") ||  strpos($name, "stage") ||  strpos($name, "Round") ||  strpos($name, "round"))
 
             && strpos($name, "-")
         ) {
