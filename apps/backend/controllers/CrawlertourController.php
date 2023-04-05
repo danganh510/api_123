@@ -63,6 +63,12 @@ class CrawlertourController extends ControllerBase
         }
         if (empty($arrListMatchLive->getBody())) {
             echo "Not found match\n\r";
+            die();
+        }
+        $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
+        if (empty($arrListMatchLive)) {
+            echo  "Not found match\n\r";
+            die();
         }
         $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
         $arrTourId = array_keys($arrListMatchLive);
@@ -108,7 +114,7 @@ class CrawlertourController extends ControllerBase
                 'is_live' => (bool) $is_live,
                 'is_list' => false,
             ];
-             //        die(json_encode($request));
+            //        die(json_encode($request));
 
 
             $clientGuzzle = new \GuzzleHttp\Client();
