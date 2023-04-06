@@ -209,7 +209,14 @@ class MatchRepo extends Component
                 $status = self::MATH_STATUS_START;
                 break;
             default:
-                if (strpos($match_time, ":")) {
+                if (strpos($match_time, "ExtraTime") !== false) {
+                    $arrTime = explode(" ",$match_time);
+                    $time = isset($arrTime[1]) && is_numeric($arrTime[1]) ? (int) $arrTime[1] : 90;
+                    $start_time = time() - $time * 60;
+                    $time_live = $match_time;
+                    $status = self::MATH_STATUS_START;
+                    break;
+                } else if (strpos($match_time, ":")) {
                     $temp = "";
                     $arrString = str_split($match_time);
                     //  var_dump($arrString);exit;
