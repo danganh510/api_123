@@ -75,10 +75,12 @@ class MatchDetailRepo extends Component
                 }
             }
 
+            echo "match wait\r\n";
             $matchCrawl = MatchDetailRepo::getMatchWait();
         }
         if (!$matchCrawl) {
             //crawl detail cho trận FT
+            echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
         }
 
