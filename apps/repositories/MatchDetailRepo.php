@@ -46,7 +46,6 @@ class MatchDetailRepo extends Component
     public function getMatchCrawl($is_live, $id)
     {
         if ($is_live) {
-            echo "132";
             $arrTourKey = ScTournament::getTourIdCrawl();
             $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
             if (!$matchCrawl) {
@@ -64,7 +63,6 @@ class MatchDetailRepo extends Component
                 }
             }
         } else {
-            echo "123";
             //7h tới 11h tối thứ 7 cn tắt detail
             $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
             $currentHour = date('G');
@@ -82,12 +80,10 @@ class MatchDetailRepo extends Component
             var_dump($matchCrawl);exit;
         }
         if (!$matchCrawl) {
-            echo "321";
             //crawl detail cho trận FT
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
         }
-var_dump($matchCrawl);exit;
         return $matchCrawl;
     }
     public static function getMatchStartTourKey($arrTourKey)
