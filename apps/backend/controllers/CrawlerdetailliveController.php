@@ -33,7 +33,7 @@ class CrawlerdetailliveController extends ControllerBase
         $this->type_crawl = $this->request->get("type");
         $is_nomal = $this->request->get("isNomal");
 
-
+var_dump($is_live);exit;
         $detailRepo = new MatchDetailRepo();
         if (!$is_nomal) {
             $is_nomal = false;
