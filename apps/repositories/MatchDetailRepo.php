@@ -77,6 +77,7 @@ class MatchDetailRepo extends Component
 
             echo "match wait\r\n";
             $matchCrawl = MatchDetailRepo::getMatchWait();
+            var_dump($matchCrawl);exit;
         }
         if (!$matchCrawl) {
             //crawl detail cho trận FT
