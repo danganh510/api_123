@@ -82,7 +82,7 @@ class MatchDetailRepo extends Component
             var_dump($matchCrawl);exit;
         }
         if (!$matchCrawl) {
-            echo "321"
+            echo "321";
             //crawl detail cho trận FT
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
