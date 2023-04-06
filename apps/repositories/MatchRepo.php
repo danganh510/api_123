@@ -202,6 +202,12 @@ class MatchRepo extends Component
                 $time_live = "After Penalties";
                 $status = self::MATH_STATUS_FINSH;
                 break;
+            case "Penalties":
+                $time = 135;
+                $start_time = time() - $time * 60;
+                $time_live = "Penalties";
+                $status = self::MATH_STATUS_START;
+                break;
             default:
                 if (strpos($match_time, ":")) {
                     $temp = "";
