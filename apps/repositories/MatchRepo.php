@@ -140,6 +140,9 @@ class MatchRepo extends Component
             echo json_encode($matchSave->getMessages());
         }
         if ($result) {
+            if ($matchSave->getMatchId() == 21045) {
+                echo "have id 21045";
+            }
             $arrIdMatch[] = $matchSave->getMatchId();
             return [
                 'matchSave' => $matchSave,
