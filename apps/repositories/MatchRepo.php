@@ -106,7 +106,7 @@ class MatchRepo extends Component
             }
         }
 
-        if (!is_numeric($timeInfo['time_live']) || ($timeInfo['time_live'] > $matchSave->getMatchTime())) {
+        if (!is_numeric($timeInfo['time_live']) || $timeInfo['time_live'] >= $matchSave->getMatchTime() || !is_numeric($matchSave->getMatchTime()) ) {
             $matchSave->setMatchTime($timeInfo['time_live']);
         }
 
