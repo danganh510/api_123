@@ -651,6 +651,11 @@ $di['router'] = function () {
         "controller" => 'match',
         "action" => "list"
     ));
+    $router->add('/get-list-match-test', array(
+        "module" => "api",
+        "controller" => 'matchtest',
+        "action" => "list"
+    ));
 
     $router->add('/get-match', array(
         "module" => "api",
