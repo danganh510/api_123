@@ -13,7 +13,7 @@ use Score\Repositories\MatchRepo;
 use Score\Repositories\Page;
 use Score\Repositories\Team;
 
-class MatchController extends ControllerBase
+class MatchtestController extends ControllerBase
 {
     public function listAction()
     {
