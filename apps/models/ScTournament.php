@@ -6,6 +6,7 @@ class ScTournament extends \Phalcon\Mvc\Model
 {
     protected $tournament_id;
     protected $tournament_type;
+    protected $tournament_season;
     protected $tournament_name;
     protected $tournament_slug;
     protected $tournament_name_flash_score;
@@ -48,7 +49,20 @@ class ScTournament extends \Phalcon\Mvc\Model
     {
         $this->tournament_id  = $tournament_id;
     }
-
+    /**
+     * @return mixed
+     */
+    public function getTournamentSeason()
+    {
+        return $this->tournament_season;
+    }
+    /**
+     * @param mixed $tournament_season
+     */
+    public function setTournamentSeason($tournament_season)
+    {
+        $this->tournament_season = $tournament_season;
+    }
     /**
      * @return mixed
      */
