@@ -68,25 +68,6 @@ class MatchRepo extends Component
                 //use crawl api
                 $matchSave->setMatchStartTime($timeInfo['start_time']);
             }
-        } else {
-            if (is_numeric($timeInfo['time_live']) && ($timeInfo['time_live'] < $matchSave->getMatchTime())) {
-                return [
-                    'matchSave' => false,
-                    'is_new' => false
-                ];
-            }
-            if ($match->getHomeScore()  < $matchSave->getMatchHomeScore()) {
-                return [
-                    'matchSave' => false,
-                    'is_new' => false
-                ];
-            }
-            if ($match->getAwayScore()  < $matchSave->getMatchAwayScore()) {
-                return [
-                    'matchSave' => false,
-                    'is_new' => false
-                ];
-            }
         }
 
         if ($timeInfo['time_live'] == "HT") {
@@ -111,12 +92,20 @@ class MatchRepo extends Component
             }
         }
 
-        $matchSave->setMatchTime($timeInfo['time_live']);
+        if (!is_numeric($timeInfo['time_live']) || ($timeInfo['time_live'] > $matchSave->getMatchTime())) {
+            $matchSave->setMatchTime($timeInfo['time_live']);
+        }
+
+        if ($match->getHomeScore()  >= $matchSave->getMatchHomeScore()) {
+            $matchSave->setMatchHomeScore(is_numeric($match->getHomeScore()) ? $match->getHomeScore() : 0);
+        }
+        if ($match->getAwayScore()  >=  $matchSave->getMatchAwayScore()) {
+            $matchSave->setMatchAwayScore(is_numeric($match->getAwayScore()) ? $match->getAwayScore() : 0);
+        }
+
         $matchSave->setMatchStatus($timeInfo['status']);
         $matchSave->setMatchRound($match->getRound());
 
-        $matchSave->setMatchHomeScore(is_numeric($match->getHomeScore()) ? $match->getHomeScore() : 0);
-        $matchSave->setMatchAwayScore(is_numeric($match->getAwayScore()) ? $match->getAwayScore() : 0);
 
         $matchSave->setMatchHomeCardRed(is_numeric($match->getHomeCardRed()) ? $match->getHomeCardRed() : 0);
         $matchSave->setMatchAwayCardRed(is_numeric($match->getAwayCardRed()) ? $match->getAwayCardRed() : 0);
