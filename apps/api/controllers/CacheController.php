@@ -54,8 +54,8 @@ class CacheController extends ControllerBase
         // $arrMatch = $arrMatch->toArray();
         // $matchCache = new CacheMatchLive();
         // $result = $matchCache->setCache(json_encode($arrMatch));
-        $time_end = time() + 3 * 60;
-        $time_begin = time() - 3 * 60;
+        $time_end = time() + 5 * 60;
+        $time_begin = time() - 5 * 60;
         $time_now = time();
         $arrMatch = ScMatch::find(
             "match_status = 'S' OR 
