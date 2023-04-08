@@ -24,46 +24,46 @@ class TournamentController extends ControllerBase
 {
 
 
-    public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
-    public function gettounamentshowAction()
-    {
-        $list_data = [
-            [
-                'id' => 1,
-                "name" => "champion",
-                "order" => 999,
-                "season" => "2023/2024"
-            ],
-            [
-                'id' => 1,
-                "name" => "champion",
-                "order" => 999,
-                "season" => "2023/2024"
-            ],
-            [
-                'id' => 1,
-                "name" => "champion",
-                "order" => 999,
-                "season" => "2023/2024"
-            ],
-            [
-                'id' => 1,
-                "name" => "champion",
-                "order" => 999,
-                "season" => "2023/2024"
-            ]
-        ];
-        $dataReturn = [
-            'code' => 200,
-            'status' => true,
-            'data' => $list_data
-        ];
-        return $dataReturn;
-    }
-    public function getscheduletourAction()
-    {
-        $tour_id = $this->request->get("id");
-        $a = '{
+  public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
+  public function gettounamentshowAction()
+  {
+    $list_data = [
+      [
+        'id' => 1,
+        "name" => "champion",
+        "order" => 999,
+        "season" => "2023/2024"
+      ],
+      [
+        'id' => 1,
+        "name" => "champion",
+        "order" => 999,
+        "season" => "2023/2024"
+      ],
+      [
+        'id' => 1,
+        "name" => "champion",
+        "order" => 999,
+        "season" => "2023/2024"
+      ],
+      [
+        'id' => 1,
+        "name" => "champion",
+        "order" => 999,
+        "season" => "2023/2024"
+      ]
+    ];
+    $dataReturn = [
+      'code' => 200,
+      'status' => true,
+      'data' => $list_data
+    ];
+    return $dataReturn;
+  }
+  public function getscheduletourAction()
+  {
+    $tour_id = $this->request->get("id");
+    $a = '{
         "658": {
           "tournament": {
             "name": "LaLiga",
@@ -118,7 +118,7 @@ class TournamentController extends ControllerBase
                   ]
                 }
               },
-              "roundInfo": ""
+              "roundInfo": "1"
             },
             "21056": {
               "status": {
@@ -158,7 +158,7 @@ class TournamentController extends ControllerBase
                   ]
                 }
               },
-              "roundInfo": ""
+              "roundInfo": "1"
             },
             "21057": {
               "status": {
@@ -198,7 +198,7 @@ class TournamentController extends ControllerBase
                   ]
                 }
               },
-              "roundInfo": ""
+              "roundInfo": "1"
             },
             "19331": {
               "status": {
@@ -238,23 +238,24 @@ class TournamentController extends ControllerBase
                   ]
                 }
               },
-              "roundInfo": ""
+              "roundInfo": "1"
             }
-          },
-          "order": "1001"
+          }
         }
       }
       ';
-        $data = json_decode($a, true);
-        $dataReturn = [
-            'code' => 200,
-            'status' => true,
-            'data' => $data
-        ];
-        return $dataReturn;
-    }
-    public function getstandingstourAction()
-    {
-        $tour_id = $this->request->get("id");
-    }
+    $data = json_decode($a, true);
+    $data[658]['match_today'] = $data[658]['match_old'];
+    $data[658]['match_next'] = $data[658]['match_old'];
+    $dataReturn = [
+      'code' => 200,
+      'status' => true,
+      'data' => $data
+    ];
+    return $dataReturn;
+  }
+  public function getstandingstourAction()
+  {
+    $tour_id = $this->request->get("id");
+  }
 }
