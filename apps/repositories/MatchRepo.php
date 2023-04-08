@@ -15,7 +15,7 @@ class MatchRepo extends Component
     const MATH_STATUS_FINSH = "F";
 
 
-    public  function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [])
+    public  function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [], $is_list = true)
     {
 
         $is_new = false;
@@ -121,6 +121,12 @@ class MatchRepo extends Component
         $matchSave->setMatchHomeCardRed(is_numeric($match->getHomeCardRed()) ? $match->getHomeCardRed() : 0);
         $matchSave->setMatchAwayCardRed(is_numeric($match->getAwayCardRed()) ? $match->getAwayCardRed() : 0);
         $matchSave->setMatchInsertTime(time());
+
+        if ($is_list == false) {
+            //nếu crawl bằng tournament thì k crawl bằng detail nữa
+            $matchSave->setMatchCrawlDetailLive(1);
+        }
+
         $result = $matchSave->save();
         if ($matchSave->getMessages()) {
             echo json_encode($matchSave->getMessages());
