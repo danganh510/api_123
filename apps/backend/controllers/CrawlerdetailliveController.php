@@ -137,7 +137,7 @@ class CrawlerdetailliveController extends ControllerBase
         }
         $matchCrawl->save();
         if ($is_live) {
-            $cache =  file_get_contents("http://123tyso.live//cache-match-live");
+            $cache =  file_get_contents("http://123tyso.live/cache-match-live");
             if ($cache) {
                 echo "Cache suscces\r\n";
             } else {
