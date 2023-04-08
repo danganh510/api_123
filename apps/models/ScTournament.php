@@ -19,6 +19,7 @@ class ScTournament extends \Phalcon\Mvc\Model
     protected $tournament_order;
     protected $tournament_crawl;
     protected $tournament_is_crawling;
+    protected $tournament_is_show;
     protected $tournament_active;
 
     public function setData($data = null)
@@ -241,6 +242,21 @@ class ScTournament extends \Phalcon\Mvc\Model
     public function setTournamentIsCrawling($tournament_is_crawling)
     {
         $this->tournament_is_crawling     = $tournament_is_crawling;
+    }
+    /**
+     * @return mixed
+     */
+    public function getTournamentIsShow()
+    {
+        return $this->tournament_is_show;
+    }
+
+    /**
+     * @param mixed $tournament_is_show	
+     */
+    public function setTournamentIsShow($tournament_is_show)
+    {
+        $this->tournament_is_show     = $tournament_is_show;
     }
 
     /**

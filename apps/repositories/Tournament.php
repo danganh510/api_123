@@ -81,6 +81,7 @@ class Tournament extends Component
             $tournament->setTournamentType($type);
             $tournament->setTournamentCrawl("N");
             $tournament->setTournamentIsCrawling("N");
+            $tournament->setTournamentIsShow("N");
             $tournament->setTournamentOrder($tournamentInfo->getId());
             $tournament->save();
             $is_cache_tour = true;
