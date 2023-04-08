@@ -122,10 +122,10 @@ class MatchRepo extends Component
         $matchSave->setMatchAwayCardRed(is_numeric($match->getAwayCardRed()) ? $match->getAwayCardRed() : 0);
         $matchSave->setMatchInsertTime(time());
 
-        if ($is_list == false) {
-            //nếu crawl bằng tournament thì k crawl bằng detail nữa
-            $matchSave->setMatchCrawlDetailLive(1);
-        }
+        // if ($is_list == false) {
+        //     //nếu crawl bằng tournament thì k crawl bằng detail nữa
+        //     $matchSave->setMatchCrawlDetailLive(1);
+        // }
 
         $result = $matchSave->save();
         if ($matchSave->getMessages()) {
