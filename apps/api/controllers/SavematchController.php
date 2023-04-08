@@ -45,7 +45,7 @@ class SavematchController extends ControllerBase
         $matchRepo = new MatchRepo();
         $total = 0;
         $is_new = false;
-        $arrMatchCrawl = [];
+        $arrMatchIdLive = [];
         $is_cache_team = false;
         $is_cache_tour = false;
         foreach ($list_match as $match_info) {
@@ -71,10 +71,9 @@ class SavematchController extends ControllerBase
                 echo "can't save tournament team";
                 continue;
             }
-            $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl);
+            $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl, $arrMatchIdLive);
             if (isset($result['matchSave'])) {
-                    $arrMatchIdLive[] = $result['matchSave']->match_id;
-                    $total++;
+                $total++;
                 //  echo "Save match success --- ";
             } else {
                 echo json_encode($result['messages']);

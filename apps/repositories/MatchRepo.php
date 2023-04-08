@@ -15,7 +15,7 @@ class MatchRepo extends Component
     const MATH_STATUS_FINSH = "F";
 
 
-    public  function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl)
+    public  function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [])
     {
 
         $is_new = false;
@@ -140,9 +140,7 @@ class MatchRepo extends Component
             echo json_encode($matchSave->getMessages());
         }
         if ($result) {
-            if ($is_new) {
-                $matchSave = self::getFirstById($matchSave->getMatchId());
-            }
+            $arrIdMatch[] = $matchSave->getMatchId();
             return [
                 'matchSave' => $matchSave,
                 'is_new' => $is_new
