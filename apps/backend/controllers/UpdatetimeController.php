@@ -35,9 +35,10 @@ class UpdatetimeController extends ControllerBase
         foreach ($arrMatch as $match) {
             if (time() - $match->getMatchInsertTime() > 40) {
                 if (is_numeric($match->getMatchTime()) && $match->getMatchStatus() == "S") {
-                    if ($match->getMatchTime() < 45) {
-                        if (time() - $match->getMatchStartTime() > $match->getMatchTime() * 60) {
-                            $match->setMatchTime($match->getMatchTime() + 1);
+                    $time = (int) $match->getMatchTime();
+                    if ($time < 45) {
+                        if (time() - $match->getMatchStartTime() > $time * 60) {
+                            $match->setMatchTime($time + 1);
                             $match->setMatchInsertTime(time());
                             $result = $match->save();
                             if (!$result) {
@@ -48,8 +49,8 @@ class UpdatetimeController extends ControllerBase
 
                         }
                     } else {
-                        if ($match->getMatchTime() < 90 && $match->getMatchTime() != 45) {
-                            $match->setMatchTime($match->getMatchTime() + 1);
+                        if ($time < 90 && $time != 45) {
+                            $match->setMatchTime($time + 1);
                             $match->setMatchInsertTime(time());
                             $result = $match->save();
                             if (!$result) {

@@ -89,6 +89,7 @@ class SavematchController extends ControllerBase
         }
         if ($is_list == true && $is_live == true) {
             $cache = new CacheMatchIdLive();
+            //phòng trường hợp...
             $cache->setCache($arrMatchIdLive);
         }
         delete_cache:
