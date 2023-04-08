@@ -48,6 +48,7 @@ class Security extends Plugin
 
             /*Guest resources*/
             $publicResources = array(
+                'apitournament' => array('*'),
                 'apigetdata' => array('*'),
                 'apimatch' => array('*'),
                 'apisavematch' => array('*'),
