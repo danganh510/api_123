@@ -70,7 +70,6 @@ class CrawlertourController extends ControllerBase
             echo  "Not found match\n\r";
             die();
         }
-        $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
         $arrTourId = array_keys($arrListMatchLive);
         $strTour = implode(",", $arrTourId);
         $tourCrawlRepo = new TournamentCrawlRepo();
