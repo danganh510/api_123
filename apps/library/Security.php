@@ -51,6 +51,7 @@ class Security extends Plugin
                 'apitournament' => array('*'),
                 'apigetdata' => array('*'),
                 'apimatch' => array('*'),
+                'apimatchtest' => array('*'),
                 'apisavematch' => array('*'),
                 'apigetconfig' => array('*'),
                 'apicache' => array('*'),
