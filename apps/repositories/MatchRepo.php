@@ -96,10 +96,10 @@ class MatchRepo extends Component
             $matchSave->setMatchTime($timeInfo['time_live']);
         }
 
-        if ($match->getHomeScore()  >= $matchSave->getMatchHomeScore()) {
+        if ($match->getHomeScore()  > $matchSave->getMatchHomeScore()) {
             $matchSave->setMatchHomeScore(is_numeric($match->getHomeScore()) ? $match->getHomeScore() : 0);
         }
-        if ($match->getAwayScore()  >=  $matchSave->getMatchAwayScore()) {
+        if ($match->getAwayScore()  >  $matchSave->getMatchAwayScore()) {
             $matchSave->setMatchAwayScore(is_numeric($match->getAwayScore()) ? $match->getAwayScore() : 0);
         }
 
