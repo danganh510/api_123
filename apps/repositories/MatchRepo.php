@@ -136,8 +136,8 @@ class MatchRepo extends Component
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchInsertTime(time());
         $result = $matchSave->save();
+        echo json_encode($matchSave->getMessages());
         if ($result) {
-            var_dump($matchSave->getMessages());exit;
             return [
                 'matchSave' => $matchSave,
                 'is_new' => $is_new
