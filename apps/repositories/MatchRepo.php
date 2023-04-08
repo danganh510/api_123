@@ -136,8 +136,13 @@ class MatchRepo extends Component
         $matchSave->setMatchOrder(1);
         $matchSave->setMatchInsertTime(time());
         $result = $matchSave->save();
-        echo json_encode($matchSave->getMessages());
+        if ($matchSave->getMessages()) {
+            echo json_encode($matchSave->getMessages());
+        }
         if ($result) {
+            if ($is_new) {
+                $matchSave = self::getFirstById($matchSave->getMatchId());
+            }
             return [
                 'matchSave' => $matchSave,
                 'is_new' => $is_new
@@ -211,7 +216,7 @@ class MatchRepo extends Component
                 break;
             default:
                 if (strpos($match_time, "ExtraTime") !== false) {
-                    $arrTime = explode(" ",$match_time);
+                    $arrTime = explode(" ", $match_time);
                     $time = isset($arrTime[1]) && is_numeric($arrTime[1]) ? (int) $arrTime[1] : 90;
                     $start_time = time() - $time * 60;
                     $time_live = $match_time;
