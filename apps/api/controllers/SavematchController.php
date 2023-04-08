@@ -73,6 +73,7 @@ class SavematchController extends ControllerBase
             }
             $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl);
             if (isset($result['matchSave'])) {
+                echo json_encode($result['matchSave']);
                 if (isset($result['matchSave']->match_id)) {
                     $arrMatchIdLive[] = $result['matchSave']->match_id;
                     $total++;
