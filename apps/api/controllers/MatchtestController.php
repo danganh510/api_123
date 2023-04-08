@@ -52,7 +52,7 @@ class MatchtestController extends ControllerBase
             goto end;
         }
         foreach ($arrMatch as $key => $match) {
-            if ($match['match_id'] == 21045) {
+            if ($match->match_id == 21045) {
                 echo "match1";
             }
             if (!is_array($match)) {
