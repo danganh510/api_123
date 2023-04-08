@@ -59,19 +59,19 @@ class MatchtestController extends ControllerBase
                 $match = (array) $match;
             }
             if ($match['match_id'] == 21045) {
-                echo "match1";
+                echo "match2";
             }
             if (empty($arrTeam[$match['match_home_id']]) || empty($arrTeam[$match['match_away_id']])) {
                 continue;
             }
             if ($match['match_id'] == 21045) {
-                echo "match1";
+                echo "match3";
             }
             if (empty($arrTournament[$match['match_tournament_id']])) {
                 continue;
             }
             if ($match['match_id'] == 21045) {
-                echo "match1";
+                echo "match4";
             }
             if (!$isLive) {
                 if ($this->my->getDays($time, $match['match_start_time'] + $time_zone * 60 * 60) != 0) {
