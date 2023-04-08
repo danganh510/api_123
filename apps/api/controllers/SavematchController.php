@@ -76,8 +76,6 @@ class SavematchController extends ControllerBase
                 if (isset($result['matchSave']->match_id)) {
                     $arrMatchIdLive[] = $result['matchSave']->match_id;
                     $total++;
-                } else {
-                    echo json_encode($result['matchSave']);
                 }
 
                 //  echo "Save match success --- ";
