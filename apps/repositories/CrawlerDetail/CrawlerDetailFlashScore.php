@@ -234,7 +234,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $time = "";
         $divScore = $divCrawl->find(".detailScore__matchInfo > div > span");
         $startTime = $divCrawl->find(".duelParticipant__startTime > div", 0);
-        $divTime =  $divCrawl->find(".detailScore__matchInfo > div > .eventTime",0);
+        $divTime =  $divCrawl->find(".detailScore__matchInfo > div > .eventTime", 0);
         if ($startTime) {
             $startTime = $startTime->text();
         }
@@ -247,7 +247,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         if ($divTime) {
             $time = $divTime->text();
         } else {
-            $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus",0);
+            $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus", 0);
 
             if ($divStatus) {
                 $time = $divStatus->text();
@@ -334,10 +334,18 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 if (strpos($hrefIcon, "red-yellow-card") !== false) {
                     $event = "RedYellowCard";
                 } else {
-                    if ($svg->text() == "Red Card") {
-                        $event = "RedCard";
-                    } else {
-                        $event = "YellowCard";
+                    $classes = explode(' ', $svg->getAttribute('class'));
+                    foreach ($classes as $class) {
+                        if (trim($class) == "redCard-ico") {
+                            $event = "RedCard";
+                        }
+                    }
+                    if (!$event) {
+                        if ($svg->text() == "Red Card") {
+                            $event = "RedCard";
+                        } else {
+                            $event = "YellowCard";
+                        }
                     }
                 }
             } else {

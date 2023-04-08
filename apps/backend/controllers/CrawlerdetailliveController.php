@@ -73,6 +73,7 @@ class CrawlerdetailliveController extends ControllerBase
         }
 
         $urlDetail = "https://www.flashscore.com/" . $matchCrawl->getMatchLinkDetailFlashscore() . "/#/match-summary/match-summary";
+        $urlDetail = "https://www.flashscore.com/match/xU7bnMdH/#/match-summary/match-summary";
         //tab: info,tracker,statistics
         $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
         $detail = $crawler->getInstance();
