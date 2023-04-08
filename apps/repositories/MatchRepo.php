@@ -68,6 +68,20 @@ class MatchRepo extends Component
                 //use crawl api
                 $matchSave->setMatchStartTime($timeInfo['start_time']);
             }
+
+            $matchSave->setMatchTournamentId($tournament->getTournamentId());
+            if ($type_crawl == MatchCrawl::TYPE_FLASH_SCORE) {
+                $matchSave->setMatchLinkDetailFlashscore($match->getHrefDetail());
+            }
+            if ($type_crawl == MatchCrawl::TYPE_SOFA || $type_crawl == MatchCrawl::TYPE_API_SOFA) {
+                $matchSave->setMatchLinkDetailSofa($match->getHrefDetail());
+            }
+
+            if ($type_crawl == MatchCrawl::TYPE_LIVE_SCORES) {
+                $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
+            }
+            $matchSave->setMatchRound($match->getRound());
+            $matchSave->setMatchOrder(1);
         }
 
         if ($timeInfo['time_live'] == "HT") {
@@ -104,25 +118,8 @@ class MatchRepo extends Component
         }
 
         $matchSave->setMatchStatus($timeInfo['status']);
-        $matchSave->setMatchRound($match->getRound());
-
-
         $matchSave->setMatchHomeCardRed(is_numeric($match->getHomeCardRed()) ? $match->getHomeCardRed() : 0);
         $matchSave->setMatchAwayCardRed(is_numeric($match->getAwayCardRed()) ? $match->getAwayCardRed() : 0);
-
-        $matchSave->setMatchTournamentId($tournament->getTournamentId());
-        $matchSave->setMatchTournamentId($tournament->getTournamentId());
-        if ($type_crawl == MatchCrawl::TYPE_FLASH_SCORE) {
-            $matchSave->setMatchLinkDetailFlashscore($match->getHrefDetail());
-        }
-        if ($type_crawl == MatchCrawl::TYPE_SOFA || $type_crawl == MatchCrawl::TYPE_API_SOFA) {
-            $matchSave->setMatchLinkDetailSofa($match->getHrefDetail());
-        }
-
-        if ($type_crawl == MatchCrawl::TYPE_LIVE_SCORES) {
-            $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
-        }
-        $matchSave->setMatchOrder(1);
         $matchSave->setMatchInsertTime(time());
         $result = $matchSave->save();
         if ($matchSave->getMessages()) {
