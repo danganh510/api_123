@@ -143,7 +143,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                     $description = $div->find("div > .smv__incidentIconSub", 0);
                 }
                 if ($description) {
-
                     $arrEvent = $this->getEvent($description);
 
                     $homeEvent = $arrEvent['event'];
@@ -334,18 +333,26 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 if (strpos($hrefIcon, "red-yellow-card") !== false) {
                     $event = "RedYellowCard";
                 } else {
-                    $classes = explode(' ', $svg->getAttribute('class'));
-                    foreach ($classes as $class) {
-                        if (trim($class) == "redCard-ico") {
-                            $event = "RedCard";
-                        }
-                    }
-                    if (!$event) {
-                        if ($svg->text() == "Red Card") {
-                            $event = "RedCard";
-                        } else {
-                            $event = "YellowCard";
-                        }
+                    //     $child = $description->find('*[class]');
+
+                    //     // Get the value of the class attribute
+                    //     $class_attr = $child->getAttribute('class');
+                    //   //  $classes = $svg->getAttribute('class');
+                    //     var_dump($class_attr);
+                    //     exit;
+                    // if (strpos($class_attr, "redCard-ico") !== false) {
+                    //     $event = "RedCard";
+                    // } else {
+                    //     if ($svg->text() == "Red Card") {
+                    //         $event = "RedCard";
+                    //     } else {
+                    //         $event = "YellowCard";
+                    //     }
+                    // }
+                    if ($svg->text() == "Red Card") {
+                        $event = "RedCard";
+                    } else {
+                        $event = "YellowCard";
                     }
                 }
             } else {
