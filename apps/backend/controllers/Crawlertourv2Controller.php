@@ -52,7 +52,7 @@ class Crawlertourv2Controller extends ControllerBase
         echo "============================\r\n";
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
-        $list_match = [];
+        $list_tour = [];
         $time_crawl = $this->my->formatDateYMD(time());
 
         $tourCron = ScCronTour::find([
@@ -61,8 +61,8 @@ class Crawlertourv2Controller extends ControllerBase
                 "TODAY" => $time_crawl
             ]
         ]);
-        $strTour = array_column($tourCron->toArray(),"cron_tour_id");
-        $strTour = implode(",",$strTour);
+        $strTour = array_column($tourCron->toArray(), "cron_tour_id");
+        $strTour = implode(",", $strTour);
         $tourCrawlRepo = new TournamentCrawlRepo();
         $tour = $tourCrawlRepo->getTournamentToshow($strTour);
 
@@ -81,7 +81,12 @@ class Crawlertourv2Controller extends ControllerBase
         // var_dump(microtime(true) - $time);
         try {
             $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live, $tour->getTournamentHrefFlashscore(), $has_standing);
-            $list_match = $crawler->getInstance();
+            $list_tour = $crawler->getInstance();
+            //list_tour:
+            //  'list_live_match' => $list_live_match,
+            // 'tourInfoHome' => $tourInfoHome,
+            // 'tourInfoAway' => $tourInfoAway,
+            // 'tourInfoOveral'
         } catch (Exception $e) {
             echo $e->getMessage();
             // $seleniumDriver->quit();
@@ -98,7 +103,7 @@ class Crawlertourv2Controller extends ControllerBase
             // echo (microtime(true) - $start_time) . "</br>";
             listMatch:
             $request = [
-                'list_match' => $list_match,
+                'list_match' => $list_tour['list_live_match'],
                 'time_plus' => $time_plus,
                 'type_crawl' => $this->type_crawl,
                 'is_live' => (bool) $is_live,
@@ -122,7 +127,14 @@ class Crawlertourv2Controller extends ControllerBase
             }
             $start_time_call = microtime(true);
             //        $result = json_decode($response->getBody()->getContents(),true);
-            $total = count($list_match);
+            $total = count($list_tour['list_live_match']);
+
+            //lưu tour:
+            //
+            foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
+                var_dump($standingOveral);exit;
+            }
+
             echo "status: " . $total;
 
             // if ($total < 10) {
@@ -141,5 +153,8 @@ class Crawlertourv2Controller extends ControllerBase
 
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
+    }
+    public function saveTournamentStanding($standing)
+    {
     }
 }

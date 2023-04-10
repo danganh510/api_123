@@ -6,6 +6,8 @@ class ScTournamentStandings extends extends \Phalcon\Mvc\Model
 {
     private $standing_tournament_id;
     private $standing_team_id;
+    private $standing_rank;
+
     private $standing_enemy;
     private $standing_round;
     private $standing_goal;
@@ -13,7 +15,7 @@ class ScTournamentStandings extends extends \Phalcon\Mvc\Model
     private $standing_total_win;
     private $standing_total_lose;
     private $standing_total_draw;
-    private $standing_is_home;
+    private $standing_type;
     private $standing_update_time;
 
     public function getStandingTournamentId()
@@ -35,7 +37,15 @@ class ScTournamentStandings extends extends \Phalcon\Mvc\Model
     {
         $this->standing_team_id = $standing_team_id;
     }
+    public function getStandingRank()
+    {
+        return $this->standing_rank;
+    }
 
+    public function setStandingRank($standing_rank)
+    {
+        $this->standing_rank = $standing_rank;
+    }
     public function getStandingEnemy()
     {
         return $this->standing_enemy;
@@ -106,14 +116,14 @@ class ScTournamentStandings extends extends \Phalcon\Mvc\Model
         $this->standing_total_draw = $standing_total_draw;
     }
 
-    public function getStandingIsHome()
+    public function getStandingType()
     {
-        return $this->standing_is_home;
+        return $this->standing_type ;
     }
 
-    public function setStandingIsHome($standing_is_home)
+    public function setStandingType($standing_type )
     {
-        $this->standing_is_home = $standing_is_home;
+        $this->standing_type  = $standing_type ;
     }
     public function getStandingUpdateTime()
     {
