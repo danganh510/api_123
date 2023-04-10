@@ -36,6 +36,7 @@ class CrawlertourController extends ControllerBase
         }
 
         ini_set('max_execution_time', 18);
+        $time_test = microtime(true);
 
         $time_plus = $this->request->get("timePlus");
         $is_live = (bool)  $this->request->get("isLive");
@@ -78,6 +79,7 @@ class CrawlertourController extends ControllerBase
         } else {
             $tour = $tourCrawlRepo->getTournament($strTour);
         }
+        var_dump(microtime(true) - $time_test);
         //$tour = ScTournament::findFirst("2827");
         if (!$tour) {
             echo "Not found";
@@ -96,6 +98,7 @@ class CrawlertourController extends ControllerBase
             // $seleniumDriver->quit();
             die();
         }
+        var_dump(microtime(true) - $time_test);
 
         $arrMatchCrawl = [];
         $is_new = false;
@@ -142,6 +145,7 @@ class CrawlertourController extends ControllerBase
             echo $total;
             echo $e->getMessage();
         }
+        var_dump(microtime(true) - $time_test);
 
         // $seleniumDriver->quit();
         // echo (microtime(true) - $start_time) . "</br>";
