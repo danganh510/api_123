@@ -25,7 +25,7 @@ class Team extends Component
             ]);
         } else {
             return ScTeam::findFirst([
-                'team_name_flashscore = :name: OR team_name = :name: OR team_slug= :slug: OR team_name_livescore = :name:',
+                'team_name_flashscore = :name: OR team_name = :name: OR team_slug= :slug: OR team_name_livescore = :name: AND team_is_public = "Y"',
                 'bind' => [
                     'name' => $name,
                     'slug' => $name_slug
@@ -75,6 +75,7 @@ class Team extends Component
                     break;
             }
             $team->setTeamActive("Y");
+            $team->setTeamIsPublic("N");
             $team->save();
             $is_cache_team = true;
         }

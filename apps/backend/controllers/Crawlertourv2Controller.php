@@ -12,6 +12,7 @@ use Score\Repositories\Team;
 
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
+use Score\Models\ScTournamentStandings;
 use Score\Repositories\CacheMatch;
 use Score\Repositories\CacheMatchLive;
 use Score\Repositories\CacheTeam;
@@ -19,6 +20,7 @@ use Score\Repositories\CacheTour;
 use Score\Repositories\CrawlerList;
 use Score\Repositories\MatchCrawl;
 use Score\Repositories\MatchRepo;
+use Score\Repositories\MyRepo;
 use Score\Repositories\Tournament;
 use Score\Repositories\TournamentCrawlRepo;
 
@@ -132,8 +134,79 @@ class Crawlertourv2Controller extends ControllerBase
             //lưu tour:
             //
             foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
-                var_dump($standingOveral);exit;
+                $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
+                $arrEnemy = [];
+                foreach ($standingOveral['matchInfo'] as $matchInfo) {
+                    if ($standingOveral['name'] == $matchInfo["home"]) {
+                        $home_id = $team->getTeamId();
+                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($standingOveral['away']), $tour->getTournamentCountryCode());
+                        $awway_id = $away->getTeamId();
+                    } else {
+                        $away_id = $team->getTeamId();
+                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($standingOveral['home']), $tour->getTournamentCountryCode());
+                        $home_id = $home->getTeamId();
+                    }
+                    $arrEnemy[] = [
+                        'date' => $matchInfo['date'],
+                        'home_id' => $home_id,
+                        'home' => $matchInfo["home"],
+                        'away_id' => $away_id,
+                        'away' => $matchInfo["away"],
+                    ];
+                }
+                $this->saveTournamentStanding($standingOveral, "overal", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy);
             }
+
+            foreach ($list_tour['tourInfoAway'] as $standingOveral) {
+                $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
+                $arrEnemy = [];
+                foreach ($standingOveral['matchInfo'] as $matchInfo) {
+                    if ($standingOveral['name'] == $matchInfo["home"]) {
+                        $home_id = $team->getTeamId();
+                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($standingOveral['away']), $tour->getTournamentCountryCode());
+                        $awway_id = $away->getTeamId();
+                    } else {
+                        $away_id = $team->getTeamId();
+                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($standingOveral['home']), $tour->getTournamentCountryCode());
+                        $home_id = $home->getTeamId();
+                    }
+                    $arrEnemy[] = [
+                        'date' => $matchInfo['date'],
+                        'home_id' => $home_id,
+                        'home' => $matchInfo["home"],
+                        'away_id' => $away_id,
+                        'away' => $matchInfo["away"],
+                    ];
+                }
+                $this->saveTournamentStanding($standingOveral, "away", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy);
+            }
+
+            foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
+                $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
+                $arrEnemy = [];
+                foreach ($standingOveral['matchInfo'] as $matchInfo) {
+                    if ($standingOveral['name'] == $matchInfo["home"]) {
+                        $home_id = $team->getTeamId();
+                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($standingOveral['away']), $tour->getTournamentCountryCode());
+                        $awway_id = $away->getTeamId();
+                    } else {
+                        $away_id = $team->getTeamId();
+                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($standingOveral['home']), $tour->getTournamentCountryCode());
+                        $home_id = $home->getTeamId();
+                    }
+                    $arrEnemy[] = [
+                        'date' => $matchInfo['date'],
+                        'home_id' => $home_id,
+                        'home' => $matchInfo["home"],
+                        'away_id' => $away_id,
+                        'away' => $matchInfo["away"],
+                    ];
+                }
+                $this->saveTournamentStanding($standingOveral, "home", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy);
+            }
+
+            $cronModel->setMatchStatus("Y");
+            $cronModel->save();
 
             echo "status: " . $total;
 
@@ -154,7 +227,24 @@ class Crawlertourv2Controller extends ControllerBase
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
     }
-    public function saveTournamentStanding($standing)
+    public function saveTournamentStanding($standing, $type, $tour_id, $team_id, $arrEnemy)
     {
+        $standingModel = ScTournamentStandings::findFirstByIdTeamType($tour_id, $team_id, $type);
+        if (!$standingModel) {
+            $standingModel = new ScTournamentStandings();
+            $standingModel->setStandingTournamentId($tour_id);
+            $standingModel->setStandingTeamId($team_id);
+            $standingModel->setStandingType($type);
+            $standingModel->setStandingTournamentId($tour_id);
+        }
+        $standingModel->setStandingUpdateTime(time());
+        $standingModel->setStandingRank($standing['rank']);
+        $standingModel->setStandingEnemy(json_encode($arrEnemy)); //
+        $standingModel->setStandingRound($standing['totalMatch']);
+        $standingModel->setStandingGoal($standing['totalGoal']);
+        $standingModel->setStandingPoint($standing['totalPoint']);
+        $standingModel->setStandingTotalWin($standing['totalWin']);
+        $standingModel->setStandingTotalDraw($standing['totalDraw']);
+        $standingModel->setStandingTotalLose($standing['totalLose']);
     }
 }

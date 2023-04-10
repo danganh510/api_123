@@ -2,7 +2,7 @@
 
 namespace Score\Models;
 
-class ScTournamentStandings extends extends \Phalcon\Mvc\Model
+class ScTournamentStandings extends  \Phalcon\Mvc\Model
 {
     private $standing_tournament_id;
     private $standing_team_id;
@@ -158,5 +158,15 @@ class ScTournamentStandings extends extends \Phalcon\Mvc\Model
     public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
+    }
+    public static function findFirstByIdTeamType($id,$team_id,$type) {
+        return self::findFirst([
+            'standing_tournament_id  = :ID: AND standing_team_id  = :TEAM_ID: AND standing_type  = :TYPE:',
+            'bind' => [
+                'ID' => $id,
+                'TEAM_ID' => $team_id,
+                'TYPE' => $type,
+            ]
+            ]);
     }
 }

@@ -17,6 +17,8 @@ class ScTeam extends \Phalcon\Mvc\Model
     protected $team_logo_small;
     protected $team_logo_medium;
     protected $team_logo_crawl;
+    protected $team_is_public;
+
     protected $team_active;
 
     public function setData($data = null)
@@ -201,6 +203,22 @@ class ScTeam extends \Phalcon\Mvc\Model
     {
         $this->team_logo_crawl = $team_logo_crawl;
     }
+    /**
+     * @return mixed
+     */
+    public function getTeamIsPublic()
+    {
+        return $this->team_is_public;
+    }
+
+    /**
+     * @param mixed $team_is_public	
+     */
+    public function setTeamIsPublic($team_is_public)
+    {
+        $this->team_is_public = $team_is_public;
+    }
+
     /**
      * @return mixed
      */
