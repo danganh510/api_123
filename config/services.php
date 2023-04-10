@@ -203,6 +203,11 @@ $di['router'] = function () {
         "controller" => "crawlertour",
         "action" => "index"
     ));
+    $router->add("/crawler-tour-v2", array(
+        "module" => "backend",
+        "controller" => "crawlertourv2",
+        "action" => "index"
+    ));
     $router->add("/crawler-detail", array(
         "module" => "backend",
         "controller" => "crawlerdetail",

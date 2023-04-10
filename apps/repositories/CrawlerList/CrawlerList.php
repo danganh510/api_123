@@ -26,13 +26,15 @@ class CrawlerList extends Component
     public $list_live_tournaments = [];
     public $round;
     public $tour_link;
+    public $has_standing;
 
-    public function __construct($type_crawl, $time_plus = 0, $isLive = false, $tour_link = "")
+    public function __construct($type_crawl, $time_plus = 0, $isLive = false, $tour_link = "", $has_standing = "")
     {
         $this->type_crawl = $type_crawl;
         $this->time_plus = $time_plus;
         $this->isLive = $isLive;
         $this->tour_link = $tour_link;
+        $this->has_standing = $has_standing;
     }
     public function runSelenium()
     {
@@ -46,19 +48,28 @@ class CrawlerList extends Component
                 $this->url_crawl = $this->url_fl;
                 if ($this->isLive) {
                     if ($this->tour_link) {
-                        if (strpos($this->tour_link,$this->url_fl) === false) {
+                        if (strpos($this->tour_link, $this->url_fl) === false) {
                             $this->url_crawl = $this->url_fl . $this->tour_link;
                         } else {
                             $this->url_crawl = $this->tour_link;
                         }
-                        
                         $crawler = new CrawlerFlashScoreTour($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
                         break;
                     }
                     $crawler = new CrawlerFlashScoreLive($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
                     break;
                 }
-               
+
+                if ($this->tour_link && $this->has_standing) {
+                    if (strpos($this->tour_link, $this->url_fl) === false) {
+                        $this->url_crawl = $this->url_fl . $this->tour_link;
+                    } else {
+                        $this->url_crawl = $this->tour_link;
+                    }
+                    $crawler = new CrawlerFlashScoreTourV2($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
+                    break;
+                }
+
                 $crawler = new CrawlerFlashScore($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
                 break;
             case MatchCrawl::TYPE_SOFA:
@@ -126,8 +137,9 @@ class CrawlerList extends Component
     public function getMatch($div)
     {
     }
-    public function replaceTeamName($teamName) {
-        return str_replace(['GOAL', 'CORRECTION', '&nbsp;', 'penalty','Penalty','VAR - handball',"VAR","VAR - offside"], ['', '', '','','','',"",""], $teamName);
+    public function replaceTeamName($teamName)
+    {
+        return str_replace(['GOAL', 'CORRECTION', '&nbsp;', 'penalty', 'Penalty', 'VAR - handball', "VAR", "VAR - offside", "missed"], ['', '', '', '', '', '', "", "" ,""], $teamName);
     }
     public function saveMatch($data)
     {

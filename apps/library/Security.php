@@ -58,6 +58,7 @@ class Security extends Plugin
                 'backendlogin'    => array('*'),
                 'backendcrawler'    => array('*'),
                 'backendcrawlertour'    => array('*'),
+                'backendcrawlertourv2'    => array('*'),
                 'backendcrawlerdetaillive'    => array('*'),
                 'backendcrawlimage'    => array('*'),
                 'backendcrawlerstructure'    => array('*'),

@@ -41,4 +41,9 @@ class TournamentCrawlRepo extends Component
         }
         return $tour;
     }
+    public function getTournamentToshow($strTour)
+    {
+        $tour = ScTournament::findFirst("tournament_is_show = 'Y'  AND NOT FIND_IN_SET(tournament_id,'{$strTour}')");
+        return $tour;
+    }
 }

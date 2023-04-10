@@ -5,6 +5,7 @@ namespace Score\Backend\Controllers;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Score\Models\ScCronTour;
 use Score\Models\ScMatch;
 use Score\Repositories\Team;
 
@@ -21,7 +22,7 @@ use Score\Repositories\MatchRepo;
 use Score\Repositories\Tournament;
 use Score\Repositories\TournamentCrawlRepo;
 
-class CrawlertourController extends ControllerBase
+class Crawlertourv2Controller extends ControllerBase
 {
 
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
@@ -34,13 +35,12 @@ class CrawlertourController extends ControllerBase
             echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
             die();
         }
-
-        ini_set('max_execution_time', 18);
+        ini_set('max_execution_time', 20);
 
         $time_plus = $this->request->get("timePlus");
         $is_live = (bool)  $this->request->get("isLive");
+        $has_standing = (bool)  $this->request->get("hasStanding");
         $this->type_crawl = $this->request->get("type");
-        $is_nomal = $this->request->get("isNomal");
         $total = 0;
 
         $time = microtime(true);
@@ -53,43 +53,34 @@ class CrawlertourController extends ControllerBase
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
-        $enpoint =  API_END_PONT . "/get-list-match";
-        $clientGuzzle = new \GuzzleHttp\Client();
-        try {
-            $arrListMatchLive = $clientGuzzle->get(
-                $enpoint
-            );
-        } catch (Exception $e) {
-        }
-        if (empty($arrListMatchLive->getBody())) {
-            echo "Not found match\n\r";
-            die();
-        }
-        $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
-        if (empty($arrListMatchLive)) {
-            echo  "Not found match\n\r";
-            die();
-        }
-        $arrTourId = array_keys($arrListMatchLive);
-        $strTour = implode(",", $arrTourId);
+        $time_crawl = $this->my->formatDateYMD(time());
+
+        $tourCron = ScCronTour::find([
+            "cron_update_time != :TODAY: AND match_status = 'Y'",
+            'bind' => [
+                "TODAY" => $time_crawl
+            ]
+        ]);
+        $strTour = array_column($tourCron->toArray(),"cron_tour_id");
+        $strTour = implode(",",$strTour);
         $tourCrawlRepo = new TournamentCrawlRepo();
-        if ($is_nomal) {
-            $tour = $tourCrawlRepo->getTournamentNomal($strTour);
-        } else {
-            $tour = $tourCrawlRepo->getTournament($strTour);
-        }
+        $tour = $tourCrawlRepo->getTournamentToshow($strTour);
+
         //$tour = ScTournament::findFirst("2827");
         if (!$tour) {
             echo "Not found";
             die();
         }
+        $cronModel = new ScCronTour();
+        $cronModel->setCronTourId($tour->getTournamentId());
+        $cronModel->setCronUpdateTime($time_crawl);
+        $cronModel->setMatchStatus("N");
+        $cronModel->save();
 
-        $tour->setTournamentIsCrawling("N");
-        $tour->save();
         echo "Tour Id: " . $tour->getTournamentId() . " \r\n";
         // var_dump(microtime(true) - $time);
         try {
-            $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live, $tour->getTournamentHrefFlashscore());
+            $crawler = new CrawlerList($this->type_crawl, $time_plus, $is_live, $tour->getTournamentHrefFlashscore(), $has_standing);
             $list_match = $crawler->getInstance();
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -117,7 +108,7 @@ class CrawlertourController extends ControllerBase
 
 
             $clientGuzzle = new \GuzzleHttp\Client();
-            $url = API_END_PONT.'/save-match';
+            $url = API_END_PONT . '/save-match';
             try {
                 $clientGuzzle->post(
                     $url,
