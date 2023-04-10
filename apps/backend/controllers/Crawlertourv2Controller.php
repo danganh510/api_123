@@ -139,11 +139,11 @@ class Crawlertourv2Controller extends ControllerBase
                 foreach ($standingOveral['matchInfo'] as $matchInfo) {
                     if ($standingOveral['name'] == $matchInfo["home"]) {
                         $home_id = $team->getTeamId();
-                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($standingOveral['away']), $tour->getTournamentCountryCode());
-                        $awway_id = $away->getTeamId();
+                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($matchInfo['away']), $tour->getTournamentCountryCode());
+                        $away_id = $away->getTeamId();
                     } else {
                         $away_id = $team->getTeamId();
-                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($standingOveral['home']), $tour->getTournamentCountryCode());
+                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($matchInfo['home']), $tour->getTournamentCountryCode());
                         $home_id = $home->getTeamId();
                     }
                     $arrEnemy[] = [
@@ -163,11 +163,11 @@ class Crawlertourv2Controller extends ControllerBase
                 foreach ($standingOveral['matchInfo'] as $matchInfo) {
                     if ($standingOveral['name'] == $matchInfo["home"]) {
                         $home_id = $team->getTeamId();
-                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($standingOveral['away']), $tour->getTournamentCountryCode());
-                        $awway_id = $away->getTeamId();
+                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($matchInfo['away']), $tour->getTournamentCountryCode());
+                        $away_id = $away->getTeamId();
                     } else {
                         $away_id = $team->getTeamId();
-                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($standingOveral['home']), $tour->getTournamentCountryCode());
+                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($matchInfo['home']), $tour->getTournamentCountryCode());
                         $home_id = $home->getTeamId();
                     }
                     $arrEnemy[] = [
@@ -187,11 +187,11 @@ class Crawlertourv2Controller extends ControllerBase
                 foreach ($standingOveral['matchInfo'] as $matchInfo) {
                     if ($standingOveral['name'] == $matchInfo["home"]) {
                         $home_id = $team->getTeamId();
-                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($standingOveral['away']), $tour->getTournamentCountryCode());
-                        $awway_id = $away->getTeamId();
+                        $away = Team::findByName($matchInfo['away'], MyRepo::create_slug($matchInfo['away']), $tour->getTournamentCountryCode());
+                        $away_id = $away->getTeamId();
                     } else {
                         $away_id = $team->getTeamId();
-                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($standingOveral['home']), $tour->getTournamentCountryCode());
+                        $home = Team::findByName($matchInfo['home'], MyRepo::create_slug($matchInfo['home']), $tour->getTournamentCountryCode());
                         $home_id = $home->getTeamId();
                     }
                     $arrEnemy[] = [
