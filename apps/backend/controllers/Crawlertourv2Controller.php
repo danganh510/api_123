@@ -246,5 +246,6 @@ class Crawlertourv2Controller extends ControllerBase
         $standingModel->setStandingTotalWin($standing['totalWin']);
         $standingModel->setStandingTotalDraw($standing['totalDraw']);
         $standingModel->setStandingTotalLose($standing['totalLose']);
+        $standingModel->save();
     }
 }
