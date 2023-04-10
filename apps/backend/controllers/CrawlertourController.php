@@ -36,7 +36,7 @@ class CrawlertourController extends ControllerBase
         }
 
         ini_set('max_execution_time', 18);
-        $time_test = microtime(true);
+      
 
         $time_plus = $this->request->get("timePlus");
         $is_live = (bool)  $this->request->get("isLive");
@@ -54,6 +54,7 @@ class CrawlertourController extends ControllerBase
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         $start_time = microtime(true);
         $list_match = [];
+        $time_test = microtime(true);
         $enpoint =  API_END_PONT . "/get-list-match";
         $clientGuzzle = new \GuzzleHttp\Client();
         try {
@@ -66,12 +67,13 @@ class CrawlertourController extends ControllerBase
             echo "Not found match\n\r";
             die();
         }
+        var_dump(microtime(true) - $time_test);
+
         $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
         if (empty($arrListMatchLive)) {
             echo  "Not found match\n\r";
             die();
         }
-        var_dump(microtime(true) - $time_test);
         $arrTourId = array_keys($arrListMatchLive);
         $strTour = implode(",", $arrTourId);
         $tourCrawlRepo = new TournamentCrawlRepo();
