@@ -452,7 +452,7 @@ class MatchRepo extends Component
         $arrMatch = $arrMatch->toArray();
       
         foreach ($arrMatch as $match) {
-            
+
             $homeModel = new ScTeam();
             $home = $homeModel->setData($arrTeam[$match['match_home_id']]);
 
@@ -495,7 +495,7 @@ class MatchRepo extends Component
                 ],
                 'roundInfo' => $match['match_round'],
             ];
-            $result['match_id'] = $matchInfo;
+            $result[$match['match_id']] = $matchInfo;
         }
         return $result;
     }
