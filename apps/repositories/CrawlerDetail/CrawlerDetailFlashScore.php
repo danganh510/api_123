@@ -363,7 +363,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 $strDescription = $divDescription->getAttribute("title");
             }
             if (!$strDescription) {
-                $divDescription = $description->find("svg > title", 0);
+                $divDescription = $description->find("div > div > title", 0);
                 if ($divDescription) {
                     $strDescription = $divDescription->text();
                 }
