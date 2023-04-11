@@ -54,9 +54,18 @@ class Selenium extends Component
         // Tắt video và âm thanh
         $chromeOptions->addArguments(['--disable-audio-output']);
         $this->driver = RemoteWebDriver::create($host, $chromeOptions->toCapabilities());
+
+        // Lấy danh sách các handle tab
+        $handles = $this->driver->getWindowHandles();
+
+        // Đếm số lượng tab
+        $tabCount = count($handles);
+
+        // In ra số lượng tab đang mở
+        echo "Số lượng tab đang mở: " . $tabCount;die();
         $time = microtime(true);
         $this->setURL($url);
-     //   var_dump(microtime(true) - $time);
+        //   var_dump(microtime(true) - $time);
     }
     public function setURL($url = 'https://www.sofascore.com/football')
     {
