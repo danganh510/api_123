@@ -329,7 +329,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $svg = $description->find(".card-ico", 0);
         if (!$svg) {
             $svg = $description->find("div > .card-ico", 0);
-
         }
         //get event
         if ($svg) {
@@ -343,13 +342,15 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                     //  $classes = $svg->getAttribute('class');
                     if (strpos($class_attr, "redCard-ico") !== false) {
                         $event = "RedCard";
-                    }  else if (strpos($class_attr, "yellowCard-ico") !== false) {
+                    } else if (strpos($class_attr, "yellowCard-ico") !== false) {
                         $event = "YellowCard";
                     }
-                    if ($svg->text() == "Red Card") {
-                        $event = "RedCard";
-                    } else {
-                        $event = "YellowCard";
+                    if (!$event) {
+                        if ($svg->text() == "Red Card") {
+                            $event = "RedCard";
+                        } else {
+                            $event = "YellowCard";
+                        }
                     }
                 }
             } else {
