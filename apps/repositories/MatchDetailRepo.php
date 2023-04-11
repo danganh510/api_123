@@ -67,6 +67,7 @@ class MatchDetailRepo extends Component
             $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
             $currentHour = date('G');
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
+            var_dump($dayOfWeek == 6 ||  $dayOfWeek == 7);exit;
             if ($dayOfWeek == 6 ||  $dayOfWeek == 7) {
 
                 if ($currentHour >= 11 && $currentHour <= 16) {
