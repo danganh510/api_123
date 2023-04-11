@@ -48,13 +48,13 @@ class Selenium extends Component
         $client = new \GuzzleHttp\Client();
 
         // Gửi yêu cầu HTTP để lấy thông tin của session
-        $res = $client->request('GET', $host. '/session/<session-id>');
+        $res = $client->request('GET', $host. '/session');
 
         // Chuyển đổi JSON response thành một mảng PHP
         $data = json_decode($res->getBody(), true);
 
         // Lấy danh sách các handle tab
-        $handles = $data['value']['windowHandles'];
+        $handles = $data['value'];
 
         // Đếm số lượng tab
         $tabCount = count($handles);
