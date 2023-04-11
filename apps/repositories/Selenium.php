@@ -44,6 +44,24 @@ class Selenium extends Component
         }
         // exit;
         $host = "http://$ip:4444/wd/hub"; // URL của máy chủ Selenium
+
+        $client = new \GuzzleHttp\Client();
+
+        // Gửi yêu cầu HTTP để lấy thông tin của session
+        $res = $client->request('GET', $host. '/session/<session-id>');
+
+        // Chuyển đổi JSON response thành một mảng PHP
+        $data = json_decode($res->getBody(), true);
+
+        // Lấy danh sách các handle tab
+        $handles = $data['value']['windowHandles'];
+
+        // Đếm số lượng tab
+        $tabCount = count($handles);
+
+        // In ra số lượng tab đang mở
+        echo "Số lượng tab đang mở: " . $tabCount . "</br> \r\n";
+
         $chromeOptions = new \Facebook\WebDriver\Chrome\ChromeOptions();
         // Bật chế độ headless
         $chromeOptions->addArguments(['--headless']);
@@ -54,15 +72,6 @@ class Selenium extends Component
         // Tắt video và âm thanh
         $chromeOptions->addArguments(['--disable-audio-output']);
         $this->driver = RemoteWebDriver::create($host, $chromeOptions->toCapabilities());
-
-        // Lấy danh sách các handle tab
-        $handles = $this->driver->getWindowHandles();
-
-        // Đếm số lượng tab
-        $tabCount = count($handles);
-
-        // In ra số lượng tab đang mở
-        echo "Số lượng tab đang mở: " . $tabCount;
         $time = microtime(true);
         $this->setURL($url);
         //   var_dump(microtime(true) - $time);
