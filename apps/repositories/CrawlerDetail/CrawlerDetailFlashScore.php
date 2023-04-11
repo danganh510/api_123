@@ -327,6 +327,10 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $event = "";
         $strDescription = "";
         $svg = $description->find(".card-ico", 0);
+        if (!$svg) {
+            $svg = $description->find("div > .card-ico", 0);
+
+        }
         //get event
         if ($svg) {
             $hrefIcon = $description->find("use", 0)->getAttribute("xlink:href");
