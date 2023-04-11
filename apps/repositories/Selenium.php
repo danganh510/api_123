@@ -62,7 +62,7 @@ class Selenium extends Component
         $tabCount = count($handles);
 
         // In ra số lượng tab đang mở
-        echo "Số lượng tab đang mở: " . $tabCount;die();
+        echo "Số lượng tab đang mở: " . $tabCount;
         $time = microtime(true);
         $this->setURL($url);
         //   var_dump(microtime(true) - $time);
