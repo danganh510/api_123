@@ -75,7 +75,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
         $htmlDivStart = "<!DOCTYPE html>" . $htmlDivStart;
         //khai bao cho the svg
-        $htmlDivStart = str_replace("<svg ", "<svg xmlns='http://www.w3.org/2000/svg'", $htmlDivStart);
+        $htmlDivStart = str_replace(["<svg ", "/svg>"], ["<div ", "/div>"], $htmlDivStart);
         end:
         return $htmlDivStart;
     }
@@ -94,7 +94,8 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
         $htmlTRacker = "<!DOCTYPE html>" . $htmlTRacker;
         //khai bao cho the svg
-        $htmlTRacker = str_replace("<svg ", "<svg xmlns='http://www.w3.org/2000/svg'", $htmlTRacker);
+        $htmlTRacker = str_replace(["<svg ", "/svg>"], ["<div ", "/div>"], $htmlTRacker);
+
         end:
         return $htmlTRacker;
     }
