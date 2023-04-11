@@ -452,10 +452,7 @@ class MatchRepo extends Component
         $arrMatch = $arrMatch->toArray();
       
         foreach ($arrMatch as $match) {
-
-            echo (json_encode($match));exit;
             
-
             $homeModel = new ScTeam();
             $home = $homeModel->setData($arrTeam[$match['match_home_id']]);
 
