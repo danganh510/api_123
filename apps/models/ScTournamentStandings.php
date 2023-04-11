@@ -6,8 +6,8 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
 {
     private $standing_tournament_id;
     private $standing_team_id;
+    private $standing_team_name;
     private $standing_rank;
-
     private $standing_enemy;
     private $standing_round;
     private $standing_goal;
@@ -36,6 +36,15 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
     public function setStandingTeamId($standing_team_id)
     {
         $this->standing_team_id = $standing_team_id;
+    }
+    public function getStandingTeamName()
+    {
+        return $this->standing_team_name;
+    }
+
+    public function setStandingTeamName($standing_team_name)
+    {
+        $this->standing_team_name = $standing_team_name;
     }
     public function getStandingRank()
     {
@@ -118,12 +127,12 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
 
     public function getStandingType()
     {
-        return $this->standing_type ;
+        return $this->standing_type;
     }
 
-    public function setStandingType($standing_type )
+    public function setStandingType($standing_type)
     {
-        $this->standing_type  = $standing_type ;
+        $this->standing_type  = $standing_type;
     }
     public function getStandingUpdateTime()
     {
@@ -159,7 +168,8 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-    public static function findFirstByIdTeamType($id,$team_id,$type) {
+    public static function findFirstByIdTeamType($id, $team_id, $type)
+    {
         return self::findFirst([
             'standing_tournament_id  = :ID: AND standing_team_id  = :TEAM_ID: AND standing_type  = :TYPE:',
             'bind' => [
@@ -167,6 +177,17 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
                 'TEAM_ID' => $team_id,
                 'TYPE' => $type,
             ]
-            ]);
+        ]);
+    }
+    public static function findByIdAndType($id, $type, $limit = 5)
+    {
+        return self::find([
+            'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
+            "limit" => (int) $limit,
+            'bind' => [
+                'ID' => $id,
+                'TYPE' => $type,
+            ]
+        ]);
     }
 }

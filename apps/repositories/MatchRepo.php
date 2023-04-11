@@ -6,6 +6,7 @@ use Exception;
 use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
 use Score\Models\ScMatch;
+use Score\Models\ScTeam;
 use Symfony\Component\DomCrawler\Crawler;
 
 class MatchRepo extends Component
@@ -106,7 +107,7 @@ class MatchRepo extends Component
             }
         }
 
-        if (!is_numeric($timeInfo['time_live']) || $timeInfo['time_live'] >= $matchSave->getMatchTime() || !is_numeric($matchSave->getMatchTime()) ) {
+        if (!is_numeric($timeInfo['time_live']) || $timeInfo['time_live'] >= $matchSave->getMatchTime() || !is_numeric($matchSave->getMatchTime())) {
             $matchSave->setMatchTime($timeInfo['time_live']);
         }
 
@@ -387,6 +388,116 @@ class MatchRepo extends Component
             'order' => "match_status DESC"
         ]);
         return $arrMatch;
+    }
+    public static function getMatchTodayByTourId($tourId)
+    {
+        $today = strtotime(strftime('%Y-%m-%d', time()));
+        $start_day = $today - 7 * 60 * 60;
+        //thời gian bonus là +- 160 phút
+        $bonus_start_day = $start_day - 160 * 60;
+        $end_day = $today + 24 * 60 * 60;
+        //thời gian bonus là +- 160 phút
+        $bonus_end_day = $end_day + 160 * 60;
+        $arrMatch = ScMatch::find([
+            '((match_start_time > :start: AND match_start_time < :end_day: AND match_status != "S")
+            OR (match_start_time > :start_bonus: AND match_start_time < :end_day_bonus: AND match_status = "S") ) AND match_tournament_id = :TOUR_ID:',
+            'bind' => [
+                'start' => $start_day,
+                'start_bonus' => $bonus_start_day,
+                'end_day' => $end_day,
+                'end_day_bonus' => $bonus_end_day,
+                'TOUR_ID' => $tourId
+            ],
+            'order' => "match_status DESC"
+        ]);
+        return $arrMatch;
+    }
+    public static function getMatchScheduleByTourId($tourId)
+    {
+        $today = strtotime(strftime('%Y-%m-%d', time()));
+        $start_day = $today - 7 * 60 * 60;
+        //thời gian bonus là +- 160 phút
+        $bonus_start_day = $start_day - 160 * 60;
+        $end_day = $today + 24 * 60 * 60;
+        //thời gian bonus là +- 160 phút
+        $bonus_end_day = $end_day + 160 * 60;
+        $arrMatch = ScMatch::find([
+            '((match_start_time > :end_day: AND match_status != "S") OR (match_start_time > :end_day_bonus: AND match_status = "S")) AND match_tournament_id = :TOUR_ID:',
+            'bind' => [
+                'end_day' => $end_day,
+                'end_day_bonus' => $bonus_end_day,
+                'TOUR_ID' => $tourId
+            ],
+            'order' => "match_status DESC"
+        ]);
+        return $arrMatch;
+    }
+    public static function getMatchOldByTourId($tourId)
+    {
+        $today = strtotime(strftime('%Y-%m-%d', time()));
+        $start_day = $today - 7 * 60 * 60;
+        $arrMatch = ScMatch::find([
+            '(match_start_time < :start_day: AND match_status = "F") AND match_tournament_id = :TOUR_ID:',
+            'bind' => [
+                'start_day' => $start_day,
+                'TOUR_ID' => $tourId
+            ],
+            'order' => "match_status DESC"
+        ]);
+        return $arrMatch;
+    }
+    public static function implementsMatch($arrMatch, $arrTeam)
+    {
+        $result = [];
+        $arrMatch = $arrMatch->toArray();
+      
+        foreach ($arrMatch as $match) {
+
+            $homeModel = new ScTeam();
+            $home = $homeModel->setData($arrTeam[$match['match_home_id']]);
+
+            $awayModel = new ScTeam();
+            $away = $awayModel->setData($arrTeam[$match['match_away_id']]);
+
+            $matchInfo = [
+                'status' => [
+                    'description' => $match['match_status'],
+                    'type' => $match['match_status']
+                ],
+                'matchInfo' => [
+                    'id' => $match['match_id'],
+                    'time_start' => $match['match_start_time'],
+                    'time' => $match['match_time'],
+                    'htScore' => $match['match_score_ht'],
+                    'slugName' => $match['match_name'],
+                ],
+                'homeTeam' => [
+                    'id' => $home->getTeamId(),
+                    'name' => $home->getTeamName(),
+                    'slug' => MyRepo::create_slug($home->getTeamName()),
+                    'logo' => $home->getTeamLogoSmall(),
+                    'score' => [
+                        'score' => $match['match_home_score'],
+                        'redCard' => $match['match_home_card_red'],
+                        'time' => [$match['match_home_score']]
+                    ]
+                ],
+                'awayTeam' => [
+                    'id' => $away->getTeamId(),
+                    'name' => $away->getTeamName(),
+                    'slug' => MyRepo::create_slug($away->getTeamName()),
+                    'logo' => $away->getTeamLogoSmall(),
+                    'score' => [
+                        'score' => $match['match_away_score'],
+                        'redCard' => $match['match_away_card_red'],
+                        'time' => [$match['match_home_score']]
+                    ]
+                ],
+                'roundInfo' => $match['match_round'],
+            ];
+            $result[$match['match_id']] = $matchInfo;
+        }
+        return $result;
     }
     public static function getFirstById($id)
     {

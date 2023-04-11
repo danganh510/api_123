@@ -76,7 +76,7 @@ class Crawlertourv2Controller extends ControllerBase
         $cronModel = new ScCronTour();
         $cronModel->setCronTourId($tour->getTournamentId());
         $cronModel->setCronUpdateTime($time_crawl);
-        $cronModel->setMatchStatus("N");
+        $cronModel->setMatchStatus("Y");
         $cronModel->save();
 
         echo "Tour Id: " . $tour->getTournamentId() . " \r\n";
@@ -205,8 +205,6 @@ class Crawlertourv2Controller extends ControllerBase
                 $this->saveTournamentStanding($standingOveral, "home", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy);
             }
 
-            $cronModel->setMatchStatus("Y");
-            $cronModel->save();
 
             echo "status: " . $total;
 
@@ -234,6 +232,7 @@ class Crawlertourv2Controller extends ControllerBase
             $standingModel = new ScTournamentStandings();
             $standingModel->setStandingTournamentId($tour_id);
             $standingModel->setStandingTeamId($team_id);
+            $standingModel->setStandingTeamName($standing['name']);
             $standingModel->setStandingType($type);
             $standingModel->setStandingTournamentId($tour_id);
         }

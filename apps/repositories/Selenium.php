@@ -2,6 +2,7 @@
 
 namespace Score\Repositories;
 
+use Exception;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
@@ -44,6 +45,29 @@ class Selenium extends Component
         }
         // exit;
         $host = "http://$ip:4444/wd/hub"; // URL của máy chủ Selenium
+
+        $client = new \GuzzleHttp\Client();
+
+        // try {
+        //     // Gửi yêu cầu HTTP để lấy thông tin của session
+        //     $res = $client->request('GET', $host . '/sessions');
+
+        //     // Chuyển đổi JSON response thành một mảng PHP
+        //     $data = json_decode($res->getBody(), true);
+
+        //     // Lấy danh sách các handle tab
+        //     $handles = $data['value'];
+
+        //     // Đếm số lượng tab
+        //     $tabCount = count($handles);
+
+        //     // In ra số lượng tab đang mở
+        //     echo "Số lượng tab đang mở: " . $tabCount . "</br> \r\n";
+        // } catch (Exception $e) {
+        //     var_dump($e->getMessage());
+        // }
+
+
         $chromeOptions = new \Facebook\WebDriver\Chrome\ChromeOptions();
         // Bật chế độ headless
         $chromeOptions->addArguments(['--headless']);
@@ -56,7 +80,7 @@ class Selenium extends Component
         $this->driver = RemoteWebDriver::create($host, $chromeOptions->toCapabilities());
         $time = microtime(true);
         $this->setURL($url);
-     //   var_dump(microtime(true) - $time);
+        //   var_dump(microtime(true) - $time);
     }
     public function setURL($url = 'https://www.sofascore.com/football')
     {
