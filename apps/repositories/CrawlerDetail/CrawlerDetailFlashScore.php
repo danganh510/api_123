@@ -326,7 +326,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     {
         $event = "";
         $strDescription = "";
-        $svg = $description->find("div > div", 0);
+        $svg = $description->find(".card-ico", 0);
         //get event
         if ($svg) {
             $hrefIcon = $description->find("use", 0)->getAttribute("xlink:href");
@@ -363,7 +363,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 $strDescription = $divDescription->getAttribute("title");
             }
             if (!$strDescription) {
-                $divDescription = $description->find("div > div > title", 0);
+                $divDescription = $description->find(".card-ico > title", 0);
                 if ($divDescription) {
                     $strDescription = $divDescription->text();
                 }
