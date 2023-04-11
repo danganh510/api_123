@@ -2,6 +2,7 @@
 
 namespace Score\Repositories;
 
+use Exception;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\WebDriverBy;
@@ -47,20 +48,24 @@ class Selenium extends Component
 
         $client = new \GuzzleHttp\Client();
 
-        // Gửi yêu cầu HTTP để lấy thông tin của session
-        $res = $client->request('GET', $host. '/session');
+        try {
+            // Gửi yêu cầu HTTP để lấy thông tin của session
+            $res = $client->request('GET', $host . '/session');
 
-        // Chuyển đổi JSON response thành một mảng PHP
-        $data = json_decode($res->getBody(), true);
+            // Chuyển đổi JSON response thành một mảng PHP
+            $data = json_decode($res->getBody(), true);
 
-        // Lấy danh sách các handle tab
-        $handles = $data['value'];
+            // Lấy danh sách các handle tab
+            $handles = $data['value'];
 
-        // Đếm số lượng tab
-        $tabCount = count($handles);
+            // Đếm số lượng tab
+            $tabCount = count($handles);
 
-        // In ra số lượng tab đang mở
-        echo "Số lượng tab đang mở: " . $tabCount . "</br> \r\n";
+            // In ra số lượng tab đang mở
+            echo "Số lượng tab đang mở: " . $tabCount . "</br> \r\n";
+        } catch (Exception $e) {
+        }
+
 
         $chromeOptions = new \Facebook\WebDriver\Chrome\ChromeOptions();
         // Bật chế độ headless
