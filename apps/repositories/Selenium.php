@@ -64,6 +64,7 @@ class Selenium extends Component
             // In ra số lượng tab đang mở
             echo "Số lượng tab đang mở: " . $tabCount . "</br> \r\n";
         } catch (Exception $e) {
+            var_dump($e->getMessage());
         }
 
 
