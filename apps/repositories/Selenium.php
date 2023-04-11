@@ -48,24 +48,24 @@ class Selenium extends Component
 
         $client = new \GuzzleHttp\Client();
 
-        try {
-            // Gửi yêu cầu HTTP để lấy thông tin của session
-            $res = $client->request('GET', $host . '/sessions');
+        // try {
+        //     // Gửi yêu cầu HTTP để lấy thông tin của session
+        //     $res = $client->request('GET', $host . '/sessions');
 
-            // Chuyển đổi JSON response thành một mảng PHP
-            $data = json_decode($res->getBody(), true);
+        //     // Chuyển đổi JSON response thành một mảng PHP
+        //     $data = json_decode($res->getBody(), true);
 
-            // Lấy danh sách các handle tab
-            $handles = $data['value'];
+        //     // Lấy danh sách các handle tab
+        //     $handles = $data['value'];
 
-            // Đếm số lượng tab
-            $tabCount = count($handles);
+        //     // Đếm số lượng tab
+        //     $tabCount = count($handles);
 
-            // In ra số lượng tab đang mở
-            echo "Số lượng tab đang mở: " . $tabCount . "</br> \r\n";
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
+        //     // In ra số lượng tab đang mở
+        //     echo "Số lượng tab đang mở: " . $tabCount . "</br> \r\n";
+        // } catch (Exception $e) {
+        //     var_dump($e->getMessage());
+        // }
 
 
         $chromeOptions = new \Facebook\WebDriver\Chrome\ChromeOptions();
