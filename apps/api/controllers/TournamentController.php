@@ -110,6 +110,7 @@ class TournamentController extends ControllerBase
   public function getstandingstourAction()
   {
     $tour_id = $this->request->get("id");
+    $limit = $this->request->get("limit");
     $tourModel = Tournament::findFirstById($tour_id);
     if (!$tourModel) {
       $dataReturn = [
@@ -134,9 +135,9 @@ class TournamentController extends ControllerBase
         "countryCode" => $tourModel->getTournamentCountryCode()
       ]
     ];
-    $standingHome = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_HOME);
-    $standingAway = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_AWAY);
-    $standingOveral = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_OVERAL);
+    $standingHome = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_HOME,$limit);
+    $standingAway = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_AWAY,$limit);
+    $standingOveral = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_OVERAL,$limit);
     $data = [
       'tournament' => $tourInfo,
       'standingHome' => $standingHome,
