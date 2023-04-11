@@ -280,7 +280,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             $event = "";
             $divEvent = $div->find(".soccer__icon", 0);
             if ($divEvent) {
-                $event = $this->getEvent($divEvent)['event'];
+                $event = $this->getEvent($divEvent, true)['event'];
             }
             $descriptionDiv = $div->find(".soccer__comment", 0);
             if ($descriptionDiv) {
@@ -322,11 +322,16 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         return $start;
     }
 
-    public function getEvent($description)
+    public function getEvent($description, $is_comment = false)
     {
         $event = "";
         $strDescription = "";
-        $svg = $description->find("div > div", 0);
+        if ($is_comment) {
+            //use  tab commentary
+            $svg = $description->find("div", 0);
+        } else {
+            $svg = $description->find("div > div", 0);
+        }
         //get event
         if ($svg) {
             $hrefIcon = $description->find("use", 0)->getAttribute("xlink:href");
