@@ -57,7 +57,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
         $htmlDivInfo = "<!DOCTYPE html>" . $htmlDivInfo;
         //khai bao cho the svg
-        $htmlDivInfo = str_replace("<svg ", "<svg xmlns='http://www.w3.org/2000/svg'", $htmlDivInfo);
+        $htmlDivInfo = str_replace(["<svg ", "/svg>"], ["<div ", "/div>"], $htmlDivInfo);
         return $htmlDivInfo;
     }
     public function getDivStart()
@@ -325,7 +325,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     {
         $event = "";
         $strDescription = "";
-        $svg = $description->find("svg", 0);
+        $svg = $description->find("div > div", 0);
         //get event
         if ($svg) {
             $hrefIcon = $description->find("use", 0)->getAttribute("xlink:href");
@@ -333,22 +333,18 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 if (strpos($hrefIcon, "red-yellow-card") !== false) {
                     $event = "RedYellowCard";
                 } else {
-                    //     $child = $description->find('*[class]');
-
-                    //     // Get the value of the class attribute
-                    //     $class_attr = $child->getAttribute('class');
-                    //   //  $classes = $svg->getAttribute('class');
-                    //     var_dump($class_attr);
-                    //     exit;
-                    // if (strpos($class_attr, "redCard-ico") !== false) {
-                    //     $event = "RedCard";
-                    // } else {
-                    //     if ($svg->text() == "Red Card") {
-                    //         $event = "RedCard";
-                    //     } else {
-                    //         $event = "YellowCard";
-                    //     }
-                    // }
+                    // Get the value of the class attribute
+                    $class_attr = $svg->getAttribute('class');
+                    //  $classes = $svg->getAttribute('class');
+                    if (strpos($class_attr, "redCard-ico") !== false) {
+                        $event = "RedCard";
+                    } else {
+                        if ($svg->text() == "Red Card") {
+                            $event = "RedCard";
+                        } else if (strpos($class_attr, "yellowCard-ico") !== false) {
+                            $event = "YellowCard";
+                        }
+                    }
                     if ($svg->text() == "Red Card") {
                         $event = "RedCard";
                     } else {
