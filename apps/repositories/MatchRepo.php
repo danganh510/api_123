@@ -453,7 +453,7 @@ class MatchRepo extends Component
         foreach ($arrMatch as $match) {
             $match = (array) $match;
 
-            var_dump($match);exit;
+            echo ($match);exit;
             
 
             $homeModel = new ScTeam();
