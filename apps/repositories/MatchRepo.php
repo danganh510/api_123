@@ -399,8 +399,8 @@ class MatchRepo extends Component
         //thời gian bonus là +- 160 phút
         $bonus_end_day = $end_day + 160 * 60;
         $arrMatch = ScMatch::find([
-            '(match_start_time > :start: AND match_start_time < :end_day: AND match_status != "S")
-            OR (match_start_time > :start_bonus: AND match_start_time < :end_day_bonus: AND match_status = "S") AND match_tournament_id = :TOUR_ID:',
+            '((match_start_time > :start: AND match_start_time < :end_day: AND match_status != "S")
+            OR (match_start_time > :start_bonus: AND match_start_time < :end_day_bonus: AND match_status = "S") ) AND match_tournament_id = :TOUR_ID:',
             'bind' => [
                 'start' => $start_day,
                 'start_bonus' => $bonus_start_day,
@@ -422,7 +422,7 @@ class MatchRepo extends Component
         //thời gian bonus là +- 160 phút
         $bonus_end_day = $end_day + 160 * 60;
         $arrMatch = ScMatch::find([
-            '(match_start_time > :end_day: AND match_status != "S") OR (match_start_time > :end_day_bonus: AND match_status = "S") AND match_tournament_id = :TOUR_ID:',
+            '((match_start_time > :end_day: AND match_status != "S") OR (match_start_time > :end_day_bonus: AND match_status = "S")) AND match_tournament_id = :TOUR_ID:',
             'bind' => [
                 'end_day' => $end_day,
                 'end_day_bonus' => $bonus_end_day,
