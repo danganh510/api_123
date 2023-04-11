@@ -10,6 +10,7 @@ use Score\Repositories\Team;
 
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
+use Score\Models\ScTournamentStandings;
 use Score\Repositories\CacheMatch;
 use Score\Repositories\CacheMatchIdLive;
 use Score\Repositories\CacheMatchLive;
@@ -40,7 +41,7 @@ class TournamentController extends ControllerBase
         'season' => $tour->getTournamentSeason()
       ];
     }
-  
+
     $dataReturn = [
       'code' => 200,
       'status' => true,
@@ -109,5 +110,45 @@ class TournamentController extends ControllerBase
   public function getstandingstourAction()
   {
     $tour_id = $this->request->get("id");
+    $tourModel = Tournament::findFirstById($tour_id);
+    if (!$tourModel) {
+      $dataReturn = [
+        'code' => 200,
+        'status' => false,
+        'messages' => "not found tournament"
+      ];
+      goto end;
+    }
+
+    $tourInfo = [
+      'name' => $tourModel->getTournamentName(),
+      'slug' => $tourModel->getTournamentSlug(),
+      'category' => [
+        'name' => $tourModel->getTournamentCountry(),
+        'slug' => MyRepo::create_slug($tourModel->getTournamentCountry()),
+        'sport' => [
+          "name" =>  "football",
+          "slug" => "football"
+        ],
+        'flag' => $tourModel->getTournamentCountry(),
+        "countryCode" => $tourModel->getTournamentCountryCode()
+      ]
+    ];
+    $standingHome = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_HOME);
+    $standingAway = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_AWAY);
+    $standingOveral = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_OVERAL);
+    $data = [
+      'tournament' => $tourInfo,
+      'standingHome' => $standingHome,
+      'standingAway' => $standingAway,
+      'standingOveral' => $standingOveral,
+    ];
+    $dataReturn = [
+      'code' => 200,
+      'status' => true,
+      'data' => $data
+    ];
+    end:
+    return $dataReturn;
   }
 }

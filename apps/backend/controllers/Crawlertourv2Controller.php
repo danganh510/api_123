@@ -234,6 +234,7 @@ class Crawlertourv2Controller extends ControllerBase
             $standingModel = new ScTournamentStandings();
             $standingModel->setStandingTournamentId($tour_id);
             $standingModel->setStandingTeamId($team_id);
+            $standingModel->setStandingTeamName($standing['name']);
             $standingModel->setStandingType($type);
             $standingModel->setStandingTournamentId($tour_id);
         }
