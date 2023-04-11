@@ -339,12 +339,8 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                     //  $classes = $svg->getAttribute('class');
                     if (strpos($class_attr, "redCard-ico") !== false) {
                         $event = "RedCard";
-                    } else {
-                        if ($svg->text() == "Red Card") {
-                            $event = "RedCard";
-                        } else if (strpos($class_attr, "yellowCard-ico") !== false) {
-                            $event = "YellowCard";
-                        }
+                    }  else if (strpos($class_attr, "yellowCard-ico") !== false) {
+                        $event = "YellowCard";
                     }
                     if ($svg->text() == "Red Card") {
                         $event = "RedCard";
