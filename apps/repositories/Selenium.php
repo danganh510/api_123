@@ -50,7 +50,7 @@ class Selenium extends Component
 
         try {
             // Gửi yêu cầu HTTP để lấy thông tin của session
-            $res = $client->request('GET', $host . '/session');
+            $res = $client->request('GET', $host . '/sessions');
 
             // Chuyển đổi JSON response thành một mảng PHP
             $data = json_decode($res->getBody(), true);
