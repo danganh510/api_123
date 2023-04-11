@@ -449,9 +449,9 @@ class MatchRepo extends Component
     public static function implementsMatch($arrMatch, $arrTeam)
     {
         $result = [];
+        $arrMatch = $arrMatch->toArray();
       
         foreach ($arrMatch as $match) {
-            $match = (array) $match;
 
             echo (json_encode($match));exit;
             
