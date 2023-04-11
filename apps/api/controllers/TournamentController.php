@@ -28,32 +28,19 @@ class TournamentController extends ControllerBase
   public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
   public function gettounamentshowAction()
   {
-    $list_data = [
-      [
-        'id' => 1,
-        "name" => "champion",
-        "order" => 999,
-        "season" => "2023/2024"
-      ],
-      [
-        'id' => 1,
-        "name" => "champion",
-        "order" => 999,
-        "season" => "2023/2024"
-      ],
-      [
-        'id' => 1,
-        "name" => "champion",
-        "order" => 999,
-        "season" => "2023/2024"
-      ],
-      [
-        'id' => 1,
-        "name" => "champion",
-        "order" => 999,
-        "season" => "2023/2024"
-      ]
-    ];
+    $arrTour = ScTournament::find([
+      'tournament_is_show = "Y"'
+    ]);
+    $list_data = [];
+    foreach ($arrTour as $tour) {
+      $list_data[] = [
+        'id' => $tour->getTournamentId(),
+        'name' => $tour->getTournamentName(),
+        'order' => $tour->getTournamentOrder(),
+        'season' => $tour->getTournamentSeason()
+      ];
+    }
+  
     $dataReturn = [
       'code' => 200,
       'status' => true,
