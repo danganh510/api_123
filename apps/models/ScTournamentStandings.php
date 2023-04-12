@@ -180,7 +180,7 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
         ]);
     }
     public static function findByIdAndType($id, $type, $limit = 5)
-    {
+    {        
         return self::find([
             'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
             "limit" => (int) $limit,
