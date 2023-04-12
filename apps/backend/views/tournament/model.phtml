@@ -37,6 +37,9 @@
                         if ($key == "tournament_id") {
                             continue;
                         }
+                        if (!in_array($key,$arr_show)) {
+                            continue;
+                        }
                         $name = str_replace(["tournament_", "_id"], ["", ""], $key);
                         $name = str_replace(["_"], [" "], $name);
                         $name = ucwords($name);
