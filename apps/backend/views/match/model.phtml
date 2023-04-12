@@ -44,6 +44,9 @@
                         if ($key == "match_id") {
                             continue;
                         }
+                        if (!in_array($key,$arr_show)) {
+                            continue;
+                        }
                         $name = str_replace(["match_", "_id"], ["", ""], $key);
                         $name = str_replace(["_"], [" "], $name);
                         $name = ucwords($name);
