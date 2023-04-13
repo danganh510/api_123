@@ -14,6 +14,9 @@ class MatchRepo extends Component
     const MATH_STATUS_WAIT = "W";
     const MATH_STATUS_START = "S";
     const MATH_STATUS_FINSH = "F";
+    const MATH_WAIT_UPDATE = "U";
+    const MATH_CANCEL = "C";
+    const MATH_AFTER_FT = "A";
 
 
     public  function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [], $is_list = true)
@@ -185,7 +188,7 @@ class MatchRepo extends Component
                 $time = 90;
                 $start_time = 0;
                 $time_live = "Awaiting updates";
-                $status = self::MATH_STATUS_WAIT;
+                $status = self::MATH_WAIT_UPDATE;
                 break;
             case "After Penalties":
                 $time = 90;
@@ -203,7 +206,7 @@ class MatchRepo extends Component
                 $time = 135;
                 $start_time = time() - $time * 60;
                 $time_live = "Penalties";
-                $status = self::MATH_STATUS_START;
+                $status = self::MATH_AFTER_FT;
                 break;
             default:
                 if (strpos($match_time, "ExtraTime") !== false) {
@@ -211,7 +214,7 @@ class MatchRepo extends Component
                     $time = isset($arrTime[1]) && is_numeric($arrTime[1]) ? (int) $arrTime[1] : 90;
                     $start_time = time() - $time * 60;
                     $time_live = $match_time;
-                    $status = self::MATH_STATUS_START;
+                    $status = self::MATH_AFTER_FT;
                     break;
                 } else if (strpos($match_time, ":")) {
                     $temp = "";

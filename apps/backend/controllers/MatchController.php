@@ -139,6 +139,11 @@ class MatchController extends ControllerBase
 
     public function editAction()
     {
+        $arr_show = [
+            'match_id','match_tournament_id','match_name','match_status','match_home_id','match_away_id','match_home_score','match_away_score','match_score_ht',
+            'match_score_ft','match_time','match_start_time','match_order'
+        ];
+        $this->view->arr_show = $arr_show;
         $id = $this->request->get('id');
         $checkID = new Validator();
         if (!$checkID->validInt($id)) {

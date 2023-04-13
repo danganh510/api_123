@@ -47,6 +47,12 @@ class TournamentController extends ControllerBase
     }
     public function editAction()
     {
+        $arr_show = [
+            'tournament_type','tournament_season','tournament_name','tournament_slug','tournament_country_code','tournament_country','tournament_image','tournament_order',
+            'tournament_is_show','tournament_crawl','tournament_active'
+        ];
+        $this->view->arr_show = $arr_show;
+
         $id = $this->request->get('id');
         $checkID = new Validator();
         if (!$checkID->validInt($id)) {
