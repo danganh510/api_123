@@ -68,11 +68,7 @@
                 $('#email').addClass("border-red");
                 valid = false;
             }
-            else if (LValidator.validEmail(loginEmail.prop("value")) == false) {
-                loginEmailMsg.text("Enter a valid email!");
-                $('#email').addClass("border-red");
-                valid = false;
-            }
+           
             else {
                 loginEmailMsg.text('');
                 $('#email').removeClass("border-red");

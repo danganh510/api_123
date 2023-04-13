@@ -34,10 +34,7 @@ class LoginController extends ControllerBase
             if (strlen($email) < 1) {
                 $this->view->msgErrorEmail = "This field cannot be empty.";
                 $validLogin = false;
-            } else if (strlen($email) > 255 || !$validate->validEmail($email)) {
-                $this->view->msgErrorEmail = "Enter a valid email";
-                $validLogin = false;
-            } else {
+            }  else {
                 $this->view->msgErrorEmail = "";
             }
             if (strlen($password) < 1 || strlen($password) > 255) {
