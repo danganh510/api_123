@@ -34,10 +34,10 @@ class Crawlertourv2Controller extends ControllerBase
         $currentHour = date('G');
         $currentMinutes = date('i');
         echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
-        if ($currentHour <= 3 || $currentHour >= 5) {
-            echo "not run";
-            die();
-        }
+        // if ($currentHour <= 3 || $currentHour >= 5) {
+        //     echo "not run";
+        //     die();
+        // }
 
         ini_set('max_execution_time', 18);
 
