@@ -33,15 +33,17 @@ class Crawlertourv2Controller extends ControllerBase
     {
         $currentHour = date('G');
         $currentMinutes = date('i');
-        if ($currentHour >= 0 && $currentHour <= 1 && $currentMinutes >= 0 && $currentMinutes < 15) {
+        if ($currentHour <=3  && $currentHour >= 5) {
             echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
             die();
         }
-        ini_set('max_execution_time', 20);
+
+        ini_set('max_execution_time', 18);
+
 
         $time_plus = $this->request->get("timePlus");
-        $is_live = (bool)  $this->request->get("isLive");
-        $has_standing = (bool)  $this->request->get("hasStanding");
+        $is_live = (bool) $this->request->get("isLive");
+        $has_standing = (bool) $this->request->get("hasStanding");
         $this->type_crawl = $this->request->get("type");
         $total = 0;
 
@@ -120,9 +122,10 @@ class Crawlertourv2Controller extends ControllerBase
                 $clientGuzzle->post(
                     $url,
                     array(
-                        //      'headers' => $header,
+                            //      'headers' => $header,
                         RequestOptions::JSON => $request,
-                        RequestOptions::SYNCHRONOUS => true, // send the request synchronously
+                        RequestOptions::SYNCHRONOUS => true,
+                        // send the request synchronously
                     )
                 );
             } catch (Exception $e) {
