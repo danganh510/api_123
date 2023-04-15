@@ -457,6 +457,7 @@ class MatchRepo extends Component
             'columns' => "tournament_id"
         ]);
         $str_tour = array_column($arrTourIsShow->toArray(), "tournament_id");
+        $str_tour = implode(",",$str_tour);
         $time = time() + $day * 24 * 60 * 60;//lấy bao nhiêu ngày tiếp theo
         $arrMatch = ScMatch::find([
             'match_start_time > :now_time: AND match_start_time < :to_time: AND FIND_IN_SET(match_tournament_id,:str_tour:) AND match_status = "W"',
