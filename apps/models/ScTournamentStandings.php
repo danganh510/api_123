@@ -185,6 +185,7 @@ class ScTournamentStandings extends \Phalcon\Mvc\Model
             return self::find([
                 'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
                 "limit" => (int) $limit,
+                "orderBy" => "standing_rank ASC",
                 'bind' => [
                     'ID' => $id,
                     'TYPE' => $type,
@@ -193,6 +194,7 @@ class ScTournamentStandings extends \Phalcon\Mvc\Model
         } else {
             return self::find([
                 'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
+                "orderBy" => "standing_rank ASC",
                 'bind' => [
                     'ID' => $id,
                     'TYPE' => $type,
