@@ -466,6 +466,7 @@ class MatchRepo extends Component
                 'to_time' => $time,
                 'str_tour' => $str_tour,
             ],
+            'limit' => (int) $limit,
             'order' => "match_start_time ASC"
         ]);
         return $arrMatch;
