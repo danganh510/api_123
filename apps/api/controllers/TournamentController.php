@@ -70,7 +70,7 @@ class TournamentController extends ControllerBase
         'name' => $tourModel->getTournamentCountry(),
         'slug' => MyRepo::create_slug($tourModel->getTournamentCountry()),
         'sport' => [
-          "name" =>  "football",
+          "name" => "football",
           "slug" => "football"
         ],
         'flag' => $tourModel->getTournamentCountry(),
@@ -111,6 +111,8 @@ class TournamentController extends ControllerBase
   {
     $tour_id = $this->request->get("id");
     $limit = $this->request->get("limit");
+    $type = $this->request->get("type");
+    $type = $type ? $type : "all";
     $tourModel = Tournament::findFirstById($tour_id);
     if (!$tourModel) {
       $dataReturn = [
@@ -128,16 +130,33 @@ class TournamentController extends ControllerBase
         'name' => $tourModel->getTournamentCountry(),
         'slug' => MyRepo::create_slug($tourModel->getTournamentCountry()),
         'sport' => [
-          "name" =>  "football",
+          "name" => "football",
           "slug" => "football"
         ],
         'flag' => $tourModel->getTournamentCountry(),
         "countryCode" => $tourModel->getTournamentCountryCode()
       ]
     ];
-    $standingHome = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_HOME,$limit);
-    $standingAway = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_AWAY,$limit);
-    $standingOveral = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_OVERAL,$limit);
+    $standingHome = [];
+    $standingAway = [];
+    $standingOveral = [];
+    switch ($type) {
+      case ConstEnv::TYPE_STANDING_HOME:
+        $standingHome = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_HOME, $limit);
+        break;
+      case ConstEnv::TYPE_STANDING_AWAY:
+        $standingAway = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_AWAY, $limit);
+        break;
+      case ConstEnv::TYPE_STANDING_OVERAL:
+        $standingOveral = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_OVERAL, $limit);
+        break;
+      default:
+        $standingHome = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_HOME, $limit);
+        $standingAway = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_AWAY, $limit);
+        $standingOveral = ScTournamentStandings::findByIdAndType($tour_id, ConstEnv::TYPE_STANDING_OVERAL, $limit);
+        break;
+    }
+
     $data = [
       'tournament' => $tourInfo,
       'standingHome' => $standingHome,
