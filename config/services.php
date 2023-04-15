@@ -611,6 +611,11 @@ $di['router'] = function () {
         "controller" => 'tournament',
         "action" => "getstandingstour"
     ));
+    $router->add('/get-match-tour-show', array(
+        "module" => "api",
+        "controller" => 'tournament',
+        "action" => "getscheduletourshow"
+    ));
     $router->add('/get-match-by-tour', array(
         "module" => "api",
         "controller" => 'tournament',
