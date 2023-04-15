@@ -2,7 +2,7 @@
 
 namespace Score\Models;
 
-class ScTournamentStandings extends  \Phalcon\Mvc\Model
+class ScTournamentStandings extends \Phalcon\Mvc\Model
 {
     private $standing_tournament_id;
     private $standing_team_id;
@@ -132,7 +132,7 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
 
     public function setStandingType($standing_type)
     {
-        $this->standing_type  = $standing_type;
+        $this->standing_type = $standing_type;
     }
     public function getStandingUpdateTime()
     {
@@ -180,14 +180,25 @@ class ScTournamentStandings extends  \Phalcon\Mvc\Model
         ]);
     }
     public static function findByIdAndType($id, $type, $limit = 5)
-    {        
-        return self::find([
-            'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
-            "limit" => (int) $limit,
-            'bind' => [
-                'ID' => $id,
-                'TYPE' => $type,
-            ]
-        ]);
+    {
+        if ($limit) {
+            return self::find([
+                'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
+                "limit" => (int) $limit,
+                'bind' => [
+                    'ID' => $id,
+                    'TYPE' => $type,
+                ]
+            ]);
+        } else {
+            return self::find([
+                'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
+                'bind' => [
+                    'ID' => $id,
+                    'TYPE' => $type,
+                ]
+            ]);
+        }
+
     }
 }
