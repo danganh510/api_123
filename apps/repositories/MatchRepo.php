@@ -7,6 +7,7 @@ use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
 use Score\Models\ScMatch;
 use Score\Models\ScTeam;
+use Score\Models\ScTournament;
 use Symfony\Component\DomCrawler\Crawler;
 
 class MatchRepo extends Component
@@ -19,19 +20,19 @@ class MatchRepo extends Component
     const MATH_AFTER_FT = "A";
 
 
-    public  function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [], $is_list = true)
+    public function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [], $is_list = true)
     {
 
         $is_new = false;
         $timeInfo = $this->getTime($match->getTime(), $time_plus);
         if (is_numeric($timeInfo['start_time']) && $timeInfo['start_time'] !== 0) {
             $month = date("m", $timeInfo['start_time']);
-            $year = date("Y",  $timeInfo['start_time']);
-            $day = date("d",  $timeInfo['start_time']);
+            $year = date("Y", $timeInfo['start_time']);
+            $day = date("d", $timeInfo['start_time']);
         } else {
             $month = date("m", time());
-            $year = date("Y",  time());
-            $day = date("d",  time());
+            $year = date("Y", time());
+            $day = date("d", time());
         }
 
         $matchSave = ScMatch::findFirst([
@@ -114,10 +115,10 @@ class MatchRepo extends Component
             $matchSave->setMatchTime($timeInfo['time_live']);
         }
 
-        if ($match->getHomeScore()  > $matchSave->getMatchHomeScore()) {
+        if ($match->getHomeScore() > $matchSave->getMatchHomeScore()) {
             $matchSave->setMatchHomeScore(is_numeric($match->getHomeScore()) ? $match->getHomeScore() : 0);
         }
-        if ($match->getAwayScore()  >  $matchSave->getMatchAwayScore()) {
+        if ($match->getAwayScore() > $matchSave->getMatchAwayScore()) {
             $matchSave->setMatchAwayScore(is_numeric($match->getAwayScore()) ? $match->getAwayScore() : 0);
         }
 
@@ -449,11 +450,30 @@ class MatchRepo extends Component
         ]);
         return $arrMatch;
     }
+    public static function getMatchTourIsShow($limit, $day)
+    {
+        $arrTourIsShow = ScTournament::find([
+            'tournament_is_show = "Y"',
+            'columns' => "tournament_id"
+        ]);
+        $str_tour = array_column($arrTourIsShow->toArray(), "tournament_id");
+        $time = time() + $day * 24 * 60 * 60;//lấy bao nhiêu ngày tiếp theo
+        $arrMatch = ScMatch::find([
+            'match_start_time > :now_time: AND match_start_time < :to_time: AND FIND_IN_SET(match_tournament_id,:str_tour:) AND match_status = "W"',
+            'bind' => [
+                'now_time' => time(),
+                'to_time' => $time,
+                'str_tour' => $str_tour,
+            ],
+            'order' => "match_start_time ASC"
+        ]);
+        return $arrMatch;
+    }
     public static function implementsMatch($arrMatch, $arrTeam)
     {
         $result = [];
         $arrMatch = $arrMatch->toArray();
-      
+
         foreach ($arrMatch as $match) {
 
             $homeModel = new ScTeam();

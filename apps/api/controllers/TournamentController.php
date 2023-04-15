@@ -49,6 +49,30 @@ class TournamentController extends ControllerBase
     ];
     return $dataReturn;
   }
+  public function getscheduletourshowAction()
+  {
+    $limit = $this->request->get("limit");
+    $day = $this->request->get("day");
+
+    $cacheTeam = new CacheTeam();
+    $arrTeam = $cacheTeam->get(ConstEnv::CACHE_TYPE_ID);
+
+    $matchSchedule = MatchRepo::getMatchTourIsShow($limit, $day);
+
+    $arrMatchSchedule = MatchRepo::implementsMatch($matchSchedule, $arrTeam);
+
+    $data = [
+      'match_schedule' => $arrMatchSchedule,
+    ];
+
+    $dataReturn = [
+      'code' => 200,
+      'status' => true,
+      'data' => $data
+    ];
+    end:
+    return $dataReturn;
+  }
   public function getscheduletourAction()
   {
     $tour_id = $this->request->get("id");
