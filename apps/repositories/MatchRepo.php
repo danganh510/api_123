@@ -457,18 +457,32 @@ class MatchRepo extends Component
             'columns' => "tournament_id"
         ]);
         $str_tour = array_column($arrTourIsShow->toArray(), "tournament_id");
-        $str_tour = implode(",",$str_tour);
-        $time = time() + $day * 24 * 60 * 60;//lấy bao nhiêu ngày tiếp theo
-        $arrMatch = ScMatch::find([
-            'match_start_time > :now_time: AND match_start_time < :to_time: AND FIND_IN_SET(match_tournament_id,:str_tour:) AND match_status = "W"',
-            'bind' => [
-                'now_time' => time(),
-                'to_time' => $time,
-                'str_tour' => $str_tour,
-            ],
-            'limit' => (int) $limit,
-            'order' => "match_start_time ASC"
-        ]);
+        $str_tour = implode(",", $str_tour);
+        $time = time() + $day * 24 * 60 * 60; //lấy bao nhiêu ngày tiếp theo
+        if ($day > 0) {
+            $arrMatch = ScMatch::find([
+                'match_start_time > :now_time: AND match_start_time < :to_time: AND FIND_IN_SET(match_tournament_id,:str_tour:) AND match_status = "W"',
+                'bind' => [
+                    'now_time' => time(),
+                    'to_time' => $time,
+                    'str_tour' => $str_tour,
+                ],
+                'limit' => (int) $limit,
+                'order' => "match_start_time ASC"
+            ]);
+        } else {
+            $arrMatch = ScMatch::find([
+                'match_start_time < :now_time: AND match_start_time > :to_time: AND FIND_IN_SET(match_tournament_id,:str_tour:) AND match_status = "F"',
+                'bind' => [
+                    'now_time' => time(),
+                    'to_time' => $time,
+                    'str_tour' => $str_tour,
+                ],
+                'limit' => (int) $limit,
+                'order' => "match_start_time ASC"
+            ]);F
+        }
+
         return $arrMatch;
     }
     public static function implementsMatch($arrMatch, $arrTeam)
