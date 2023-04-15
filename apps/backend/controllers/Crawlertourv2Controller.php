@@ -60,7 +60,7 @@ class Crawlertourv2Controller extends ControllerBase
         $time_crawl = $this->my->formatDateYMD(time());
 
         $tourCron = ScCronTour::find([
-            "cron_update_time != :TODAY: AND match_status = 'Y'",
+            "cron_update_time = :TODAY: AND match_status = 'Y'",
             'bind' => [
                 "TODAY" => $time_crawl
             ]
