@@ -76,6 +76,9 @@ class MatchDetailRepo extends Component
             }
 
             echo "match wait\r\n";
+            //ưu tiên trận lỗi:
+            $matchCrawl = MatchDetailRepo::getMatchWaitError();
+
             $matchCrawl = MatchDetailRepo::getMatchWait();
         }
         if (!$matchCrawl) {
@@ -115,6 +118,15 @@ class MatchDetailRepo extends Component
     {
         return ScMatch::findFirst([
             'match_crawl_detail = 0 AND match_status = "W"'
+        ]);
+    }
+    public static function getMatchWaitError()
+    {
+        return ScMatch::findFirst([
+            ' match_status = "W" AND match_start_time < :time_now:',
+            'bind' => [
+                'time_now' => time() - 150 * 60
+            ]
         ]);
     }
     public static function getMatchFinish()
