@@ -53,11 +53,17 @@ class TournamentController extends ControllerBase
   {
     $limit = $this->request->get("limit");
     $day = $this->request->get("day");
+    $arrTourIsShow = ScTournament::find([
+      'tournament_is_show = "Y"',
+      'columns' => "tournament_id"
+    ]);
+    $str_tour = array_column($arrTourIsShow->toArray(), "tournament_id");
+    $str_tour = implode(",", $str_tour);
 
     $cacheTeam = new CacheTeam();
     $arrTeam = $cacheTeam->get(ConstEnv::CACHE_TYPE_ID);
 
-    $matchSchedule = MatchRepo::getMatchTourIsShow($limit, $day);
+    $matchSchedule = MatchRepo::getMatchTourIsShow($limit, $day, $str_tour);
 
     $arrMatchSchedule = MatchRepo::implementsMatch($matchSchedule, $arrTeam);
 
@@ -120,7 +126,6 @@ class TournamentController extends ControllerBase
         'match_today' => $arrMatchToday,
         'match_schedule' => $arrMatchSchedule,
       ]
-
     ];
 
     $dataReturn = [

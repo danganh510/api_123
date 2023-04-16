@@ -450,14 +450,9 @@ class MatchRepo extends Component
         ]);
         return $arrMatch;
     }
-    public static function getMatchTourIsShow($limit, $day)
+    public static function getMatchTourIsShow($limit, $day, $strTour)
     {
-        $arrTourIsShow = ScTournament::find([
-            'tournament_is_show = "Y"',
-            'columns' => "tournament_id"
-        ]);
-        $str_tour = array_column($arrTourIsShow->toArray(), "tournament_id");
-        $str_tour = implode(",", $str_tour);
+     
         $time = time() + $day * 24 * 60 * 60; //lấy bao nhiêu ngày tiếp theo
         if ($day > 0) {
             $arrMatch = ScMatch::find([
@@ -480,7 +475,7 @@ class MatchRepo extends Component
                 ],
                 'limit' => (int) $limit,
                 'order' => "match_start_time ASC"
-            ]);F
+            ]);
         }
 
         return $arrMatch;

@@ -31,7 +31,7 @@ class CrawlerController extends ControllerBase
         ini_set('max_execution_time', -1);
 
         $time_plus = $this->request->get("timePlus");
-        $is_live = (bool)  $this->request->get("isLive");
+        $is_live = (bool) $this->request->get("isLive");
         $this->type_crawl = $this->request->get("type");
         $total = 0;
 
@@ -68,25 +68,27 @@ class CrawlerController extends ControllerBase
                 'is_live' => $is_live,
                 'is_list' => true,
             ];
-        //   die(json_encode($request));exit;
+            //   die(json_encode($request));exit;
             $clientGuzzle = new \GuzzleHttp\Client();
-            $url = API_END_PONT.'/save-match';
+            $url = API_END_PONT . '/save-match';
             try {
                 $response = $clientGuzzle->post(
                     $url,
                     array(
-                        //      'headers' => $header,
+                            //      'headers' => $header,
                         RequestOptions::JSON => $request,
-                        RequestOptions::SYNCHRONOUS => true, // send the request synchronously
+                        RequestOptions::SYNCHRONOUS => true,
+                        // send the request synchronously
                     )
                 );
             } catch (Exception $e) {
             }
             $start_time_call = microtime(true);
-            //        $result = json_decode($response->getBody()->getContents(),true);
+            $result = json_decode($response->getBody()->getContents(), true);
+            var_dump($result);
             $total = count($list_match);
             echo "status: " . $total;
-            echo $response->getBody()->getContents();
+            //   echo $response->getBody()->getContents();
 
             // if ($total < 10) {
             //     sleep(5);
