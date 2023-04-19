@@ -393,7 +393,7 @@ class MatchRepo extends Component
         ]);
         return $arrMatch;
     }
-    public static function getMatchTodayByTourId($tourId)
+    public static function getMatchTodayByTourId($tourId,$limit)
     {
         $today = strtotime(strftime('%Y-%m-%d', time()));
         $start_day = $today - 7 * 60 * 60;
@@ -412,11 +412,42 @@ class MatchRepo extends Component
                 'end_day_bonus' => $bonus_end_day,
                 'TOUR_ID' => $tourId
             ],
+            'limit' => (int) $limit,
             'order' => "match_status DESC"
         ]);
         return $arrMatch;
     }
-    public static function getMatchScheduleByTourId($tourId)
+    public static function getMatchScheduleByTourId($tourId, $limit)
+    {
+        $start_day = time();
+
+        $arrMatch = ScMatch::find([
+            '(match_start_time > :start_day: AND match_status = "W") AND match_tournament_id = :TOUR_ID:',
+            'bind' => [
+                'start_day' => $start_day,
+                'TOUR_ID' => $tourId
+            ],
+            'limit' => (int) $limit,
+            'order' => "match_start_time ASC"
+        ]);
+        return $arrMatch;
+    }
+    public static function getMatchOldByTourId($tourId, $limit)
+    {
+        $start_day = time();
+
+        $arrMatch = ScMatch::find([
+            '(match_start_time < :start_day: AND match_status = "F") AND match_tournament_id = :TOUR_ID:',
+            'bind' => [
+                'start_day' => $start_day,
+                'TOUR_ID' => $tourId
+            ],
+            'limit' => (int) $limit,
+            'order' => "match_start_time ASC"
+        ]);
+        return $arrMatch;
+    }
+    public static function getMatchScheduleByTourId2($tourId, $limit)
     {
         $today = strtotime(strftime('%Y-%m-%d', time()));
         $start_day = $today - 7 * 60 * 60;
@@ -432,11 +463,12 @@ class MatchRepo extends Component
                 'end_day_bonus' => $bonus_end_day,
                 'TOUR_ID' => $tourId
             ],
-            'order' => "match_status DESC"
+            'limit' => (int) $limit,
+            'order' => "match_start_time ASC"
         ]);
         return $arrMatch;
     }
-    public static function getMatchOldByTourId($tourId)
+    public static function getMatchOldByTourId2($tourId,$limit)
     {
         $today = strtotime(strftime('%Y-%m-%d', time()));
         $start_day = $today - 7 * 60 * 60;
@@ -446,6 +478,7 @@ class MatchRepo extends Component
                 'start_day' => $start_day,
                 'TOUR_ID' => $tourId
             ],
+            'limit' => (int) $limit,
             'order' => "match_status DESC"
         ]);
         return $arrMatch;

@@ -83,6 +83,7 @@ class TournamentController extends ControllerBase
   {
     $tour_id = $this->request->get("id");
     $tourModel = Tournament::findFirstById($tour_id);
+    $limit = $this->request->get("limit");
     if (!$tourModel) {
       $dataReturn = [
         'code' => 200,
@@ -111,9 +112,9 @@ class TournamentController extends ControllerBase
     $cacheTeam = new CacheTeam();
     $arrTeam = $cacheTeam->get(ConstEnv::CACHE_TYPE_ID);
 
-    $matchOld = MatchRepo::getMatchOldByTourId($tour_id);
-    $matchToday = MatchRepo::getMatchTodayByTourId($tour_id);
-    $matchSchedule = MatchRepo::getMatchScheduleByTourId($tour_id);
+    $matchOld = MatchRepo::getMatchOldByTourId($tour_id,$limit);
+    $matchToday = MatchRepo::getMatchTodayByTourId($tour_id,$limit);
+    $matchSchedule = MatchRepo::getMatchScheduleByTourId($tour_id,$limit);
 
     $arrMatchOld = MatchRepo::implementsMatch($matchOld, $arrTeam);
     $arrMatchToday = MatchRepo::implementsMatch($matchToday, $arrTeam);
