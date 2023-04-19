@@ -134,7 +134,7 @@ class MatchRepo extends Component
         // }
 
         $result = $matchSave->save();
-        var_dump($result);exit;
+        var_dump($matchSave->getMessages());exit;
         
         if ($matchSave->getMessages()) {
             echo json_encode($matchSave->getMessages());
