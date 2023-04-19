@@ -30,7 +30,8 @@ class TournamentController extends ControllerBase
   public function gettounamentshowAction()
   {
     $arrTour = ScTournament::find([
-      'tournament_is_show = "Y"'
+      'tournament_is_show = "Y"',
+      "order" => "tournament_order DESC"
     ]);
     $list_data = [];
     foreach ($arrTour as $tour) {
