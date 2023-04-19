@@ -86,10 +86,11 @@ class MatchRepo extends Component
             if ($type_crawl == MatchCrawl::TYPE_LIVE_SCORES) {
                 $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
             }
-            $matchSave->setMatchRound($match->getRound());
             $matchSave->setMatchOrder(1);
         }
-
+        if ($match->getRound()) {
+            $matchSave->setMatchRound($match->getRound());
+        }
         if ($timeInfo['time_live'] == "HT") {
             if ($matchSave->getMatchTimeHt() == "" && $timeInfo['status'] == self::MATH_STATUS_START) {
                 $matchSave->setMatchTimeHt(time());
