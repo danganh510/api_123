@@ -28,8 +28,8 @@ class CrawlertourController extends ControllerBase
 
     public function indexAction()
     {
-        echo "wait update";
-        die();
+        // echo "wait update";
+        // die();
         $currentHour = date('G');
         $currentMinutes = date('i');
         if ($currentHour >= 0 && $currentHour <= 1 && $currentMinutes >= 0 && $currentMinutes < 15) {
