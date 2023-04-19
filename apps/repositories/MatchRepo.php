@@ -116,10 +116,10 @@ class MatchRepo extends Component
             $matchSave->setMatchTime($timeInfo['time_live']);
         }
 
-        if ($match->getHomeScore() > $matchSave->getMatchHomeScore()) {
+        if ($match->getHomeScore() > $matchSave->getMatchHomeScore() || !is_numeric($matchSave->getMatchHomeScore())) {
             $matchSave->setMatchHomeScore(is_numeric($match->getHomeScore()) ? $match->getHomeScore() : 0);
         }
-        if ($match->getAwayScore() > $matchSave->getMatchAwayScore()) {
+        if ($match->getAwayScore() > $matchSave->getMatchAwayScore() || !is_numeric($matchSave->getMatchAwayScore())) {
             $matchSave->setMatchAwayScore(is_numeric($match->getAwayScore()) ? $match->getAwayScore() : 0);
         }
 
@@ -134,7 +134,6 @@ class MatchRepo extends Component
         // }
 
         $result = $matchSave->save();
-        var_dump($matchSave->getMessages());exit;
         
         if ($matchSave->getMessages()) {
             echo json_encode($matchSave->getMessages());
