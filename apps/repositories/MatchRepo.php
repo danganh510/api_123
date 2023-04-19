@@ -49,7 +49,6 @@ class MatchRepo extends Component
                 'day2' => $day - 2
             ]
         ]);
-        var_dump($matchSave);exit;
         
         if (!$matchSave) {
             $is_new = true;
@@ -135,6 +134,8 @@ class MatchRepo extends Component
         // }
 
         $result = $matchSave->save();
+        var_dump($result);exit;
+        
         if ($matchSave->getMessages()) {
             echo json_encode($matchSave->getMessages());
         }
