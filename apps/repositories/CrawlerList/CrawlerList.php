@@ -42,7 +42,7 @@ class CrawlerList extends Component
     }
     public function getInstance()
     {
-        $day_time =  $this->my->formatDateYMD(time() + $this->time_plus * 24 * 60 * 60);
+        $day_time = $this->my->formatDateYMD(time() + $this->time_plus * 24 * 60 * 60);
         switch ($this->type_crawl) {
             case MatchCrawl::TYPE_FLASH_SCORE:
                 $this->url_crawl = $this->url_fl;
@@ -139,7 +139,11 @@ class CrawlerList extends Component
     }
     public function replaceTeamName($teamName)
     {
-        return str_replace(['GOAL', 'CORRECTION', '&nbsp;', 'penalty', 'Penalty', 'VAR - handball', "VAR", "VAR - offside", "missed"], ['', '', '', '', '', '', "", "" ,""], $teamName);
+        return str_replace(
+            ['GOAL', 'CORRECTION', '&nbsp;', 'penalty', 'Penalty', 'VAR - handball', "VAR", "VAR - offside", "missed", " - offside", "- offside"],
+            ['', '', '', '', '', '', "", "", "", "", ""],
+            $teamName
+        );
     }
     public function saveMatch($data)
     {
