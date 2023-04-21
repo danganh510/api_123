@@ -49,7 +49,7 @@ class MatchRepo extends Component
                 'day2' => $day - 2
             ]
         ]);
-        
+
         if (!$matchSave) {
             $is_new = true;
             $matchSave = new ScMatch();
@@ -135,7 +135,7 @@ class MatchRepo extends Component
         // }
 
         $result = $matchSave->save();
-        
+
         if ($matchSave->getMessages()) {
             echo json_encode($matchSave->getMessages());
         }
@@ -193,6 +193,12 @@ class MatchRepo extends Component
                 $start_time = 0;
                 $time_live = "Awaiting updates";
                 $status = self::MATH_WAIT_UPDATE;
+                break;
+            case "AfterET":
+                $time = 120;
+                $start_time = time() - $time * 60;
+                $time_live = "AfterET";
+                $status = self::MATH_STATUS_FINSH;
                 break;
             case "After Penalties":
                 $time = 90;
@@ -396,7 +402,7 @@ class MatchRepo extends Component
         ]);
         return $arrMatch;
     }
-    public static function getMatchTodayByTourId($tourId,$limit)
+    public static function getMatchTodayByTourId($tourId, $limit)
     {
         $today = strtotime(strftime('%Y-%m-%d', time()));
         $start_day = $today - 7 * 60 * 60;
@@ -471,7 +477,7 @@ class MatchRepo extends Component
         ]);
         return $arrMatch;
     }
-    public static function getMatchOldByTourId2($tourId,$limit)
+    public static function getMatchOldByTourId2($tourId, $limit)
     {
         $today = strtotime(strftime('%Y-%m-%d', time()));
         $start_day = $today - 7 * 60 * 60;
@@ -488,7 +494,7 @@ class MatchRepo extends Component
     }
     public static function getMatchTourIsShow($limit, $day, $strTour)
     {
-     
+
         $time = time() + $day * 24 * 60 * 60; //lấy bao nhiêu ngày tiếp theo
         if ($day > 0) {
             $arrMatch = ScMatch::find([
