@@ -86,6 +86,12 @@ class MatchDetailRepo extends Component
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
         }
+        if ($id) {
+            $matchCrawl = ScMatch::findFirst([
+                'match_id = :id:',
+                'bind' => ['id' => $id]
+            ]);
+        }
         return $matchCrawl;
     }
     public static function getMatchStartTourKey($arrTourKey)
