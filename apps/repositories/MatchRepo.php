@@ -200,6 +200,12 @@ class MatchRepo extends Component
                 $time_live = "AfterET";
                 $status = self::MATH_STATUS_FINSH;
                 break;
+            case "After Extra Time":
+                $time = 120;
+                $start_time = time() - $time * 60;
+                $time_live = "After Extra Time";
+                $status = self::MATH_STATUS_FINSH;
+                break;
             case "After Penalties":
                 $time = 90;
                 $start_time = time() - $time * 60;
