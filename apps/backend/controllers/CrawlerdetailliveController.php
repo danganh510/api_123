@@ -49,6 +49,8 @@ class CrawlerdetailliveController extends ControllerBase
                 'bind' => ['id' => $id]
             ]);
         }
+        var_dump($id);exit;
+        
 
         if (!$matchCrawl) {
             echo "Not found Match";
