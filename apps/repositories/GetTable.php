@@ -71,12 +71,19 @@ class GetTable extends Component
         if (isset($params['conditions']) && !empty($params['conditions'])) {
             $sql = $sql->where($params['conditions']);
         }
+        $total = $sql->getQuery()->count();;
         if (isset($params['limit'])) {
             $sql = $sql->limit($params['limit']);
         }
+        if (isset($params['offset'])) {
+            $sql = $sql->offset($params['offset']);
+        }
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();
-        return $list_data;
+        return [
+            'list_data' => $list_data,
+            'total' => $total
+        ];
     }
     public function getListTableLang($params, $modelInfo)
     {

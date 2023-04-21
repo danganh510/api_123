@@ -28,6 +28,7 @@ class GetdataController extends ControllerBase
         //     'language' => 'vi',
         //     'orderBy' => "type_id",
         //     'limit' => 1,
+        //     'offset' => 1,
         //     'conditions' => "type_parent_id = 1"
         // ];
 
@@ -69,14 +70,15 @@ class GetdataController extends ControllerBase
         }
 
         if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
-            $list_data = $getData->getListTable($this->requestParams, $modelInfo);
+            $result = $getData->getListTable($this->requestParams, $modelInfo);
         } else {
-            $list_data = $getData->getListTableLang($this->requestParams, $modelInfo);
+            $result = $getData->getListTableLang($this->requestParams, $modelInfo);
         }
         $dataReturn = [
             'code' => 200,
             'status' => true,
-            'data' => $list_data
+            'data' => $result['list_data'],
+            'total' => $result['total']
         ];
         end:
 
