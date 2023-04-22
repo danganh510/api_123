@@ -458,7 +458,7 @@ class MatchRepo extends Component
                 'TOUR_ID' => $tourId
             ],
             'limit' => (int) $limit,
-            'order' => "match_start_time ASC"
+            'order' => "match_start_time DESC"
         ]);
         return $arrMatch;
     }
