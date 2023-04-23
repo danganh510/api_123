@@ -57,7 +57,7 @@ class CrawlerFlashScoreLive extends CrawlerFlashScoreBase
                 $divMatch = $div->find(".event__participant");
 
                 if (!empty($divMatch)) {
-                    $list_live_match[] = $this->getMatch($div);
+                    $list_live_match[] = $this->getMatch($div, $this->round);
 
                     // echo "time get match: " . (microtime(true) - $time_1) . "</br>";
                 }

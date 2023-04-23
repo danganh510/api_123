@@ -103,11 +103,12 @@ class CrawlerFlashScoreBase extends CrawlerList
 
             && strpos($name, "-")
         ) {
+          
+            
             $nameDetail = explode("-", $name);
             $name = trim($nameDetail[0]);
-            $group = isset($nameDetail[1]) ? $nameDetail[1] . (isset($nameDetail[2]) ? $nameDetail[1] : "") : "";
-            $group = isset($nameDetail[3]) ? $group . $nameDetail[3] : "";
-            $group = trim($group);
+            unset($nameDetail[0]);
+            $group = trim(implode("-",$nameDetail));
         }
         $this->round = $group;
 

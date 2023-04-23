@@ -43,14 +43,6 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl = $detailRepo->getMatchCrawl($is_live, $id);
         }
 
-        if ($id) {
-            $matchCrawl = ScMatch::findFirst([
-                'match_id = :id:',
-                'bind' => ['id' => $id]
-            ]);
-        }
-        
-
         if (!$matchCrawl) {
             echo "Not found Match";
             die();

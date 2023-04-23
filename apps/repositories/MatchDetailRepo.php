@@ -23,7 +23,7 @@ class MatchDetailRepo extends Component
         if ($matchCrawl) {
             return $matchCrawl;
         }
-    
+
         $arrTourKey = ScTournament::getTourIdCrawl();
         $matchCrawl = MatchDetailRepo::getMatchStartHT($arrTourKey);
         if (!$matchCrawl) {

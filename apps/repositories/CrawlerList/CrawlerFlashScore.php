@@ -22,12 +22,14 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
     {
 
         if (!$cronModel) {
+            $this->deleteFolder();
             $cronModel = new ScCron();
             $cronModel->setCronTime($this->day_time);
             $cronModel->setCronStatus("Y");
             $cronModel->Save();
         }
         if ($cronModel && $cronModel->getCronStatus() == "N") {
+            $this->deleteFolder();
             echo "All Match save";
             die();
         }
@@ -114,7 +116,7 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
 
                 if (!empty($divMatch)) {
                     $divMatch = $div->find("div",0);
-                    $list_live_match[] = $this->getMatch($divMatch);
+                    $list_live_match[] = $this->getMatch($divMatch, $this->round);
 
                     // echo "time get match: " . (microtime(true) - $time_1) . "</br>";
                 }
