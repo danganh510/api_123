@@ -8,7 +8,7 @@ use Phalcon\Mvc\User\Component;
 
 class GetTable extends Component
 {
-    const TABLE_CAN_GET = ['sc_article', 'sc_banner', 'sc_type'];
+    const TABLE_CAN_GET = ['sc_article', 'sc_banner', 'sc_type',"sc_team"];
     public function getColumnsModel($table)
     {
 
@@ -76,7 +76,7 @@ class GetTable extends Component
             $sql = $sql->limit($params['limit']);
         }
         if (isset($params['offset'])) {
-            $sql = $sql->offset($params['offset']);
+            $sql = $sql->offset($params['offset'] * $params['limit']);
         }
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();
