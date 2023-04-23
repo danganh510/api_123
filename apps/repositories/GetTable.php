@@ -71,18 +71,18 @@ class GetTable extends Component
         if (isset($params['conditions']) && !empty($params['conditions'])) {
             $sql = $sql->where($params['conditions']);
         }
-      //  $total = $sql->getQuery()->count();;
+        $total = count($sql->getQuery()->execute());
         if (isset($params['limit'])) {
             $sql = $sql->limit($params['limit']);
         }
-        // if (isset($params['offset'])) {
-        //     $sql = $sql->offset($params['offset']);
-        // }
+        if (isset($params['offset'])) {
+            $sql = $sql->offset($params['offset']);
+        }
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();
         return [
             'list_data' => $list_data,
-      //      'total' => $total
+            'total' => $total
         ];
     }
     public function getListTableLang($params, $modelInfo)
@@ -102,13 +102,13 @@ class GetTable extends Component
                 $columns_get[] = "nlang." . $column;
                 continue;
             }
-            if (in_array($column,  $modelInfo['column_model_lang'])) {
+            if (in_array($column, $modelInfo['column_model_lang'])) {
                 $columns_get[] = "lang." . $column;
             }
         }
         $sql = $this->modelsManager->createBuilder()->columns(implode(",", $columns_get))
             ->addFrom($modelInfo['str'], "nlang")
-            ->innerJoin($modelInfo['strLang'], "nlang.{$modelInfo['column_id']} = lang.{$modelInfo['column_id']}",  'lang')
+            ->innerJoin($modelInfo['strLang'], "nlang.{$modelInfo['column_id']} = lang.{$modelInfo['column_id']}", 'lang')
             ->where("lang.{$modelInfo['column_lang_code']} = :lang_code:", ['lang_code' => $params['language']]);
         if (isset($modelInfo['conditions']) && !empty($modelInfo['conditions'])) {
             $sql = $sql->andWhere($modelInfo['conditions']);

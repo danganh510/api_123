@@ -78,7 +78,7 @@ class GetdataController extends ControllerBase
             'code' => 200,
             'status' => true,
             'data' => $result['list_data'],
-            'total' => 20
+            'total' => $result['total'],
         ];
         end:
 
