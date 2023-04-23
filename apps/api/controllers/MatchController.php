@@ -22,7 +22,9 @@ class MatchController extends ControllerBase
 
 
         $time_request = isset($this->requestParams['time']) ? $this->requestParams['time'] : "";
+        $status = isset($this->requestParams['status']) ? $this->requestParams['status'] : "";
         $status = isset($this->requestParams['status']) ?  $this->requestParams['status'] : "";
+        $status = isset($this->requestParams['status']) ? $this->requestParams['status'] : "";
         //live
         $isLive = false;
         if (!$time_request || $time_request == "live") {
@@ -51,6 +53,8 @@ class MatchController extends ControllerBase
         if (!$arrMatch) {
             goto end;
         }
+        $time_to = [];
+        $time_to = [];
         foreach ($arrMatch as $key => $match) {
             if (!is_array($match)) {
                 $match = (array) $match;
@@ -118,6 +122,16 @@ class MatchController extends ControllerBase
                 ],
                 'roundInfo' => $match['match_round'],
             ];
+            $time_to_new = abs($match['match_start_time'] - time());
+            if (!isset($time_to[$match['match_tournament_id']]) || $time_to[$match['match_tournament_id']] > $time_to_new) {
+                //gán giá trị mới cho thời gian trận đấu gần nhất tới hiện tại
+                $time_to[$match['match_tournament_id']] = abs($match['match_start_time'] - time());
+            }
+            $time_to_new = abs($match['match_start_time'] - time());
+            if (!isset($time_to[$match['match_tournament_id']]) || $time_to[$match['match_tournament_id']] > $time_to_new) {
+                //gán giá trị mới cho thời gian trận đấu gần nhất tới hiện tại
+                $time_to[$match['match_tournament_id']] = abs($match['match_start_time'] - time());
+            }
             if (isset($events[$match['match_tournament_id']])) {
                 $events[$match['match_tournament_id']]['match'][$match['match_id']] = $matchInfo;
             } else {
@@ -140,14 +154,32 @@ class MatchController extends ControllerBase
                         $match['match_id'] => $matchInfo
                     ],
                     'order' => $arrTournament[$match['match_tournament_id']]['tournament_order'],
-
                 ];
             }
+            $events[$match['match_tournament_id']]['time_to'] = $time_to[$match['match_tournament_id']];
         }
         end:
+        if ($this->my->getDays($time, time() + $time_zone * 60 * 60) == 0 && !$isLive) {
+
+        } else {
+            uasort($events, function ($a, $b) {
+                return $b['order'] - $a['order'];
+            });
         uasort($events, function($a, $b) {
             return $b['order'] - $a['order'];
         });
+        if ($this->my->getDays($time, time() + $time_zone * 60 * 60) == 0 && !$isLive) {
+            uasort($events, function ($a, $b) {
+                return $b['time_to'] - $a['time_to'];
+            });
+        } else {
+            uasort($events, function ($a, $b) {
+                return $b['order'] - $a['order'];
+            });
+        }
+
+        }
+
         return $events;
         //get match and tournament
 
@@ -161,7 +193,9 @@ class MatchController extends ControllerBase
             ->leftJoin('Score\Models\ScMatchInfo', 'match_id  = i.info_match_id', 'i')
             ->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,match_status,match_score_ht,
         i.info_summary,i.info_time,i.info_stats,t.tournament_name,t.tournament_country_code")
+            ->where("match_id = :id:", [
             ->where("match_id = :id:",  [
+            ->where("match_id = :id:", [
                 'id' => $id
             ])->execute();
         if (empty($matchInfo->toArray())) {
