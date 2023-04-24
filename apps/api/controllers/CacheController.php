@@ -48,7 +48,7 @@ class CacheController extends ControllerBase
         $arrMatch = ScMatch::find([
             'FIND_IN_SET(match_id,:arrId:)',
             'bind' => [
-                'arrId' => implode(",",$arrMatchIdLive)
+                'arrId' => implode(",", $arrMatchIdLive)
             ]
         ]);
         $arrMatch = $arrMatch->toArray();
@@ -66,6 +66,18 @@ class CacheController extends ControllerBase
         // $arrMatch = $arrMatch->toArray();
         // $matchCache = new CacheMatchLive();
         // $result = $matchCache->setCache(json_encode($arrMatch));
+        die($result);
+    }
+    public function cachematch7dayAction()
+    {
+        $timestamp_before_7 = time() - 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
+        $timestamp_affter_7 = time() + 7 * 24 * 60 * 60 + 60 * 60; //backup 1h
+        $arrMatch = ScMatch::find(
+            "match_start_time > $timestamp_before_7 AND match_start_time < $timestamp_affter_7"
+        );
+        $arrMatch = $arrMatch->toArray();
+        $matchCache = new CacheMatch();
+        $result = $matchCache->setCache(json_encode($arrMatch));
         die($result);
     }
 

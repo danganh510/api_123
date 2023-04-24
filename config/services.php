@@ -588,6 +588,11 @@ $di['router'] = function () {
         "controller" => 'cache',
         "action" => "cachematchlive"
     ));
+    $router->add('/cache-match-7-day', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "cachematch7day"
+    ));
     $router->add('/get-team', array(
         "module" => "api",
         "controller" => 'cache',
