@@ -32,7 +32,7 @@ class CrawlertourController extends ControllerBase
         // die();
         $currentHour = date('G');
         $currentMinutes = date('i');
-        if ($currentHour >= 0 && $currentHour <= 1 && $currentMinutes >= 0 && $currentMinutes < 15) {
+        if ($currentHour >= 0 && $currentHour <= 2 && $currentMinutes >= 0 && $currentMinutes < 15) {
             echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
             die();
         }
