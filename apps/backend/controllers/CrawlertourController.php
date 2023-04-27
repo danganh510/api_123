@@ -28,20 +28,13 @@ class CrawlertourController extends ControllerBase
 
     public function indexAction()
     {
-        // echo "wait update";
-        // die();
-        $currentHour = date('G');
-        $currentMinutes = date('i');
-        if ($currentHour >= 0 && $currentHour <= 1 && $currentMinutes >= 0 && $currentMinutes < 15) {
-            echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
-            die();
-        }
-
+     
         ini_set('max_execution_time', 18);
-      
+
+        $this->checkTimeList();
 
         $time_plus = $this->request->get("timePlus");
-        $is_live = (bool)  $this->request->get("isLive");
+        $is_live = (bool) $this->request->get("isLive");
         $this->type_crawl = $this->request->get("type");
         $is_nomal = $this->request->get("isNomal");
         $total = 0;
@@ -57,7 +50,7 @@ class CrawlertourController extends ControllerBase
         $start_time = microtime(true);
         $list_match = [];
         $time_test = microtime(true);
-        $enpoint =  API_END_PONT . "/get-list-match";
+        $enpoint = API_END_PONT . "/get-list-match";
         $clientGuzzle = new \GuzzleHttp\Client();
         try {
             $arrListMatchLive = $clientGuzzle->get(
@@ -73,7 +66,7 @@ class CrawlertourController extends ControllerBase
 
         $arrListMatchLive = json_decode($arrListMatchLive->getBody(), true);
         if (empty($arrListMatchLive)) {
-            echo  "Not found match\n\r";
+            echo "Not found match\n\r";
             die();
         }
         $arrTourId = array_keys($arrListMatchLive);
@@ -125,14 +118,15 @@ class CrawlertourController extends ControllerBase
 
 
             $clientGuzzle = new \GuzzleHttp\Client();
-            $url = API_END_PONT.'/save-match';
+            $url = API_END_PONT . '/save-match';
             try {
                 $clientGuzzle->post(
                     $url,
                     array(
-                        //      'headers' => $header,
+                            //      'headers' => $header,
                         RequestOptions::JSON => $request,
-                        RequestOptions::SYNCHRONOUS => true, // send the request synchronously
+                        RequestOptions::SYNCHRONOUS => true,
+                        // send the request synchronously
                     )
                 );
             } catch (Exception $e) {

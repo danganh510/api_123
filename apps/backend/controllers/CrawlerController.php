@@ -32,6 +32,37 @@ class CrawlerController extends ControllerBase
 
         $time_plus = $this->request->get("timePlus");
         $is_live = (bool) $this->request->get("isLive");
+        $off = $this->request->get("off");
+        if ($off == 1) {
+            //7h tới 11h tối thứ 7 cn tắt detail
+            $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
+            $currentHour = date('G');
+            echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
+            if ($dayOfWeek == 6 || $dayOfWeek == 7) {
+
+                if ($currentHour >= 8 && $currentHour <= 20) {
+                    echo "gio cao diem";
+                    die();
+                }
+            }
+        } elseif ($off == 2) {
+            $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
+            $currentHour = date('G');
+            echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
+            if ($dayOfWeek == 6 || $dayOfWeek == 7) {
+
+                if ($currentHour >= 11 && $currentHour <= 16) {
+                    echo "gio cao diem";
+                    die();
+                }
+            }
+        }
+        $currentHour = date('G');
+        $currentMinutes = date('i');
+        if ($currentHour >= 0 && $currentHour <= 1 && $currentMinutes >= 0 && $currentMinutes < 15) {
+            echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
+            die();
+        }
         $this->type_crawl = $this->request->get("type");
         $total = 0;
 
@@ -85,8 +116,8 @@ class CrawlerController extends ControllerBase
             }
             $start_time_call = microtime(true);
             $result = json_decode($response->getBody()->getContents(), true);
-            var_dump($result);
-            $total = count($list_match);
+
+            $total = isset($result['total']) ? $result['total'] : 0;
             echo "status: " . $total;
             //   echo $response->getBody()->getContents();
 

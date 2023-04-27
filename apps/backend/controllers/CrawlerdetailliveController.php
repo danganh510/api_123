@@ -24,6 +24,7 @@ class CrawlerdetailliveController extends ControllerBase
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
     public function indexAction()
     {
+        $this->checkTimeList();
         $start_time_cron = time();
         echo "============================\n\r";
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
