@@ -29,9 +29,15 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
             $cronModel->Save();
         }
         if ($cronModel && $cronModel->getCronStatus() == "N") {
-            $this->deleteFolder();
-            echo "All Match save";
-            die();
+            $today = $this->my->formatDateYMD(time());
+            if ($this->day_time == $today) {
+                $cronModel->setCronStatus("Y");
+                $cronModel->save();
+            } else {
+                $this->deleteFolder();
+                echo "All Match save";
+                die();
+            }
         }
 
 
@@ -64,6 +70,18 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
 
         if ($key_now + 1 >= $total_div) {
             $cronModel->setCronStatus("N");
+
+            //tìm cron chạy ngày hnay để xóa đi và chạy lại
+            $today = $this->my->formatDateYMD(time());
+            $cronModelToday = ScCron::findFirst([
+                'cron_time = :time:',
+                'bind' => [
+                    'time' => $today
+                ]
+            ]);
+            if ($cronModelToday) {
+                $cronModelToday->delete();
+            } 
         }
         if ($cronModel) {
             $cronModel->setCronCount($total_div);
@@ -112,10 +130,10 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
                 }
 
                 //match
-                $divMatch = $div->find(".event__participant",0);
+                $divMatch = $div->find(".event__participant", 0);
 
                 if (!empty($divMatch)) {
-                    $divMatch = $div->find("div",0);
+                    $divMatch = $div->find("div", 0);
                     $list_live_match[] = $this->getMatch($divMatch, $this->round);
 
                     // echo "time get match: " . (microtime(true) - $time_1) . "</br>";
