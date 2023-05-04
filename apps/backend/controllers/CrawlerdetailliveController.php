@@ -36,6 +36,8 @@ class CrawlerdetailliveController extends ControllerBase
 
 
         $detailRepo = new MatchDetailRepo();
+        var_dump($is_nomal);exit;
+        
         if ($is_nomal) {
             $is_nomal = false;
             //is Live
