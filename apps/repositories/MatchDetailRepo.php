@@ -86,7 +86,6 @@ class MatchDetailRepo extends Component
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
         }
-        var_dump($id);exit;
         
         if ($id) {
             $matchCrawl = ScMatch::findFirst([
@@ -131,7 +130,7 @@ class MatchDetailRepo extends Component
     public static function getMatchWaitError()
     {
         return ScMatch::findFirst([
-            ' match_status = "W" AND match_start_time < :time_now:',
+            ' match_status != "S" AND match_start_time < :time_now:',
             'bind' => [
                 'time_now' => time() - 150 * 60
             ]
