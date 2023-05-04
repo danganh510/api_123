@@ -18,6 +18,7 @@ class MatchRepo extends Component
     const MATH_WAIT_UPDATE = "U";
     const MATH_CANCEL = "C";
     const MATH_AFTER_FT = "A";
+    const MATH_POSTPONED = "P";
 
 
     public function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [], $is_list = true)
@@ -228,7 +229,13 @@ class MatchRepo extends Component
                 $time = 135;
                 $start_time = time() - $time * 60;
                 $time_live = "Awarded";
-                $status = self::MATH_STATUS_FINSH;
+                $status = self::MATH_AFTER_FT;
+                break;
+            case "Postponed":
+                $time = 135;
+                $start_time = time() - $time * 60;
+                $time_live = "Postponed";
+                $status = self::MATH_POSTPONED;
                 break;
             default:
                 if (strpos($match_time, "ExtraTime") !== false) {
