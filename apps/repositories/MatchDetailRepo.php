@@ -83,12 +83,20 @@ class MatchDetailRepo extends Component
                 $matchCrawl = MatchDetailRepo::getMatchWait();
             }
         }
+
         if (!$matchCrawl) {
             //crawl detail cho trận FT
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
         }
-
+        if (!$matchCrawl) {
+            //crawl detail cho trận FT
+            echo "match wait\r\n";
+            $matchCrawl = MatchDetailRepo::getMatchWaitError();
+        }
+        if (!$matchCrawl) {
+            $matchCrawl = MatchDetailRepo::getMatchWait();
+        }
         if ($id) {
             $matchCrawl = ScMatch::findFirst([
                 'match_id = :id:',
