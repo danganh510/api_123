@@ -45,7 +45,6 @@ class MatchDetailRepo extends Component
     }
     public function getMatchCrawl($is_live, $id)
     {
-        var_dump($is_live);exit;
         
         if ($is_live) {
             $arrTourKey = ScTournament::getTourIdCrawl();
@@ -80,6 +79,8 @@ class MatchDetailRepo extends Component
             echo "match wait\r\n";
             //ưu tiên trận lỗi:
             $matchCrawl = MatchDetailRepo::getMatchWaitError();
+            var_dump($matchCrawl);exit;
+            
 
             $matchCrawl = MatchDetailRepo::getMatchWait();
         }
