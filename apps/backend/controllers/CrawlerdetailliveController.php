@@ -95,6 +95,7 @@ class CrawlerdetailliveController extends ControllerBase
             !empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
             && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])
         ) {
+var_dump($detail['match']);exit;
 
             $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
@@ -103,7 +104,6 @@ class CrawlerdetailliveController extends ControllerBase
             if ($time) {
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
-                var_dump($timeInfo['status']);exit;
                 
                 $matchCrawl->setMatchTime($timeInfo['time_live']);
                 if ($id == 4800) {
