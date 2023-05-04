@@ -141,6 +141,8 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->save();
         }
         $matchCrawl->save();
+        var_dump((array) $matchCrawl);exit;
+        
         var_dump($matchCrawl->getMessages());exit;
         
         if ($is_live) {
