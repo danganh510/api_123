@@ -86,6 +86,8 @@ class MatchDetailRepo extends Component
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
         }
+        var_dump($id);exit;
+        
         if ($id) {
             $matchCrawl = ScMatch::findFirst([
                 'match_id = :id:',
