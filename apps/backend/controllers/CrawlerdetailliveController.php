@@ -90,7 +90,7 @@ class CrawlerdetailliveController extends ControllerBase
         if ($result) {
             echo "crawl succes--";
         }
-        var_dump($detail['match']);exit;
+   
         //lưu thông tin mới của match
         if (
             (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
