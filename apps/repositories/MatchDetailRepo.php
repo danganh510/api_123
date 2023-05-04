@@ -78,7 +78,6 @@ class MatchDetailRepo extends Component
             echo "match wait\r\n";
             //ưu tiên trận lỗi:
             $matchCrawl = MatchDetailRepo::getMatchWaitError();
-var_dump($matchCrawl);exit;
 
             $matchCrawl = MatchDetailRepo::getMatchWait();
         }
