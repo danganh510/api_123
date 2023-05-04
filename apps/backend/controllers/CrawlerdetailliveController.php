@@ -107,7 +107,6 @@ class CrawlerdetailliveController extends ControllerBase
             if ($time) {
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
-                var_dump($timeInfo);exit;
                 
                 $matchCrawl->setMatchTime($timeInfo['time_live']);
                 if ($id == 4800) {
@@ -138,6 +137,8 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->save();
         }
         $matchCrawl->save();
+        var_dump($matchCrawl->getMessages());exit;
+        
         if ($is_live) {
             $cache =  file_get_contents("http://123tyso.live/cache-match-live");
             if ($cache) {
