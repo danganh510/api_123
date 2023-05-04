@@ -36,18 +36,26 @@ class MatchRepo extends Component
             $day = date("d", time());
         }
 
+        // $matchSave = ScMatch::findFirst([
+        //     "match_home_id = :home_id: AND match_away_id = :away_id: 
+        //     AND (match_start_day = :day: OR match_start_day = :day1: OR match_start_day = :day2: )
+        //     AND match_start_month = :month: AND match_start_year = :year:",
+        //     'bind' => [
+        //         'home_id' => $home->getTeamId(),
+        //         'away_id' => $away->getTeamId(),
+        //         'day' => $day,
+        //         'month' => $month,
+        //         'year' => $year,
+        //         'day1' => $day - 1,
+        //         'day2' => $day - 2
+        //     ]
+        // ]);
+        //chuyển crawl flashscore, sử dụng link để tìm, tránh trường hợp hoãn trận đấu dẫn đến 2 trận đấu giống nhau
+        
         $matchSave = ScMatch::findFirst([
-            "match_home_id = :home_id: AND match_away_id = :away_id: 
-            AND (match_start_day = :day: OR match_start_day = :day1: OR match_start_day = :day2: )
-            AND match_start_month = :month: AND match_start_year = :year:",
+            " match_link_detail_flashscore = :id_match_flashscore:",
             'bind' => [
-                'home_id' => $home->getTeamId(),
-                'away_id' => $away->getTeamId(),
-                'day' => $day,
-                'month' => $month,
-                'year' => $year,
-                'day1' => $day - 1,
-                'day2' => $day - 2
+                'id_match_flashscore' => $match->getHrefDetail(),
             ]
         ]);
 
