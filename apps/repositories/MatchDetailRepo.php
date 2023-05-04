@@ -45,6 +45,8 @@ class MatchDetailRepo extends Component
     }
     public function getMatchCrawl($is_live, $id)
     {
+        var_dump($is_live);exit;
+        
         if ($is_live) {
             $arrTourKey = ScTournament::getTourIdCrawl();
             $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
