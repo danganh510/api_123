@@ -130,7 +130,7 @@ class MatchDetailRepo extends Component
     public static function getMatchWaitError()
     {
         return ScMatch::findFirst([
-            ' match_status != "S" AND match_start_time < :time_now:',
+            ' match_status != "F" AND match_start_time < :time_now:',
             'bind' => [
                 'time_now' => time() - 150 * 60
             ]
