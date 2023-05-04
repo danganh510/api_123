@@ -141,6 +141,7 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->save();
         }
         $matchCrawl->save();
+        var_dump($matchCrawl->getMessages());exit;
         
         if ($is_live) {
             $cache =  file_get_contents("http://123tyso.live/cache-match-live");
