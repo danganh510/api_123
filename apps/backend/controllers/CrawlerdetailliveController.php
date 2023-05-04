@@ -100,10 +100,10 @@ class CrawlerdetailliveController extends ControllerBase
         ) {
 
 
-            if ($detail['match']['homeScore']) {
+            if (is_numeric($detail['match']['homeScore'])) {
                 $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
             }
-            if ($detail['match']['awayScore']) {
+            if (is_numeric($detail['match']['awayScore'])) {
                 $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
             }
             $time = $detail['match']['timeNow'];
@@ -141,7 +141,6 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->save();
         }
         $matchCrawl->save();
-        var_dump((array) $matchCrawl);exit;
         
         var_dump($matchCrawl->getMessages());exit;
         
