@@ -354,11 +354,15 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                             }
                         }
                     }
+                } else {
+                    $event = substr($hrefIcon, strpos($hrefIcon, "#") + 1);
                 }
+            } else {
+                $divTemp = $description->find("div", 1);
+                $divSvg = $divTemp->find("div",0);
+                $event = $divSvg->getAttribute('class');
             }
-            if (!$event) {
-                $event = substr($hrefIcon, strpos($hrefIcon, "#") + 1);
-            }
+            
           
         }
         $strDescription = $description->getAttribute("title");
