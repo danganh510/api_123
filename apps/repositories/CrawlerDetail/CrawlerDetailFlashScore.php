@@ -358,9 +358,8 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                     $event = substr($hrefIcon, strpos($hrefIcon, "#") + 1);
                 }
             } else {
-                $divTemp = $description->find("div", 1);
-                var_dump($divTemp);exit;
-                
+                $class_attr = $svg->getAttribute('class');
+                var_dump($class_attr);exit;
             }
             
           
