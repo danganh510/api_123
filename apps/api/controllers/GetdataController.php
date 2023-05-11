@@ -9,6 +9,7 @@ use Score\Models\ScTournament;
 use Score\Models\ScType;
 use Score\Repositories\Article;
 use Score\Repositories\Banner;
+use Score\Repositories\CacheGetData;
 use Score\Repositories\CacheMatch;
 use Score\Repositories\CacheMatchLive;
 use Score\Repositories\CacheTeam;
@@ -68,12 +69,18 @@ class GetdataController extends ControllerBase
                 goto end;
             }
         }
-
-        if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
-            $result = $getData->getListTable($this->requestParams, $modelInfo);
-        } else {
-            $result = $getData->getListTableLang($this->requestParams, $modelInfo);
+        $cacheData = new CacheGetData($this->requestParams);
+        $result = $cacheData->getCache();
+        if (empty($result)) {
+            if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
+                $result = $getData->getListTable($this->requestParams, $modelInfo);
+            } else {
+                $result = $getData->getListTableLang($this->requestParams, $modelInfo);
+            }
+            $cacheData->setCache($result);
         }
+
+       
         $dataReturn = [
             'code' => 200,
             'status' => true,
