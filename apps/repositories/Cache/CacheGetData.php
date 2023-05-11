@@ -25,6 +25,7 @@ class CacheGetData extends Component
         }
         $this->key = "";
         foreach ($param as $key => $value) {
+            $value = json_encode($value);
             $this->key .= "_key_$key"."_value_$value";
         }
     }
