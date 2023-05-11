@@ -15,7 +15,7 @@ class CacheGetData extends Component
     static $frontCache = null;
     static $backCache = null;
     public $key;
-    public function __construct($param)
+    public function __construct($param = [])
     {
         if (!is_dir(__DIR__ . "/../Cache")) {
             mkdir(__DIR__ . "/../Cache");
@@ -24,10 +24,32 @@ class CacheGetData extends Component
             mkdir(self::filePath);
         }
         $this->key = "";
-        foreach ($param as $key => $value) {
-            $value = json_encode($value);
-            $this->key .= "_key_$key"."_value_$value";
+        if (!empty($param)) {
+            foreach ($param as $key => $value) {
+                $value = trim(json_encode($value));
+                $value = preg_replace('/[^a-zA-Z0-9_ \-()\/%-&]/s', '', $value);
+                $this->key .= "_$value";
+            }
         }
+    }
+    public function deleteFolder()
+    {
+        $dirname = self::filePath;
+        if (is_dir($dirname))
+            $dir_handle = opendir($dirname);
+        if (!$dir_handle)
+            return false;
+
+        while ($file = readdir($dir_handle)) {
+            if ($file != "." && $file != "..") {
+                if (!is_dir($dirname . "/" . $file))
+                    unlink($dirname . "/" . $file);
+            }
+        }
+
+        closedir($dir_handle);
+        rmdir($dirname);
+        return true;
     }
     public function clearCacheExpried()
     {

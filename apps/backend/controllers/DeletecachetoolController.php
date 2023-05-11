@@ -30,66 +30,15 @@ class DeletecachetoolController extends ControllerBase
     public function deletecacheAction()
     {
         $this->view->disable();
-        $btn_delete = $this->request->getPost('delete');
-        $btn_delete_table = $this->request->getPost('deleteTable');
-        $btn_delete_id = $this->request->getPost('deleteId');
         if ($this->request->isPost()) {
-            $urlDelete =  defined('TEST_MODE') && TEST_MODE ? "https://sandbox.travelner.com" : "https://www.travelner.com";
-            if ($btn_delete == self::URL_DELETE_POPULAR_LOCATIONS) {
-                $URL_DELETE_CACHE_TOOL = $urlDelete.'/delete-cache-for-api?type=' . self::URL_DELETE_POPULAR_LOCATIONS;
-            } else {
-                $URL_DELETE_CACHE_TOOL = $urlDelete.'/delete-cache';
-                $URL_DELETE_CACHE_TOOL .= '?type=' . $btn_delete;
-                if (isset($btn_delete_table) && strlen($btn_delete_table) > 0){
-                    $URL_DELETE_CACHE_TOOL .= '&table=' . $btn_delete_table;
-                }
-                if (isset($btn_delete_id) && strlen($btn_delete_id) > 0){
-                    $URL_DELETE_CACHE_TOOL .= '&id=' . $btn_delete_id;
-                }
-            }
+            $urlDelete =  "http://123tyso.live";
+            $URL_DELETE_CACHE_TOOL = $urlDelete.'/delete-cache-data';
             $result = self::curl_get_contents($URL_DELETE_CACHE_TOOL);
             $this->session->set('msg_result', $result);
             $this->response->redirect("/deletecachetool");
         }
     }
-    public function deletecachetypeAction()
-    {
-        $this->view->disable();
-        if ($this->request->isPost()) {
-            $time = $this->globalVariable->curTime;
-            $type = $this->request->getPost('delete');
-            if ($type == "airports") {
-                unlink(__DIR__."/../../messages/caches/airport.txt");
-            }
-            $paramStr = '{"iat":'.$time.',"type":"'.$type.'"}';
-            $repoMy = new \My();
-            $obj = $repoMy->getDataResultApi($paramStr,'/frontend/deletecache/type',(defined('TEST_MODE') && TEST_MODE));
-
-            if (isset($obj->isSuccessful) && $obj->isSuccessful=="true") {
-                if ($obj->data) {
-                    $msg_result = [
-                        'status' => $obj->data->status,
-                        'message' => $obj->data->message,
-                    ];
-                } else {
-                    $msg_result =  [
-                        'status' => 'false',
-                        'message' => 'Delete cache Fail',
-                    ];
-                }
-            }  else {
-                $mesages = isset($obj->message) && $obj->message != "" ? $obj->message : "Connect to API fail";
-                $msg_result =  [
-                    'status' => 'false',
-                    'message' =>$mesages,
-                ];
-            }
-
-            $this->session->set('msg_result', $msg_result);
-            return $this->response->redirect("/deletecachetool");
-
-        }
-    }
+  
 
     function curl_get_contents($url)
     {
@@ -98,8 +47,6 @@ class DeletecachetoolController extends ControllerBase
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,
-            "ctoken=k3FRQ1U0bYHUVSu6");
         $data = curl_exec($ch);
         curl_close($ch);
         $data_de = json_decode($data,true);
