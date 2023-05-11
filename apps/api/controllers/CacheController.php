@@ -109,6 +109,7 @@ class CacheController extends ControllerBase
         $result = $cache->deleteFolder();        
         return [
             'code' => 200,
+            "message" => "delete cache success",
             'status' => $result,
         ];
     }
