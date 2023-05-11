@@ -12,7 +12,7 @@ if (isset($msg_result['status'])) {
         <?php echo $msg_result['message']; ?>
     </div>
 <?php } ?>
-<form class="searchForm" name="form-deletecache" method="post" action="<?php echo $this->url->get('deletecachetool/deletecache'); ?>">
+<form class="searchForm" name="form-deletecache" method="post" action="<?php echo $this->url->get('/dashboard/delete-data-cache'); ?>">
     <input type="hidden" name="delete" id="deleteCache" value=""/>
     <input type="hidden" name="deleteTable" id="deleteTable" value=""/>
     <input type="hidden" name="deleteId" id="deleteId" value=""/>

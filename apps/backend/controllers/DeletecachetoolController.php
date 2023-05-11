@@ -35,7 +35,7 @@ class DeletecachetoolController extends ControllerBase
             $URL_DELETE_CACHE_TOOL = $urlDelete.'/delete-cache-data';
             $result = self::curl_get_contents($URL_DELETE_CACHE_TOOL);
             $this->session->set('msg_result', $result);
-            $this->response->redirect("/deletecachetool");
+            $this->response->redirect("/dashboard/list-deletecachetool");
         }
     }
   

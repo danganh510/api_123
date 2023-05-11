@@ -570,10 +570,10 @@ $di['router'] = function () {
         "controller" => "deletecachetool",
         "action" => "index"
     ));
-    $router->add("/dashboard/delete-all-cache", array(
+    $router->add("/dashboard/delete-data-cache", array(
         "module" => "backend",
         "controller" => "deletecachetool",
-        "action" => "deleteallcache"
+        "action" => "deletecache"
     ));
     $router->add("/auto-update-time", array(
         "module" => "backend",
