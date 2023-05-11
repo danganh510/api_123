@@ -565,7 +565,7 @@ $di['router'] = function () {
         "controller" => "contactus",
         "action" => "view"
     ));
-    $router->add("/delete-cache-tool", array(
+    $router->add("/list-deletecachetool", array(
         "module" => "backend",
         "controller" => "deletecachetool",
         "action" => "index"

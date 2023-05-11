@@ -10,6 +10,7 @@ use Score\Repositories\Team;
 
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
+use Score\Repositories\CacheGetData;
 use Score\Repositories\CacheMatch;
 use Score\Repositories\CacheMatchIdLive;
 use Score\Repositories\CacheMatchLive;
@@ -101,5 +102,14 @@ class CacheController extends ControllerBase
                 'status' => 'false',
             ];
         }
+    }
+    function deletecacheAction()
+    {
+        $cache = new CacheGetData();
+        $result = $cache->deleteFolder();        
+        return [
+            'code' => 200,
+            'status' => $result,
+        ];
     }
 }
