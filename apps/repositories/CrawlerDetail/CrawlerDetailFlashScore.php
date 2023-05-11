@@ -354,9 +354,10 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                             }
                         }
                     }
-                } else {
-                    $event = substr($hrefIcon, strpos($hrefIcon, "#") + 1);
                 }
+            }
+            if (!$event) {
+                $event = substr($hrefIcon, strpos($hrefIcon, "#") + 1);
             }
           
         }
