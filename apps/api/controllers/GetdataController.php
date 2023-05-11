@@ -79,7 +79,7 @@ class GetdataController extends ControllerBase
             }
             $cacheData->setCache($result);
         }
-
+        $result = $getData->getListTable($this->requestParams, $modelInfo);
        
         $dataReturn = [
             'code' => 200,
