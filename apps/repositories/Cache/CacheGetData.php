@@ -27,7 +27,7 @@ class CacheGetData extends Component
         if (!empty($param)) {
             foreach ($param as $key => $value) {
                 $value = trim(json_encode($value));
-                $value = preg_replace('/[^a-zA-Z0-9_ \-()\/%-&]/s', '', $value);
+                $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
                 $this->key .= "_$value";
             }
         }
