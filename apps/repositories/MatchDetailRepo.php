@@ -65,16 +65,19 @@ class MatchDetailRepo extends Component
             }
         } else {
             //7h tới 11h tối thứ 7 cn tắt detail
-            $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
-            $currentHour = date('G');
-            echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
-            if ($dayOfWeek == 6 ||  $dayOfWeek == 7) {
+            if (!$id) {
+                $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
+                $currentHour = date('G');
+                echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
+                if ($dayOfWeek == 6 || $dayOfWeek == 7) {
 
-                if ($currentHour >= 11 && $currentHour <= 16) {
-                    echo "Wait for crawl list";
-                    die();
+                    if ($currentHour >= 11 && $currentHour <= 16) {
+                        echo "Wait for crawl list";
+                        die();
+                    }
                 }
             }
+
 
             echo "match wait\r\n";
             //ưu tiên trận lỗi:
