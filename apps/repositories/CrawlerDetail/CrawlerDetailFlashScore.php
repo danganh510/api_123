@@ -359,7 +359,8 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 }
             } else {
                 $class_attr = $svg->getAttribute('class');
-                $event = $class_attr;
+                $class_attr = explode(" ",$class_attr)[0];
+                $event = trim($class_attr);
             }
             
           
