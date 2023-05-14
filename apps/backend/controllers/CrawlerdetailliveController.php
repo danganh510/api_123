@@ -36,6 +36,7 @@ class CrawlerdetailliveController extends ControllerBase
 
 
         $detailRepo = new MatchDetailRepo();
+        
         if ($is_nomal) {
             $is_nomal = false;
             //is Live
@@ -71,6 +72,7 @@ class CrawlerdetailliveController extends ControllerBase
         //tab: info,tracker,statistics
         $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
         $detail = $crawler->getInstance();
+        $detail['match']['timeNow'] = trim($detail['match']['timeNow']);
         $infoModel = ScMatchInfo::findFirst([
             'info_match_id = :id:',
             'bind' => [
@@ -89,19 +91,27 @@ class CrawlerdetailliveController extends ControllerBase
         if ($result) {
             echo "crawl succes--";
         }
+   
+   
         //lưu thông tin mới của match
         if (
-            !empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
-            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])
+            (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
+            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || trim($detail['match']['timeNow']) == "Postponed"
         ) {
 
-            $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
-            $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
+
+            if (is_numeric($detail['match']['homeScore'])) {
+                $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
+            }
+            if (is_numeric($detail['match']['awayScore'])) {
+                $matchCrawl->setMatchAwayScore($detail['match']['awayScore']);
+            }
             $time = $detail['match']['timeNow'];
             $time = trim($time);
             if ($time) {
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
+                
                 $matchCrawl->setMatchTime($timeInfo['time_live']);
                 if ($id == 4800) {
                     var_dump($time, $timeInfo);
@@ -131,6 +141,7 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->save();
         }
         $matchCrawl->save();
+                
         if ($is_live) {
             $cache =  file_get_contents("http://123tyso.live/cache-match-live");
             if ($cache) {

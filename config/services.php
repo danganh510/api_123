@@ -565,15 +565,15 @@ $di['router'] = function () {
         "controller" => "contactus",
         "action" => "view"
     ));
-    $router->add("/delete-cache-tool", array(
+    $router->add("/dashboard/list-deletecachetool", array(
         "module" => "backend",
         "controller" => "deletecachetool",
         "action" => "index"
     ));
-    $router->add("/dashboard/delete-all-cache", array(
+    $router->add("/dashboard/delete-data-cache", array(
         "module" => "backend",
         "controller" => "deletecachetool",
-        "action" => "deleteallcache"
+        "action" => "deletecache"
     ));
     $router->add("/auto-update-time", array(
         "module" => "backend",
@@ -603,7 +603,11 @@ $di['router'] = function () {
         "controller" => 'cache',
         "action" => "getcachetournament"
     ));
-
+    $router->add('/delete-cache-data', array(
+        "module" => "api",
+        "controller" => 'cache',
+        "action" => "deletecache"
+    ));
 
     //API
     $router->add('/get-tour', array(

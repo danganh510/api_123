@@ -45,7 +45,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
         echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
         if ($currentHour >= 11 && $currentHour <= 16) {
             if ($dayOfWeek != 6 && $dayOfWeek != 7) {
-                $second = $time = date("s", time());
+                $second =  date("s", time());
                 if (($second >= 26 && $second <= 32) || ($second >= 46 && $second <= 52)) {
                     echo "gio cao diem";
                     die();

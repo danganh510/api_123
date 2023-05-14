@@ -45,6 +45,7 @@ class MatchDetailRepo extends Component
     }
     public function getMatchCrawl($is_live, $id)
     {
+
         if ($is_live) {
             $arrTourKey = ScTournament::getTourIdCrawl();
             $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
@@ -78,13 +79,23 @@ class MatchDetailRepo extends Component
             echo "match wait\r\n";
             //ưu tiên trận lỗi:
             $matchCrawl = MatchDetailRepo::getMatchWaitError();
-
-            $matchCrawl = MatchDetailRepo::getMatchWait();
+            if (!$matchCrawl) {
+                $matchCrawl = MatchDetailRepo::getMatchWait();
+            }
         }
+
         if (!$matchCrawl) {
             //crawl detail cho trận FT
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
+        }
+        if (!$matchCrawl) {
+            //crawl detail cho trận FT
+            echo "match wait\r\n";
+            $matchCrawl = MatchDetailRepo::getMatchWaitError();
+        }
+        if (!$matchCrawl) {
+            $matchCrawl = MatchDetailRepo::getMatchWait();
         }
         if ($id) {
             $matchCrawl = ScMatch::findFirst([
@@ -129,7 +140,7 @@ class MatchDetailRepo extends Component
     public static function getMatchWaitError()
     {
         return ScMatch::findFirst([
-            ' match_status = "W" AND match_start_time < :time_now:',
+            ' (match_status = "W" OR match_status = "S") AND match_start_time < :time_now:',
             'bind' => [
                 'time_now' => time() - 150 * 60
             ]

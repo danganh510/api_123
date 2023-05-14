@@ -81,7 +81,7 @@ class GetTable extends Component
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();
         return [
-            'list_data' => $list_data,
+            'list_data' => $list_data->toArray(),
             'total' => $total
         ];
     }

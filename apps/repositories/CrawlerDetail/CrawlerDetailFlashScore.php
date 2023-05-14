@@ -332,30 +332,37 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         //get event
         if ($svg) {
-            $hrefIcon = $description->find("use", 0)->getAttribute("xlink:href");
-            if (strpos($hrefIcon, "card") !== false) {
-                if (strpos($hrefIcon, "red-yellow-card") !== false) {
-                    $event = "RedYellowCard";
-                } else {
-                    // Get the value of the class attribute
-                    $class_attr = $svg->getAttribute('class');
-                    //  $classes = $svg->getAttribute('class');
-                    if (strpos($class_attr, "redCard-ico") !== false) {
-                        $event = "RedCard";
-                    } else if (strpos($class_attr, "yellowCard-ico") !== false) {
-                        $event = "YellowCard";
-                    }
-                    if (!$event) {
-                        if ($svg->text() == "Red Card") {
+            if ($description->find("use", 0)) {
+                $hrefIcon = $description->find("use", 0)->getAttribute("xlink:href");
+                if (strpos($hrefIcon, "card") !== false) {
+                    if (strpos($hrefIcon, "red-yellow-card") !== false) {
+                        $event = "RedYellowCard";
+                    } else {
+                        // Get the value of the class attribute
+                        $class_attr = $svg->getAttribute('class');
+                        //  $classes = $svg->getAttribute('class');
+                        if (strpos($class_attr, "redCard-ico") !== false) {
                             $event = "RedCard";
-                        } else {
+                        } else if (strpos($class_attr, "yellowCard-ico") !== false) {
                             $event = "YellowCard";
                         }
+                        if (!$event) {
+                            if ($svg->text() == "Red Card") {
+                                $event = "RedCard";
+                            } else {
+                                $event = "YellowCard";
+                            }
+                        }
                     }
+                } else {
+                    $event = substr($hrefIcon, strpos($hrefIcon, "#") + 1);
                 }
             } else {
-                $event = substr($hrefIcon, strpos($hrefIcon, "#") + 1);
+                $class_attr = $svg->getAttribute('class');
+                $event = $class_attr;
             }
+            
+          
         }
         $strDescription = $description->getAttribute("title");
         if (!$strDescription) {
