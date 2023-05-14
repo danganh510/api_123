@@ -328,7 +328,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $strDescription = "";
         $svg = $description->find("div > div", 0);
         if (!$svg) {
-            $svg = $description->find("div", 1);
+            $svg = $description->find("div", 0);
         }
         //get event
         if ($svg) {
