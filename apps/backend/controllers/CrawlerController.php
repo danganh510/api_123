@@ -40,6 +40,7 @@ class CrawlerController extends ControllerBase
                 echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
                 die();
             }
+            
             //7h tới 11h tối thứ 7 cn tắt detail
             $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
