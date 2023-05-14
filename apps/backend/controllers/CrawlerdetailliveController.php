@@ -24,13 +24,17 @@ class CrawlerdetailliveController extends ControllerBase
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
     public function indexAction()
     {
-        $this->checkTimeList();
+        $id = $this->request->get("id");
+
+        if (!$id) {
+            $this->checkTimeList();
+        }
+
         $start_time_cron = time();
         echo "============================\n\r";
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         ini_set('max_execution_time', 20);
         $is_live =  $this->request->get("isLive");
-        $id = $this->request->get("id");
         $this->type_crawl = $this->request->get("type");
         $is_nomal = $this->request->get("isNomal");
 
