@@ -35,7 +35,12 @@ class ScArticle extends \Phalcon\Mvc\Model
      * @Column(type="string", length=255, nullable=false)
      */
     protected $article_name;
-
+    /**
+     *
+     * @var string
+     * @Column(type="string", length=255, nullable=true)
+     */
+    protected $article_tag_id;
     /**
      *
      * @var string
@@ -192,7 +197,18 @@ class ScArticle extends \Phalcon\Mvc\Model
 
         return $this;
     }
+    /**
+     * Method to set the value of field article_tag_id
+     *
+     * @param string $article_tag_id
+     * @return $this
+     */
+    public function setArticleTagId($article_tag_id)
+    {
+        $this->article_tag_id = $article_tag_id;
 
+        return $this;
+    }
     /**
      * Method to set the value of field article_icon
      *
@@ -425,7 +441,15 @@ class ScArticle extends \Phalcon\Mvc\Model
     {
         return $this->article_name;
     }
-
+    /**
+     * Returns the value of field article_tag_id
+     *
+     * @return string
+     */
+    public function getArticleTagId()
+    {
+        return $this->article_tag_id;
+    }
     /**
      * Returns the value of field article_icon
      *
@@ -578,7 +602,7 @@ class ScArticle extends \Phalcon\Mvc\Model
     /**
      * Initialize method for model.
      */
-//    public function initialize()
+    //    public function initialize()
 //    {
 //        $this->setSchema("travelner");
 //    }
