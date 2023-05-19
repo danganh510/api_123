@@ -158,6 +158,9 @@ class ArticleController extends ControllerBase
                     $data['article_tag'] = $this->request->get("txtTag");
                     $arTag = explode(";",$data['article_tag']);
                     foreach ($arTag as $tag) {
+                        if (!$tag) {
+                            continue;
+                        }
                         $tag_model = ScTag::findTagByName($tag);
                         if (!$tag_model) {
                             $tag_model = new ScTag();
@@ -337,6 +340,9 @@ class ArticleController extends ControllerBase
                     if($save_mode == ScLanguage::GENERAL) {
                         $arTag = explode(";",$data_post['article_tag']);
                         foreach ($arTag as $tag) {
+                            if (!$tag) {
+                                continue;
+                            }
                             $tag_model = ScTag::findTagByName($tag);
                             if (!$tag_model) {
                                 $tag_model = new ScTag();
