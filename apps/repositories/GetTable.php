@@ -8,7 +8,7 @@ use Phalcon\Mvc\User\Component;
 
 class GetTable extends Component
 {
-    const TABLE_CAN_GET = ['sc_article', 'sc_banner', 'sc_type',"sc_page"];
+    const TABLE_CAN_GET = ['sc_article', 'sc_banner', 'sc_type',"sc_page","sc_tag"];
     public function getColumnsModel($table)
     {
 
