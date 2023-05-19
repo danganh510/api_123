@@ -166,7 +166,7 @@ class ArticleController extends ControllerBase
                         }
                         $ar_tag_id[] = $tag_model->getTagId();
                     }
-                    $new_article->setArticleTagId(implode(";",$ar_tag_id));
+                    $new_article->setArticleTagId(implode(",",$ar_tag_id));
                     $new_article->save();
                     $message = 'Create the Article ID: ' . $new_article->getArticleId() . ' success';
                     $msg_result = array('status' => 'success', 'msg' => $message);
@@ -345,7 +345,7 @@ class ArticleController extends ControllerBase
                             }
                             $ar_tag_id[] = $tag_model->getTagId();
                         }
-                        $article_model->setArticleTagId(implode(";",$ar_tag_id));
+                        $article_model->setArticleTagId(implode(",",$ar_tag_id));
                         $article_model->save();
                     }
                    
@@ -406,7 +406,7 @@ class ArticleController extends ControllerBase
         }
         $arTagId = $article_model->getArticleTagId();
         $arTag = [];
-        foreach(explode(";",$arTagId) as $id) {
+        foreach(explode(",",$arTagId) as $id) {
             $name = ScTag::findTagNameById($id);
             if ($name) {
                 $arTag[] = $name;
