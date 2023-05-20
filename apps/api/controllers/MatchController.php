@@ -3,6 +3,8 @@
 namespace Score\Api\Controllers;
 
 use ConstEnv;
+use Score\Models\ScArea;
+use Score\Models\ScCountry;
 use Score\Models\ScMatch;
 use Score\Models\ScTeam;
 use Score\Repositories\CacheMatch;
@@ -133,7 +135,7 @@ class MatchController extends ControllerBase
                                 'slug' => "football"
                             ],
                             'flag' => $arrTournament[$match['match_tournament_id']]['tournament_country'],
-                            'countryCode' => $arrTournament[$match['match_tournament_id']]['tournament_country_code']
+                            'countryCode' => $arrTournament[$match['match_tournament_id']]['tournament_country_code'],
                         ]
                     ],
                     'match' => [
