@@ -89,7 +89,7 @@ class CacheMatch extends Component
     public static function getFrontCache()
     {
         if (self::$frontCache == null) {
-            self::$frontCache = new FrontData(['lifetime' => 7 * 24 * 60 * 60]);
+            self::$frontCache = new FrontData(['lifetime' =>  24 * 60 * 60]);
         }
 
         return self::$frontCache;
