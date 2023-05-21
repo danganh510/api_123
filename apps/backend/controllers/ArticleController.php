@@ -248,11 +248,11 @@ class ArticleController extends ControllerBase
                 $lang_current = $save_mode;
             }
             if ($save_mode != ScLanguage::GENERAL) {
-                $data_post['article_name'] = $this->request->getPost('txtName', array('string', 'trim'));
-                $data_post['article_title'] = $this->request->getPost('txtTitle', array('string', 'trim'));
-                $data_post['article_meta_keyword'] = $this->request->getPost('txtMetaKey', array('string', 'trim'));
-                $data_post['article_meta_description'] = $this->request->getPost('txtMetaDesc', array('string', 'trim'));
-                $data_post['article_meta_image'] = $this->request->getPost('txtMetaImage', array('string', 'trim'));
+                $data_post['article_name'] = trim($this->request->getPost('txtName'));
+                $data_post['article_title'] = trim($this->request->getPost('txtTitle'));
+                $data_post['article_meta_keyword'] = trim($this->request->getPost('txtMetaKey'));
+                $data_post['article_meta_description'] = trim($this->request->getPost('txtMetaDesc'));
+                $data_post['article_meta_image'] = trim($this->request->getPost('txtMetaImage'));
                 $data_post['article_summary'] = $this->request->getPost('txtSummary');
                 $data_post['article_content'] = $this->request->getPost('txtContent');
                 $data_post['article_keyword'] = $this->request->getPost('txtKeyword', array('string', 'trim'));
@@ -277,7 +277,7 @@ class ArticleController extends ControllerBase
                 $data_post['article_order'] = $this->request->getPost('txtOrder', array('string', 'trim'));
                 $data_post['article_active'] = $this->request->getPost("radActive");
                 $data_post['article_is_home'] = $this->request->getPost("txtHome");
-                $data_post['article_tag'] = $this->request->get("txtTag");
+                $data_post['article_tag'] = trim($this->request->get("txtTag"));
 
 
                 if (empty($data_post["article_type_id"])) {
