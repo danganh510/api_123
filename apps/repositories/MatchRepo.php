@@ -409,8 +409,8 @@ class MatchRepo extends Component
     }
     public static function getMatchToday()
     {
-        $today = strtotime(strftime('%Y-%m-%d', time()));
-        $start_day = $today + 7 * 60 * 60;
+        $today = strtotime(strftime('%Y-%m-%d', time() + 7 * 60 * 60));
+        $start_day = $today;
         //thời gian bonus là +- 160 phút
         $bonus_start_day = $start_day - 160 * 60;
         $end_day = $start_day + 24 * 60 * 60 ;
