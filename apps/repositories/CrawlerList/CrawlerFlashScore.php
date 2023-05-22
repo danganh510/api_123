@@ -93,6 +93,7 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
     }
     public function crawlList()
     {
+        var_dump($this->my->getDays(time(),strtotime($this->day_time)));exit;
         $cronModel = ScCron::findFirst([
             'cron_time = :date: AND cron_day = :day_plus:',
             'bind' => [
