@@ -25,6 +25,7 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
             $this->deleteFolder();
             $cronModel = new ScCron();
             $cronModel->setCronTime($this->day_time);
+            $cronModel->setCronDay($this->my->getDays(strtotime($this->day_time)));
             $cronModel->setCronStatus("Y");
             $cronModel->Save();
         }
@@ -74,9 +75,10 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
             //tìm cron chạy ngày hnay để xóa đi và chạy lại
             $today = $this->my->formatDateYMD(time());
             $cronModelToday = ScCron::findFirst([
-                'cron_time = :time:',
+                'cron_time = :time: AND cron_day = :day_plus:',
                 'bind' => [
-                    'time' => $today
+                    'time' => $today,
+                    'day_plus' => $this->my->getDays(strtotime($this->day_time))
                 ]
             ]);
             if ($cronModelToday) {
@@ -92,13 +94,15 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
     public function crawlList()
     {
         $cronModel = ScCron::findFirst([
-            'cron_time = :date:',
+            'cron_time = :date: AND cron_day = :day_plus:',
             'bind' => [
-                'date' => $this->day_time
+                'date' => $this->day_time,
+                'day_plus' => $this->my->getDays(strtotime($this->day_time))
             ]
         ]);
         $cronModelNo = ScCron::findFirst([
-            'cron_status = "Y"'
+            'cron_status = "Y" AND cron_day = :day_plus:',
+            'day_plus' => $this->my->getDays(strtotime($this->day_time))
         ]);
         if ($cronModelNo && $cronModelNo->getCronTime() != $this->day_time) {
             $cronModelNo->setCronStatus("N");

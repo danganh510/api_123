@@ -27,6 +27,11 @@ class ScCron extends \Phalcon\Mvc\Model
     protected $cron_count;
     /**
      *
+     * @var integer
+     */
+    protected $cron_day;
+    /**
+     *
      * @var string
      */
     protected $cron_status;
@@ -66,6 +71,18 @@ class ScCron extends \Phalcon\Mvc\Model
     public function setCronStatus($cron_status)
     {
         $this->cron_status = $cron_status;
+
+        return $this;
+    }
+    /**
+     * Method to set the value of field cron_day
+     *
+     * @param integer $cron_day
+     * @return $this
+     */
+    public function setCronDay($cron_day)
+    {
+        $this->cron_day = $cron_day;
 
         return $this;
     }
@@ -120,6 +137,15 @@ class ScCron extends \Phalcon\Mvc\Model
     public function getCronCount()
     {
         return $this->cron_count;
+    }
+    /**
+     * Returns the value of field cron_day
+     *
+     * @return integer
+     */
+    public function getCronDay()
+    {
+        return $this->cron_day;
     }
 
     /**
