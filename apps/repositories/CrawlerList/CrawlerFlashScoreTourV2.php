@@ -100,6 +100,7 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
         $divHomeStanding =  str_get_html($parentDiv['htmlDivHomeStanding']);
         $divAwayStanding =  str_get_html($parentDiv['htmlDivAwayStanding']);
         $divOveralStanding =  str_get_html($parentDiv['htmlDivOveralStanding']);
+        var_dump($divAwayStanding,$divHomeStanding,$divOveralStanding);exit;
         //         file_put_contents("htmlDivHomeStanding.html",$parentDiv['htmlDivHomeStanding']);
         //         file_put_contents("htmlDivAwayStanding.html",$parentDiv['htmlDivAwayStanding']);
         // exit;
@@ -166,7 +167,6 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
                 $tourInfoOveral[] =  $this->crawlStanding($divOvelralTeam);
             }
         }
-        var_dump($tourInfoHome,$tourInfoAway);exit;
         return [
             'list_live_match' => $list_live_match,
             'tourInfoHome' => $tourInfoHome,

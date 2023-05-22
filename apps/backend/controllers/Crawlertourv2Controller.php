@@ -81,7 +81,7 @@ class Crawlertourv2Controller extends ControllerBase
         $cronModel->setCronTourId($tour->getTournamentId());
         $cronModel->setCronUpdateTime($time_crawl);
         $cronModel->setMatchStatus("Y");
-        $cronModel->save();
+      //  $cronModel->save();
 
         echo "Tour Id: " . $tour->getTournamentId() . " \r\n";
         // var_dump(microtime(true) - $time);
