@@ -96,6 +96,7 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
         $list_live_match = [];
         $list_standing_home = [];
         $list_standing_away = [];
+        var_dump($parentDiv);exit;
 
         $divHomeStanding =  str_get_html($parentDiv['htmlDivHomeStanding']);
         $divAwayStanding =  str_get_html($parentDiv['htmlDivAwayStanding']);
