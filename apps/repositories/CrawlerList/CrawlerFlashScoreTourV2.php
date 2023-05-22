@@ -46,9 +46,7 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
             }
 
             $divsHome = $this->seleniumDriver->findElements('#tournament-table-tabs-and-content > .subFilter > .subFilter__group > a');
-            $this->seleniumDriver->quit();
-
-            var_dump($divsHome);exit;
+           
             foreach ($divsHome as $key =>  $divHome) {
                 if (strtolower(trim($divHome->getText())) == "overall") {
                     if ($key != 0) {
@@ -99,12 +97,10 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
         $list_live_match = [];
         $list_standing_home = [];
         $list_standing_away = [];
-        var_dump($parentDiv);exit;
 
         $divHomeStanding =  str_get_html($parentDiv['htmlDivHomeStanding']);
         $divAwayStanding =  str_get_html($parentDiv['htmlDivAwayStanding']);
         $divOveralStanding =  str_get_html($parentDiv['htmlDivOveralStanding']);
-        var_dump($divAwayStanding,$divHomeStanding,$divOveralStanding);exit;
         //         file_put_contents("htmlDivHomeStanding.html",$parentDiv['htmlDivHomeStanding']);
         //         file_put_contents("htmlDivAwayStanding.html",$parentDiv['htmlDivAwayStanding']);
         // exit;
