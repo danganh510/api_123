@@ -37,6 +37,7 @@ class CrawlerFlashScoreTour extends CrawlerFlashScoreBase
         }
         $this->seleniumDriver->quit();
     //    var_dump(microtime(true) - $time);
+var_dump($htmlDiv);exit;
 
         return $htmlDiv;
     }
