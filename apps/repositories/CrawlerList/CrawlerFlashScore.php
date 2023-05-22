@@ -102,13 +102,14 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
         ]);
         $cronModelNo = ScCron::findFirst([
             'cron_status = "Y" AND cron_day = :day_plus:',
-            'day_plus' => $this->my->getDays(time(),strtotime($this->day_time))
+            'bind' => [
+                'day_plus' => $this->my->getDays(time(),strtotime($this->day_time))
+            ]
         ]);
         if ($cronModelNo && $cronModelNo->getCronTime() != $this->day_time) {
             $cronModelNo->setCronStatus("N");
             $cronModelNo->save();
         }
-        var_dump($cronModel);exit;
         
         if (!$cronModel || $cronModel->getCronStatus() == "Y") {
             $this->saveFile($cronModel);
