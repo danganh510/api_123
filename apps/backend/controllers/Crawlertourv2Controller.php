@@ -70,7 +70,6 @@ class Crawlertourv2Controller extends ControllerBase
         $strTour = implode(",", $strTour);
         $tourCrawlRepo = new TournamentCrawlRepo();
         $tour = $tourCrawlRepo->getTournamentToshow($strTour);
-        var_dump($tour);exit;
         
 
         //$tour = ScTournament::findFirst("2827");
@@ -103,6 +102,7 @@ class Crawlertourv2Controller extends ControllerBase
         $arrMatchCrawl = [];
         $is_new = false;
         //start crawler
+var_dump($list_tour);exit;
 
         try {
             statCrawler:
