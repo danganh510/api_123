@@ -35,7 +35,7 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
             foreach ($parentsDiv as $parentDiv) {
                 $htmlDiv .= $parentDiv->getAttribute("outerHTML");
             }
-            $divsStanding = $this->seleniumDriver->findElements('#tournament-table-tabs-and-content > .tabs > .tabs__group > a');
+            $divsStanding = $this->seleniumDriver->findElements('#tournament-table-tabs-and-content > .filter > .filter__group > a');
             foreach ($divsStanding as $key => $divStanding) {
                 if (strtolower(trim($divStanding->getText())) == "standings") {
                     if ($key == 0) {
@@ -45,7 +45,7 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
                 }
             }
 
-            $divsHome = $this->seleniumDriver->findElements('#tournament-table-tabs-and-content > .subTabs > .subTabs__group > a');
+            $divsHome = $this->seleniumDriver->findElements('#tournament-table-tabs-and-content > .subFilter > .subFilter__group > a');
             $this->seleniumDriver->quit();
 
             var_dump($divsHome);exit;
