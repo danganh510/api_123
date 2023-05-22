@@ -70,6 +70,8 @@ class Crawlertourv2Controller extends ControllerBase
         $strTour = implode(",", $strTour);
         $tourCrawlRepo = new TournamentCrawlRepo();
         $tour = $tourCrawlRepo->getTournamentToshow($strTour);
+        var_dump($tour);exit;
+        
 
         //$tour = ScTournament::findFirst("2827");
         if (!$tour) {
