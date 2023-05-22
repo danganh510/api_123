@@ -134,13 +134,15 @@ class Crawlertourv2Controller extends ControllerBase
             } catch (Exception $e) {
             }
             $start_time_call = microtime(true);
-                 $result = json_decode($response->getBody()->getContents(),true);
-                 var_dump($result);exit;
+             //    $result = json_decode($response->getBody()->getContents(),true);
+       
                  
             $total = count($list_tour['list_live_match']);
 
             //lưu tour:
             //
+            var_dump($list_tour['tourInfoOveral']);exit;
+            
             foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
                 $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
                 $arrEnemy = [];
