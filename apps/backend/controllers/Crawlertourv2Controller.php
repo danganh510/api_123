@@ -102,7 +102,7 @@ class Crawlertourv2Controller extends ControllerBase
         $arrMatchCrawl = [];
         $is_new = false;
         //start crawler
-var_dump($list_tour);exit;
+
 
         try {
             statCrawler:
@@ -122,7 +122,7 @@ var_dump($list_tour);exit;
             $clientGuzzle = new \GuzzleHttp\Client();
             $url = API_END_PONT . '/save-match';
             try {
-                $clientGuzzle->post(
+                $response = $clientGuzzle->post(
                     $url,
                     array(
                             //      'headers' => $header,
@@ -134,7 +134,9 @@ var_dump($list_tour);exit;
             } catch (Exception $e) {
             }
             $start_time_call = microtime(true);
-            //        $result = json_decode($response->getBody()->getContents(),true);
+                 $result = json_decode($response->getBody()->getContents(),true);
+                 var_dump($result);exit;
+                 
             $total = count($list_tour['list_live_match']);
 
             //lưu tour:
