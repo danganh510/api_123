@@ -92,7 +92,6 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
     {
         require_once(__DIR__ . "/../../library/simple_html_dom.php");
         $parentDiv = $this->getHtmlParent();
-        var_dump($parentDiv);exit;
         
         $list_live_match = [];
         $list_standing_home = [];
@@ -167,6 +166,7 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
                 $tourInfoOveral[] =  $this->crawlStanding($divOvelralTeam);
             }
         }
+        var_dump($tourInfoHome,$tourInfoAway);exit;
         return [
             'list_live_match' => $list_live_match,
             'tourInfoHome' => $tourInfoHome,
