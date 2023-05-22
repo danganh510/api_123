@@ -17,6 +17,7 @@ class CrawlerFlashScoreBase extends CrawlerList
     }
     public function setupSiteTour()
     {
+        echo "123";exit;
         $this->runSelenium();
     }
     public function setupSite()

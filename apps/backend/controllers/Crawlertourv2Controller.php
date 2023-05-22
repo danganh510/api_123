@@ -141,7 +141,6 @@ class Crawlertourv2Controller extends ControllerBase
 
             //lưu tour:
             //
-            var_dump($list_tour);exit;
             
             foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
                 $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
