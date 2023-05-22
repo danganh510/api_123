@@ -46,6 +46,9 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
             }
 
             $divsHome = $this->seleniumDriver->findElements('#tournament-table-tabs-and-content > .subTabs > .subTabs__group > a');
+            $this->seleniumDriver->quit();
+
+            var_dump($divsHome);exit;
             foreach ($divsHome as $key =>  $divHome) {
                 if (strtolower(trim($divHome->getText())) == "overall") {
                     if ($key != 0) {
