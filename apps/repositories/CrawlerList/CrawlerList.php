@@ -59,7 +59,7 @@ class CrawlerList extends Component
                     $crawler = new CrawlerFlashScoreLive($this->seleniumDriver, $this->url_crawl, $day_time, $this->isLive);
                     break;
                 }
-var_dump($this->tour_link && $this->has_standing);exit;
+
 
                 if ($this->tour_link && $this->has_standing) {
                     if (strpos($this->tour_link, $this->url_fl) === false) {
