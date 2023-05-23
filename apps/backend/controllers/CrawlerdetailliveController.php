@@ -94,15 +94,11 @@ class CrawlerdetailliveController extends ControllerBase
         if ($result) {
             echo "crawl succes--";
         }
-   var_dump($detail['match']['timeNow']);exit;
-   var_dump((
-    (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
-    && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || trim($detail['match']['timeNow']) == "Postponed"
-   ));exit;
+
         //lưu thông tin mới của match
         if (
             (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
-            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || trim($detail['match']['timeNow']) == "Postponed"
+            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || !is_numeric($detail['match']['timeNow'])
         ) {
 
 
@@ -114,7 +110,6 @@ class CrawlerdetailliveController extends ControllerBase
             }
             $time = $detail['match']['timeNow'];
             $time = trim($time);
-            var_dump($time);exit;
             if ($time) {
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
