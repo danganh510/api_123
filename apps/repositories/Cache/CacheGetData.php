@@ -77,9 +77,6 @@ class CacheGetData extends Component
 
         $cache = self::getBackCache();
         $cacheKey = self::cacheKeyClients($sessionId);
-        if (!$cache->has($cacheKey)) {
-            return false;
-        }
         $clients = $cache->get($cacheKey);
 
         return json_decode($clients, true);
