@@ -166,7 +166,6 @@ class MatchRepo extends Component
     public function getTime($match_time, $time_plus, $type = "list")
     {
         $match_time = trim($match_time);
-        var_dump($match_time);exit;
         switch ($match_time) {
             case "HT":
             case "Half Time":
