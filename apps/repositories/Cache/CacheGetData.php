@@ -34,9 +34,7 @@ class CacheGetData extends Component
 
         if (!empty($param)) {
             foreach ($param as $key => $value) {
-                if($key == "columns") {
-                    continue;
-                }
+
                 $value = trim(json_encode($value));
                 $value = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $value);
                 $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
