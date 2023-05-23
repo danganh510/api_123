@@ -37,13 +37,16 @@ class CrawlerController extends ControllerBase
         if ($off == 1) {
             $currentHour = date('G');
             $currentMinutes = date('i');
-            if ($time_plus + $dayOfWeek == 6 || $time_plus + $dayOfWeek == 7) {
-                if ($currentHour >= 0 && $currentHour <= 3) {
-                    echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
-                    die();
-                }
+            // if ($time_plus + $dayOfWeek == 6 || $time_plus + $dayOfWeek == 7) {
+            //     if ($currentHour >= 0 && $currentHour <= 3) {
+            //         echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
+            //         die();
+            //     }
+            // }
+            if ($currentHour >= 0 && $currentHour <= 3) {
+                echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
+                die();
             }
-            
             //7h tới 11h tối thứ 7 cn tắt detail
    
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
@@ -57,11 +60,9 @@ class CrawlerController extends ControllerBase
         } elseif ($off == 2) {
             $currentHour = date('G');
             $currentMinutes = date('i');
-            if ($time_plus + $dayOfWeek == 6 || $time_plus + $dayOfWeek == 7) {
-                if ($currentHour >= 0 && $currentHour <= 3) {
-                    echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
-                    die();
-                }
+            if ($currentHour >= 0 && $currentHour <= 3) {
+                echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
+                die();
             }
 
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
