@@ -64,8 +64,9 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
         $matchCrawl->setMatchInsertTime(time());
-        $matchCrawl->save();
+        $result = $matchCrawl->save();
 
+        var_dump($result);exit;
         echo $matchCrawl->getMatchId() . "---";
         if ($matchCrawl->getMatchLinkDetailFlashscore() == "" || $matchCrawl->getMatchLinkDetailFlashscore() == null) {
             goto end;
