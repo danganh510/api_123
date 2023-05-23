@@ -33,15 +33,19 @@ class CrawlerController extends ControllerBase
         $time_plus = $this->request->get("timePlus");
         $is_live = (bool) $this->request->get("isLive");
         $off = $this->request->get("off");
+        $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
         if ($off == 1) {
             $currentHour = date('G');
             $currentMinutes = date('i');
-            if ($currentHour >= 0 && $currentHour <= 1 && $currentMinutes >= 0 && $currentMinutes < 15) {
-                echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
-                die();
+            if ($time_plus + $dayOfWeek == 6 || $time_plus + $dayOfWeek == 7) {
+                if ($currentHour >= 0 && $currentHour <= 3) {
+                    echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
+                    die();
+                }
             }
+            
             //7h tới 11h tối thứ 7 cn tắt detail
-            $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
+   
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
             if ($dayOfWeek == 6 || $dayOfWeek == 7) {
 
@@ -53,11 +57,13 @@ class CrawlerController extends ControllerBase
         } elseif ($off == 2) {
             $currentHour = date('G');
             $currentMinutes = date('i');
-            if ($currentHour >= 0 && $currentHour <= 1 && $currentMinutes >= 0 && $currentMinutes < 15) {
-                echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
-                die();
+            if ($time_plus + $dayOfWeek == 6 || $time_plus + $dayOfWeek == 7) {
+                if ($currentHour >= 0 && $currentHour <= 3) {
+                    echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
+                    die();
+                }
             }
-            $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
+
             echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
             if ($dayOfWeek == 6 || $dayOfWeek == 7) {
 
