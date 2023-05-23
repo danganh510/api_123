@@ -78,7 +78,7 @@ class GetdataController extends ControllerBase
             } else {
                 $result = $getData->getListTableLang($this->requestParams, $modelInfo);
             }
-            $cacheData->setCache($result);
+         //   $cacheData->setCache($result);
         }
         // if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
         //     $result = $getData->getListTable($this->requestParams, $modelInfo);
