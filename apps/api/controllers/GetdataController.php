@@ -71,21 +71,21 @@ class GetdataController extends ControllerBase
         }
         // $cacheData = new CacheGetData($this->requestParams);
         // $result = $cacheData->getCache();
-        $result = [];
-        if (empty($result)) {
-            if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
-                $result = $getData->getListTable($this->requestParams, $modelInfo);
-            } else {
-                $result = $getData->getListTableLang($this->requestParams, $modelInfo);
-            }
-         //   $cacheData->setCache($result);
-        }
+        // $result = [];
+        // if (empty($result)) {
+        //     if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
+        //         $result = $getData->getListTable($this->requestParams, $modelInfo);
+        //     } else {
+        //         $result = $getData->getListTableLang($this->requestParams, $modelInfo);
+        //     }
+        //  //   $cacheData->setCache($result);
+        // }
         // if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
         //     $result = $getData->getListTable($this->requestParams, $modelInfo);
         // } else {
         //     $result = $getData->getListTableLang($this->requestParams, $modelInfo);
         // }
-       
+        $result = $getData->getListTable($this->requestParams, $modelInfo);
         $dataReturn = [
             'code' => 200,
             'status' => true,
