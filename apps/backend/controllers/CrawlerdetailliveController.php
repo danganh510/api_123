@@ -95,7 +95,10 @@ class CrawlerdetailliveController extends ControllerBase
             echo "crawl succes--";
         }
    
-   
+   var_dump((
+    (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
+    && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || trim($detail['match']['timeNow']) == "Postponed"
+   ));exit;
         //lưu thông tin mới của match
         if (
             (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
