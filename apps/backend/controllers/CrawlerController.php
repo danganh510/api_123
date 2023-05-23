@@ -43,7 +43,7 @@ class CrawlerController extends ControllerBase
             //         die();
             //     }
             // }
-            if ($currentHour >= 0 && $currentHour <= 3) {
+            if ($currentHour >= 1 && $currentHour <= 4) {
                 echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
                 die();
             }
@@ -60,7 +60,7 @@ class CrawlerController extends ControllerBase
         } elseif ($off == 2) {
             $currentHour = date('G');
             $currentMinutes = date('i');
-            if ($currentHour >= 0 && $currentHour <= 3) {
+            if ($currentHour >= 1 && $currentHour <= 4) {
                 echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
                 die();
             }
