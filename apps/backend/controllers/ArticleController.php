@@ -344,7 +344,6 @@ class ArticleController extends ControllerBase
                 }
                 if ($result) {
                     if($save_mode == ScLanguage::GENERAL) {
-                        var_dump($_POST['txtTag']);exit;
                         
                         $arTag = $_POST['txtTag'];
                         $ar_tag_id = [];

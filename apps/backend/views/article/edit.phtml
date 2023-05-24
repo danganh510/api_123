@@ -110,7 +110,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="slcType">Tag </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select multiple id="txtTag" name="txtTag" class="form-control <?php echo isset($messages["article_type_id"]) ? $messages["status"] : ""; ?>">
+                            <select multiple id="txtTag" name="txtTag[]" class="form-control <?php echo isset($messages["article_type_id"]) ? $messages["status"] : ""; ?>">
                                 <option value="">Select Tag...</option>
                                 <?= isset($select_tag) ? $select_tag : ""
                                 ?>
