@@ -14,6 +14,7 @@ use Score\Utils\Validator;
 use Phalcon\Paginator\Adapter\NativeArray;
 use Score\Models\ScTag;
 use Score\Repositories\Language;
+use Tag;
 
 class ArticleController extends ControllerBase
 {
@@ -86,6 +87,7 @@ class ArticleController extends ControllerBase
     {
         $data = array('id' => -1, 'article_order' => 1, 'article_active' => 'Y', 'article_is_home' => 'N', 'article_type_id' => "",);
         $messages = array();
+        $ar_tag_id = [];
         if ($this->request->isPost()) {
             $messages = array();
             $data = array(
@@ -132,7 +134,7 @@ class ArticleController extends ControllerBase
             } else if (!is_numeric($data['article_order'])) {
                 $messages['article_order'] = "Order is not valid";
             }
-            $ar_tag_id = [];
+      
 
             if (count($messages) == 0) {
                 $msg_result = array();
@@ -188,10 +190,13 @@ class ArticleController extends ControllerBase
         $type = new Type();
         $select_type = $type->getParentIdType("", 0, $data["article_type_id"]);
         $messages["status"] = "border-red";
+        $select_tag = Article::selectTag($ar_tag_id);
+
         $this->view->setVars([
             'oldinput' => $data,
             'messages' => $messages,
             'select_type' => $select_type,
+            'select_tag' => $select_tag
         ]);
     }
 
