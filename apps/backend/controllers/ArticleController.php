@@ -241,6 +241,7 @@ class ArticleController extends ControllerBase
             'article_update_time' => $this->globalVariable->curTime,
         );
         $save_mode = '';
+        $ar_tag_id = explode(",",$article_model->getArticleTagId());
 
         if ($this->request->isPost()) {
             if (!isset($_POST['save'])) {
@@ -344,6 +345,7 @@ class ArticleController extends ControllerBase
                 if ($result) {
                     if($save_mode == ScLanguage::GENERAL) {
                         $arTag = explode(";",$data_post['article_tag']);
+                        $ar_tag_id = [];
                         foreach ($arTag as $tag) {
                             if (!$tag) {
                                 continue;
@@ -437,6 +439,7 @@ class ArticleController extends ControllerBase
         );
         $messages["status"] = "border-red";
         $select_type = Type::getParentIdType("", 0, $formData["article_type_id"]);
+        $select_tag = Article::selectTag($ar_tag_id);
         $this->view->setVars([
             'formData' => $formData,
             'messages' => $messages,
