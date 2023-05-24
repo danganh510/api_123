@@ -34,7 +34,7 @@ class DeletecachetoolController extends ControllerBase
             $urlDelete =  "http://123tyso.live";
             $URL_DELETE_CACHE_TOOL = $urlDelete.'/delete-cache-data';
             $result = self::curl_get_contents($URL_DELETE_CACHE_TOOL);
-            file_get_contents("https://213tyso.com/deletecache.php");
+            file_get_contents("https://123tyso.com/deletecache.php");
             $this->session->set('msg_result', $result);
             $this->response->redirect("/dashboard/list-deletecachetool");
         }
