@@ -4,6 +4,9 @@
             tags: true,
             tokenSeparators: [',', ' ']
         });
+        $("#slcType").select2({
+            tags: true
+        });
         $('form[name=type-form]').submit(function(event) {
             var valid = true;
 
