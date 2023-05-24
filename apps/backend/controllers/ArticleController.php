@@ -157,8 +157,7 @@ class ArticleController extends ControllerBase
                 $result = $new_article->save();
 
                 if ($result === true) {
-                    $data['article_tag'] = $this->request->get("txtTag");
-                    $arTag = explode(";",$data['article_tag']);
+                    $arTag = $_POST['txtTag'];
                     foreach ($arTag as $tag) {
                         if (!$tag) {
                             continue;
@@ -345,8 +344,9 @@ class ArticleController extends ControllerBase
                 }
                 if ($result) {
                     if($save_mode == ScLanguage::GENERAL) {
-                        $arTag = explode(";",$data_post['article_tag']);
+                        $arTag = $_POST['txtTag'];
                         $ar_tag_id = [];
+                    
                         foreach ($arTag as $tag) {
                             if (!$tag) {
                                 continue;
