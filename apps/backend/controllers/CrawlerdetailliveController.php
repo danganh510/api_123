@@ -64,8 +64,7 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
         $matchCrawl->setMatchInsertTime(time());
-        $matchCrawl->save();
-
+        $result = $matchCrawl->save();
         echo $matchCrawl->getMatchId() . "---";
         if ($matchCrawl->getMatchLinkDetailFlashscore() == "" || $matchCrawl->getMatchLinkDetailFlashscore() == null) {
             goto end;
@@ -95,12 +94,11 @@ class CrawlerdetailliveController extends ControllerBase
         if ($result) {
             echo "crawl succes--";
         }
-   
-   
+
         //lưu thông tin mới của match
         if (
             (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
-            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || trim($detail['match']['timeNow']) == "Postponed"
+            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || !is_numeric($detail['match']['timeNow'])
         ) {
 
 

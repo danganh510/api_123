@@ -51,7 +51,7 @@ class MatchRepo extends Component
         //     ]
         // ]);
         //chuyển crawl flashscore, sử dụng link để tìm, tránh trường hợp hoãn trận đấu dẫn đến 2 trận đấu giống nhau
-        
+
         $matchSave = ScMatch::findFirst([
             " match_link_detail_flashscore = :id_match_flashscore:",
             'bind' => [
@@ -245,6 +245,12 @@ class MatchRepo extends Component
                 $time_live = "Postponed";
                 $status = self::MATH_POSTPONED;
                 break;
+            case "Cancelled":
+                $time = 135;
+                $start_time = time() - $time * 60;
+                $time_live = "Cancelled";
+                $status = self::MATH_CANCEL;
+                break;
             default:
                 if (strpos($match_time, "ExtraTime") !== false) {
                     $arrTime = explode(" ", $match_time);
@@ -410,10 +416,10 @@ class MatchRepo extends Component
     public static function getMatchToday($time_request)
     {
         $today = strtotime($time_request);
-        $start_day = $today  - 7 * 60 * 60;
+        $start_day = $today - 7 * 60 * 60;
         //thời gian bonus là +- 160 phút
         $bonus_start_day = $start_day - 160 * 60;
-        $end_day = $start_day + 24 * 60 * 60 ;
+        $end_day = $start_day + 24 * 60 * 60;
         //thời gian bonus là +- 160 phút
         $bonus_end_day = $end_day + 160 * 60;
         $arrMatch = ScMatch::find([
