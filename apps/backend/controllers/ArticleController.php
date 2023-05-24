@@ -165,7 +165,7 @@ class ArticleController extends ControllerBase
                         $tag_model = ScTag::findTagByName($tag);
                         if (!$tag_model) {
                             $tag_model = new ScTag();
-                            $tag_model->setTagName($tag);
+                            $tag_model->setTagName(trim($tag));
                             $tag_model->save();
                         }
                         $ar_tag_id[] = $tag_model->getTagId();
@@ -355,7 +355,7 @@ class ArticleController extends ControllerBase
                             $tag_model = ScTag::findTagByName($tag);
                             if (!$tag_model) {
                                 $tag_model = new ScTag();
-                                $tag_model->setTagName($tag);
+                                $tag_model->setTagName(trim($tag));
                                 $tag_model->save();
                             }
                             $ar_tag_id[] = $tag_model->getTagId();
