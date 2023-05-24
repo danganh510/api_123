@@ -17,13 +17,13 @@ use Score\Models\ScType;
 
 class Article extends Component
 {
-    public static function selectTag($arTagSelect)
+    public static function selectTag($arTagIdSelect)
     {
         $arTag = ScTag::find();
         $output = "";
         foreach ($arTag as $key => $value) {
             $selected = "";
-            if (in_array($value->tag_name, $arTagSelect)) {
+            if (in_array($value->tag_id, $arTagIdSelect)) {
                 $selected = "selected='selected'";
             }
             $output .= "<option " . $selected . " value='" . $value->tag_name . "'>" .  $value->tag_name. "</option>";

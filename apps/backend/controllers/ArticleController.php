@@ -242,7 +242,6 @@ class ArticleController extends ControllerBase
         );
         $save_mode = '';
         $ar_tag_id = explode(",",$article_model->getArticleTagId());
-        var_dump($ar_tag_id);exit;
         
 
         if ($this->request->isPost()) {
@@ -446,6 +445,7 @@ class ArticleController extends ControllerBase
             'formData' => $formData,
             'messages' => $messages,
             'select_type' => $select_type,
+            'select_tag' => $select_tag
         ]);
     }
 
