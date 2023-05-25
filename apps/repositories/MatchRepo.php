@@ -58,7 +58,7 @@ class MatchRepo extends Component
                 'id_match_flashscore' => $match->getHrefDetail(),
             ]
         ]);
-        if (!$timeInfo['start_time']) {
+        if (!isset($timeInfo['start_time']) || !$timeInfo['start_time']) {
             $timeInfo['start_time'] = $match->getTime();
             $day_start = date('d', time());
             $month_start = date('m', time());
