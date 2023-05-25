@@ -258,6 +258,12 @@ class MatchRepo extends Component
                 $time_live = "Cancelled";
                 $status = self::MATH_CANCEL;
                 break;
+            case "Walkover":
+                $time = 90;
+                $start_time = time() - $time * 60;
+                $time_live = "Walkover";
+                $status = self::MATH_STATUS_FINSH;
+                break;
             default:
                 if (strpos($match_time, "ExtraTime") !== false) {
                     $arrTime = explode(" ", $match_time);
