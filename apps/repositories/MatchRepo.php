@@ -99,7 +99,7 @@ class MatchRepo extends Component
             $month_start = date('m', $timeInfo['start_time']);
             $year_start = date('Y', $timeInfo['start_time']);
             //use crawl api
-            if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
+            if (!$matchSave->getMatchStartTime() || abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
                 $matchSave->setMatchStartTime($timeInfo['start_time']);
                 $matchSave->setMatchStartDay($day_start);
                 $matchSave->setMatchStartMonth($month_start);
