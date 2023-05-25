@@ -79,10 +79,7 @@ class MatchRepo extends Component
             $matchSave->setMatchStartDay($day_start);
             $matchSave->setMatchStartMonth($month_start);
             $matchSave->setMatchStartYear($year_start);
-            if ($timeInfo['start_time']) {
-                //use crawl api
-                $matchSave->setMatchStartTime($timeInfo['start_time']);
-            }
+
 
             $matchSave->setMatchTournamentId($tournament->getTournamentId());
             if ($type_crawl == MatchCrawl::TYPE_FLASH_SCORE) {
@@ -96,6 +93,18 @@ class MatchRepo extends Component
                 $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
             }
             $matchSave->setMatchOrder(1);
+        }
+        if ($timeInfo['start_time']) {
+            $day_start = date('d', $timeInfo['start_time']);
+            $month_start = date('m', $timeInfo['start_time']);
+            $year_start = date('Y', $timeInfo['start_time']);
+            //use crawl api
+            if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
+                $matchSave->setMatchStartTime($timeInfo['start_time']);
+                $matchSave->setMatchStartDay($day_start);
+                $matchSave->setMatchStartMonth($month_start);
+                $matchSave->setMatchStartYear($year_start);
+            }
         }
         if ($match->getRound()) {
             $matchSave->setMatchRound($match->getRound());
