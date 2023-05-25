@@ -20,13 +20,10 @@ class MyRepo extends Component
         $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
         $currentHour = date('G');
        // echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
-        if ($currentHour >= 11 && $currentHour <= 16) {
-            if ($dayOfWeek != 6 && $dayOfWeek != 7) {
-                $second =  date("s", time());
-                if (($second >= 26 && $second <= 32) || ($second >= 46 && $second <= 52)) {
+        if ($currentHour >= 8 && $currentHour <= 20) {
+            if ($dayOfWeek == 6 && $dayOfWeek == 7) {
                 //    echo "gio cao diem";
                     return true;;
-                }
             }
         }
         return false;

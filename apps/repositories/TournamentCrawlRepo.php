@@ -21,27 +21,32 @@ class TournamentCrawlRepo extends Component
     }
     public function getTournament($strTour)
     {
+        if (!MyRepo::checkTimeEndWeek()) {
+            $tour = false;
+            goto not_primary;
+        }
         $time_test = microtime(true);
         $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND tournament_crawl = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}')");
-echo "data1: ".(microtime(true) - $time_test);
+        echo "data1: " . (microtime(true) - $time_test);
         if (!$tour) {
             $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}') AND tournament_crawl = 'Y'";
             $this->modelsManager->executeQuery($sql);
             echo "All reset \r\n";
             $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') AND tournament_crawl = 'Y'");
-            echo "data2: ".(microtime(true) - $time_test);
+            echo "data2: " . (microtime(true) - $time_test);
+        }
 
-            if (!$tour) {
+        not_primary:
+        if (!$tour) {
+            $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') ");
+            if ($tour) {
+                $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}')";
+                $this->modelsManager->executeQuery($sql);
+                echo "All reset \r\n";
                 $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') ");
-                if ($tour) {
-                    $sql = "UPDATE Score\Models\ScTournament SET tournament_is_crawling = 'Y' WHERE FIND_IN_SET(tournament_id,'{$strTour}')";
-                    $this->modelsManager->executeQuery($sql);
-                    echo "All reset \r\n";
-                    $tour = ScTournament::findFirst("tournament_is_crawling = 'Y' AND FIND_IN_SET(tournament_id,'{$strTour}') ");
-                }
             }
         }
-        echo "data3: ".(microtime(true) - $time_test);
+        echo "data3: " . (microtime(true) - $time_test);
 
         return $tour;
     }
