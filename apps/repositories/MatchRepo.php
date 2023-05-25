@@ -58,6 +58,16 @@ class MatchRepo extends Component
                 'id_match_flashscore' => $match->getHrefDetail(),
             ]
         ]);
+        if (!$timeInfo['start_time']) {
+            $timeInfo['start_time'] = $match->getTime();
+            $day_start = date('d', time());
+            $month_start = date('m', time());
+            $year_start = date('Y', time());
+        } else {
+            $day_start = date('d', $timeInfo['start_time']);
+            $month_start = date('m', $timeInfo['start_time']);
+            $year_start = date('Y', $timeInfo['start_time']);
+        }
 
         if (!$matchSave) {
             $is_new = true;
@@ -65,21 +75,6 @@ class MatchRepo extends Component
             $matchSave->setMatchName($home->getTeamSlug() . "-vs-" . $away->getTeamSlug());
             $matchSave->setMatchHomeId($home->getTeamId());
             $matchSave->setMatchAwayId($away->getTeamId());
-
-            if (!$timeInfo['start_time']) {
-                $timeInfo['start_time'] = $match->getTime();
-                $day_start = date('d', time());
-                $month_start = date('m', time());
-                $year_start = date('Y', time());
-            } else {
-                $day_start = date('d', $timeInfo['start_time']);
-                $month_start = date('m', $timeInfo['start_time']);
-                $year_start = date('Y', $timeInfo['start_time']);
-            }
-            $matchSave->setMatchStartDay($day_start);
-            $matchSave->setMatchStartMonth($month_start);
-            $matchSave->setMatchStartYear($year_start);
-
 
             $matchSave->setMatchTournamentId($tournament->getTournamentId());
             if ($type_crawl == MatchCrawl::TYPE_FLASH_SCORE) {
@@ -93,19 +88,22 @@ class MatchRepo extends Component
                 $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
             }
             $matchSave->setMatchOrder(1);
+
+            $matchSave->setMatchStartDay($day_start);
+            $matchSave->setMatchStartMonth($month_start);
+            $matchSave->setMatchStartYear($year_start);
+            $matchSave->setMatchStartTime($timeInfo['start_time']);
         }
-        if ($timeInfo['start_time']) {
-            $day_start = date('d', $timeInfo['start_time']);
-            $month_start = date('m', $timeInfo['start_time']);
-            $year_start = date('Y', $timeInfo['start_time']);
+    
+
+        if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
             //use crawl api
-            if (!$matchSave->getMatchStartTime() || abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
-                $matchSave->setMatchStartTime($timeInfo['start_time']);
-                $matchSave->setMatchStartDay($day_start);
-                $matchSave->setMatchStartMonth($month_start);
-                $matchSave->setMatchStartYear($year_start);
-            }
+            $matchSave->setMatchStartTime($timeInfo['start_time']);
+            $matchSave->setMatchStartDay($day_start);
+            $matchSave->setMatchStartMonth($month_start);
+            $matchSave->setMatchStartYear($year_start);
         }
+
         if ($match->getRound()) {
             $matchSave->setMatchRound($match->getRound());
         }
