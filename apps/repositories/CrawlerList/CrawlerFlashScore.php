@@ -25,7 +25,7 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
             $this->deleteFolder();
             $cronModel = new ScCron();
             $cronModel->setCronTime($this->day_time);
-            $cronModel->setCronDay($this->my->getDays(time(),strtotime($this->day_time)));
+            $cronModel->setCronDay($this->my->getDays(time(), strtotime($this->day_time)));
             $cronModel->setCronStatus("Y");
             $cronModel->Save();
         }
@@ -97,20 +97,20 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
             'cron_time = :date: AND cron_day = :day_plus:',
             'bind' => [
                 'date' => $this->day_time,
-                'day_plus' => $this->my->getDays(time(),strtotime($this->day_time))
+                'day_plus' => $this->my->getDays(time(), strtotime($this->day_time))
             ]
         ]);
         $cronModelNo = ScCron::findFirst([
             'cron_status = "Y" AND cron_day = :day_plus:',
             'bind' => [
-                'day_plus' => $this->my->getDays(time(),strtotime($this->day_time))
+                'day_plus' => $this->my->getDays(time(), strtotime($this->day_time))
             ]
         ]);
         if ($cronModelNo && $cronModelNo->getCronTime() != $this->day_time) {
             $cronModelNo->setCronStatus("N");
             $cronModelNo->save();
         }
-        
+
         if (!$cronModel || $cronModel->getCronStatus() == "Y") {
             $this->saveFile($cronModel);
             echo "Cache Match";

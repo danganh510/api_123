@@ -14,6 +14,24 @@ use Exception;
 
 class MyRepo extends Component
 {
+    public static function checkTimeEndWeek()
+    {
+        //7h tới 11h tối thứ 7 cn tắt detail
+        $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
+        $currentHour = date('G');
+       // echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
+        if ($currentHour >= 11 && $currentHour <= 16) {
+            if ($dayOfWeek != 6 && $dayOfWeek != 7) {
+                $second =  date("s", time());
+                if (($second >= 26 && $second <= 32) || ($second >= 46 && $second <= 52)) {
+                //    echo "gio cao diem";
+                    return true;;
+                }
+            }
+        }
+        return false;
+    
+    }
     public static function replace_space($string)
     {
         return str_replace(" ", "", $string);
