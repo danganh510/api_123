@@ -72,18 +72,18 @@ class CrawlerFlashScore extends CrawlerFlashScoreBase
         if ($key_now + 1 >= $total_div) {
             $cronModel->setCronStatus("N");
 
-            //tìm cron chạy ngày hnay để xóa đi và chạy lại
-            $today = $this->my->formatDateYMD(time());
-            $cronModelToday = ScCron::findFirst([
-                'cron_time = :time: AND cron_day = :day_plus:',
-                'bind' => [
-                    'time' => $today,
-                    'day_plus' => $this->my->getDays(time(),strtotime($this->day_time))
-                ]
-            ]);
-            if ($cronModelToday) {
-                $cronModelToday->delete();
-            } 
+            // //tìm cron chạy ngày hnay để xóa đi và chạy lại
+            // $today = $this->my->formatDateYMD(time());
+            // $cronModelToday = ScCron::findFirst([
+            //     'cron_time = :time: AND cron_day = :day_plus:',
+            //     'bind' => [
+            //         'time' => $today,
+            //         'day_plus' => $this->my->getDays(time(),strtotime($this->day_time))
+            //     ]
+            // ]);
+            // if ($cronModelToday) {
+            //     $cronModelToday->delete();
+            // } 
         }
         if ($cronModel) {
             $cronModel->setCronCount($total_div);
