@@ -95,12 +95,15 @@ class CrawlerdetailliveController extends ControllerBase
         }
 
         //lưu thông tin mới của match
+        if (isset($detail['match']['timeNow'])) {
+            $detail['match']['timeNow'] = trim($detail['match']['timeNow']);
+
+        }
         if (
             (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
             && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || !is_numeric($detail['match']['timeNow'])
         ) {
 
-            $detail['match']['timeNow'] = trim($detail['match']['timeNow']);
 
             if (is_numeric($detail['match']['homeScore'])) {
                 $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
