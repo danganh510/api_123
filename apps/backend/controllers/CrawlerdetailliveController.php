@@ -85,6 +85,16 @@ class CrawlerdetailliveController extends ControllerBase
             $infoModel = new ScMatchInfo();
             $infoModel->setInfoMatchId($matchCrawl->getMatchId());
         }
+        if (!$detail) {
+            $matchCrawl->setMatchStatus("C");
+            $matchCrawl->save();
+            echo "not found match";
+            $infoModel->setInfoTime(json_encode([]));
+            $infoModel->setInfoStats(json_encode([]));
+            $infoModel->setInfoSummary(json_encode([]));
+            $result = $infoModel->save();
+           
+        }
         $infoModel->setInfoTime(json_encode($detail['info']));
         $infoModel->setInfoStats(json_encode($detail['start']));
         $infoModel->setInfoSummary(json_encode($detail['tracker']));
@@ -93,12 +103,7 @@ class CrawlerdetailliveController extends ControllerBase
         if ($result) {
             echo "crawl succes--";
         }
-        if (!$detail) {
-            $matchCrawl->setMatchStatus("C");
-            $matchCrawl->save();
-            echo "not found match";
-           
-        }
+      
 
         //lưu thông tin mới của match
         if (isset($detail['match']['timeNow'])) {
