@@ -93,6 +93,7 @@ class CrawlerdetailliveController extends ControllerBase
             $infoModel->setInfoStats(json_encode([]));
             $infoModel->setInfoSummary(json_encode([]));
             $result = $infoModel->save();
+            die();
            
         }
         $infoModel->setInfoTime(json_encode($detail['info']));
