@@ -98,7 +98,7 @@ class MatchRepo extends Component
 
        // if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
             //use crawl api
-            if (!in_array($matchSave->getMatchStatus(),["S","F","W"])) {
+            if (in_array($matchSave->getMatchStatus(),[MatchRepo::MATH_CANCEL,MatchRepo::MATH_POSTPONED])) {
                 $matchSave->setMatchStartTime($timeInfo['start_time']);
                 $matchSave->setMatchStartDay($day_start);
                 $matchSave->setMatchStartMonth($month_start);
