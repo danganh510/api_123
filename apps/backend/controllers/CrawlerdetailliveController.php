@@ -88,10 +88,16 @@ class CrawlerdetailliveController extends ControllerBase
         $infoModel->setInfoTime(json_encode($detail['info']));
         $infoModel->setInfoStats(json_encode($detail['start']));
         $infoModel->setInfoSummary(json_encode($detail['tracker']));
-
+     
         $result = $infoModel->save();
         if ($result) {
             echo "crawl succes--";
+        }
+        if (!$detail) {
+            $matchCrawl->setMatchStatus("C");
+            $matchCrawl->save();
+            echo "not found match";
+           
         }
 
         //lưu thông tin mới của match
