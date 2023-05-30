@@ -96,13 +96,16 @@ class MatchRepo extends Component
         }
     
 
-        if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
+       // if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
             //use crawl api
-            $matchSave->setMatchStartTime($timeInfo['start_time']);
-            $matchSave->setMatchStartDay($day_start);
-            $matchSave->setMatchStartMonth($month_start);
-            $matchSave->setMatchStartYear($year_start);
-        }
+            if (!in_array($matchSave->getMatchStatus(),["S","F","W"])) {
+                $matchSave->setMatchStartTime($timeInfo['start_time']);
+                $matchSave->setMatchStartDay($day_start);
+                $matchSave->setMatchStartMonth($month_start);
+                $matchSave->setMatchStartYear($year_start);
+            }
+           
+     //   }
 
         if ($match->getRound()) {
             $matchSave->setMatchRound($match->getRound());
