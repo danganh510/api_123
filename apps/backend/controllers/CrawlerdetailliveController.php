@@ -75,7 +75,6 @@ class CrawlerdetailliveController extends ControllerBase
         //tab: info,tracker,statistics
         $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
         $detail = $crawler->getInstance();
-        $detail['match']['timeNow'] = trim($detail['match']['timeNow']);
         $infoModel = ScMatchInfo::findFirst([
             'info_match_id = :id:',
             'bind' => [
@@ -101,6 +100,7 @@ class CrawlerdetailliveController extends ControllerBase
             && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || !is_numeric($detail['match']['timeNow'])
         ) {
 
+            $detail['match']['timeNow'] = trim($detail['match']['timeNow']);
 
             if (is_numeric($detail['match']['homeScore'])) {
                 $matchCrawl->setMatchHomeScore($detail['match']['homeScore']);
