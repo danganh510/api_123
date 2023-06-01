@@ -100,7 +100,7 @@ class CrawlerFlashScoreBase extends CrawlerList
         $group = "";
         if ((strpos($name, "Group") || strpos($name, "Offs") || strpos($name, "Apertura") || strpos($name, "Clausura")
                 || strpos($name, "Clausura") ||  strpos($name, "places") ||  strpos($name, "stage") ||  strpos($name, "Round")
-                 ||  strpos($name, "round")  || strpos($name, "Addtional"))
+                 ||  strpos($name, "round")  || strpos($name, "Additional"))
             && strpos($name, "-")
         ) {
           
