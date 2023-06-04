@@ -23,14 +23,26 @@ class CacheGetData extends Component
         if (!is_dir(self::filePath)) {
             mkdir(self::filePath);
         }
-        $this->key = "";
+        $this->key = $this->formatKey($param);
+      
+    }
+    private function formatKey($param)
+    {
+
+        $key = "";
+        $key = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $key);
+
         if (!empty($param)) {
             foreach ($param as $key => $value) {
+
                 $value = trim(json_encode($value));
+                $value = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $value);
                 $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
-                $this->key .= "_$value";
+                $key .= "_$value";
             }
         }
+        
+        return $key;
     }
     public function deleteFolder()
     {
@@ -119,7 +131,7 @@ class CacheGetData extends Component
     public static function getFrontCache()
     {
         if (self::$frontCache == null) {
-            self::$frontCache = new FrontData(['lifetime' => 48 * 60 * 60]);
+            self::$frontCache = new FrontData(['lifetime' => 24 * 60 * 60]);
         }
 
         return self::$frontCache;

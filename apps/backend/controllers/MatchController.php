@@ -2,7 +2,7 @@
 namespace Score\Backend\Controllers;
 
 use Score\Repositories\Country;
-use Score\Repositories\Match;
+// use Score\Repositories\Match;
 use Score\Models\ScMatch;
 use Score\Utils\Validator;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
@@ -102,9 +102,10 @@ class MatchController extends ControllerBase
             }
             if ($data['match_code'] == "") {
                 $messages['code'] = 'Code field is required.';
-            } else if (Match::checkCode($data['match_code'], -1)) {
-                $messages["code"] = "Code is exists.";
-            }
+            } 
+            // else if (Match::checkCode($data['match_code'], -1)) {
+            //     $messages["code"] = "Code is exists.";
+            // }
             if (empty($data['match_order'])) {
                 $messages["order"] = "Order field is required.";
             } else if (!is_numeric($data["match_order"])) {

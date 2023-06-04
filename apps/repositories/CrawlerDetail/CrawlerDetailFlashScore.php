@@ -23,6 +23,9 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $info = $this->crawlDetailInfo();
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
+        if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
+            return false;
+        }
 
         $result = [
             'match' => $info['match'],
@@ -31,6 +34,13 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             'tracker' => $tracker,
         ];
         return $result;
+    }
+    public function checkHasExist() {
+        $parentDiv = $this->seleniumDriver->findElement('p > strong');
+        if ($parentDiv->text() == "Error:") {
+            return true;
+        }
+        return false;
     }
     /**
      * @ $this->seleniumDriver Selenium
@@ -52,6 +62,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     public function getDivInfo()
     {
         $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
+        if (!$parentDiv) return "";
 
         $htmlDivInfo = $parentDiv->getAttribute("outerHTML");
 
@@ -71,6 +82,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         sleep(0.5);
         $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
+        if (!$parentDiv) return "";
         $htmlDivStart = $parentDiv->getAttribute("outerHTML");
 
         $htmlDivStart = "<!DOCTYPE html>" . $htmlDivStart;
@@ -90,6 +102,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         sleep(0.5);
         $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
+        if (!$parentDiv) return "";
         $htmlTRacker = $parentDiv->getAttribute("outerHTML");
 
         $htmlTRacker = "<!DOCTYPE html>" . $htmlTRacker;
@@ -329,6 +342,10 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $svg = $description->find("div > div", 0);
         if (!$svg) {
             $svg = $description->find("div", 0);
+            if (!$svg->find("title")) {
+                $svg = $description->find("div",1);
+
+            }
         }
         //get event
         if ($svg) {
@@ -359,7 +376,8 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 }
             } else {
                 $class_attr = $svg->getAttribute('class');
-                $event = $class_attr;
+                $class_attr = explode(" ",$class_attr)[0];
+                $event = trim($class_attr);
             }
             
           

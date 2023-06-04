@@ -24,13 +24,17 @@ class CrawlerdetailliveController extends ControllerBase
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
     public function indexAction()
     {
-        $this->checkTimeList();
+        $id = $this->request->get("id");
+
+        if (!$id) {
+            $this->checkTimeList();
+        }
+
         $start_time_cron = time();
         echo "============================\n\r";
         echo "Start crawl data in " . $this->my->formatDateTime($start_time_cron) . "\n\r";
         ini_set('max_execution_time', 20);
         $is_live =  $this->request->get("isLive");
-        $id = $this->request->get("id");
         $this->type_crawl = $this->request->get("type");
         $is_nomal = $this->request->get("isNomal");
 
@@ -60,8 +64,7 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
         $matchCrawl->setMatchInsertTime(time());
-        $matchCrawl->save();
-
+        $result = $matchCrawl->save();
         echo $matchCrawl->getMatchId() . "---";
         if ($matchCrawl->getMatchLinkDetailFlashscore() == "" || $matchCrawl->getMatchLinkDetailFlashscore() == null) {
             goto end;
@@ -72,7 +75,6 @@ class CrawlerdetailliveController extends ControllerBase
         //tab: info,tracker,statistics
         $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
         $detail = $crawler->getInstance();
-        $detail['match']['timeNow'] = trim($detail['match']['timeNow']);
         $infoModel = ScMatchInfo::findFirst([
             'info_match_id = :id:',
             'bind' => [
@@ -83,20 +85,35 @@ class CrawlerdetailliveController extends ControllerBase
             $infoModel = new ScMatchInfo();
             $infoModel->setInfoMatchId($matchCrawl->getMatchId());
         }
+        if (!$detail) {
+            $matchCrawl->setMatchStatus("C");
+            $matchCrawl->save();
+            echo "not found match";
+            $infoModel->setInfoTime(json_encode([]));
+            $infoModel->setInfoStats(json_encode([]));
+            $infoModel->setInfoSummary(json_encode([]));
+            $result = $infoModel->save();
+            die();
+           
+        }
         $infoModel->setInfoTime(json_encode($detail['info']));
         $infoModel->setInfoStats(json_encode($detail['start']));
         $infoModel->setInfoSummary(json_encode($detail['tracker']));
-
+     
         $result = $infoModel->save();
         if ($result) {
             echo "crawl succes--";
         }
-   
-   
+      
+
         //lưu thông tin mới của match
+        if (isset($detail['match']['timeNow'])) {
+            $detail['match']['timeNow'] = trim($detail['match']['timeNow']);
+
+        }
         if (
             (!empty($detail['match']) && isset($detail['match']['homeScore']) && isset($detail['match']['awayScore'])
-            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || trim($detail['match']['timeNow']) == "Postponed"
+            && is_numeric($detail['match']['homeScore']) && is_numeric($detail['match']['homeScore'])) || !is_numeric($detail['match']['timeNow'])
         ) {
 
 

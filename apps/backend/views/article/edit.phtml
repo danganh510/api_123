@@ -1,5 +1,12 @@
 <script>
     $(document).ready(function() {
+        $("#txtTag").select2({
+            tags: true,
+            tokenSeparators: [',', ' ']
+        });
+        $("#slcType").select2({
+            tags: true
+        });
         $('form[name=type-form]').submit(function(event) {
             var valid = true;
 
@@ -103,6 +110,24 @@
                             <span class="text-danger msg-type"><?php echo isset($messages["article_type_id"]) ? $messages["article_type_id"] : "" ?></span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="slcType">Tag </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select multiple id="txtTag" name="txtTag[]" class="form-control <?php echo isset($messages["article_type_id"]) ? $messages["status"] : ""; ?>">
+                                <option value="">Select Tag...</option>
+                                <?= isset($select_tag) ? $select_tag : ""
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                  <?php /*  <div class="form-group">
+                        <label for="txtTitle" class="control-label col-md-3 col-sm-3 col-xs-12">Tag</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input placeholder=";" maxlength="255" value="<?php echo isset($formData["article_tag"]) ? $formData["article_tag"] : "" ?>" id="txtTag" class="form-control col-md-7 col-xs-12" type="text" name="txtTag">
+                        </div>
+                        <span class="text-danger msg-tag">use ; to array tag</span>
+                    </div>
+                    */ ?>
 
                     <div class="form-group">
                         <label for="txtTitle" class="control-label col-md-3 col-sm-3 col-xs-12">Image Thumb</label>

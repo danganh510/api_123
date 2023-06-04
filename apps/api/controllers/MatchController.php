@@ -3,6 +3,8 @@
 namespace Score\Api\Controllers;
 
 use ConstEnv;
+use Score\Models\ScArea;
+use Score\Models\ScCountry;
 use Score\Models\ScMatch;
 use Score\Models\ScTeam;
 use Score\Repositories\CacheMatch;
@@ -43,7 +45,7 @@ class MatchController extends ControllerBase
         // $matchRepo = new MatchRepo();
         // $arrMatch = $matchRepo->getMatch($time, $status);
         if ($this->my->getDays($time, time() + $time_zone * 60 * 60) == 0 && !$isLive) {
-            $arrMatch = MatchRepo::getMatchToday();
+            $arrMatch = MatchRepo::getMatchToday($time_request);
             $arrMatch = $arrMatch->toArray();
         } else {
             $arrMatch = $cacheMatch->getCache();
@@ -133,7 +135,7 @@ class MatchController extends ControllerBase
                                 'slug' => "football"
                             ],
                             'flag' => $arrTournament[$match['match_tournament_id']]['tournament_country'],
-                            'countryCode' => $arrTournament[$match['match_tournament_id']]['tournament_country_code']
+                            'countryCode' => $arrTournament[$match['match_tournament_id']]['tournament_country_code'],
                         ]
                     ],
                     'match' => [

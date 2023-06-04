@@ -19,6 +19,7 @@ class MatchRepo extends Component
     const MATH_CANCEL = "C";
     const MATH_AFTER_FT = "A";
     const MATH_POSTPONED = "P";
+    const MATH_ABANDONED = "AB";
 
 
     public function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [], $is_list = true)
@@ -51,13 +52,23 @@ class MatchRepo extends Component
         //     ]
         // ]);
         //chuyển crawl flashscore, sử dụng link để tìm, tránh trường hợp hoãn trận đấu dẫn đến 2 trận đấu giống nhau
-        
+
         $matchSave = ScMatch::findFirst([
             " match_link_detail_flashscore = :id_match_flashscore:",
             'bind' => [
                 'id_match_flashscore' => $match->getHrefDetail(),
             ]
         ]);
+        if (!isset($timeInfo['start_time']) || !$timeInfo['start_time']) {
+            $timeInfo['start_time'] = $match->getTime();
+            $day_start = date('d', time());
+            $month_start = date('m', time());
+            $year_start = date('Y', time());
+        } else {
+            $day_start = date('d', $timeInfo['start_time']);
+            $month_start = date('m', $timeInfo['start_time']);
+            $year_start = date('Y', $timeInfo['start_time']);
+        }
 
         if (!$matchSave) {
             $is_new = true;
@@ -65,24 +76,6 @@ class MatchRepo extends Component
             $matchSave->setMatchName($home->getTeamSlug() . "-vs-" . $away->getTeamSlug());
             $matchSave->setMatchHomeId($home->getTeamId());
             $matchSave->setMatchAwayId($away->getTeamId());
-
-            if (!$timeInfo['start_time']) {
-                $timeInfo['start_time'] = $match->getTime();
-                $day_start = date('d', time());
-                $month_start = date('m', time());
-                $year_start = date('Y', time());
-            } else {
-                $day_start = date('d', $timeInfo['start_time']);
-                $month_start = date('m', $timeInfo['start_time']);
-                $year_start = date('Y', $timeInfo['start_time']);
-            }
-            $matchSave->setMatchStartDay($day_start);
-            $matchSave->setMatchStartMonth($month_start);
-            $matchSave->setMatchStartYear($year_start);
-            if ($timeInfo['start_time']) {
-                //use crawl api
-                $matchSave->setMatchStartTime($timeInfo['start_time']);
-            }
 
             $matchSave->setMatchTournamentId($tournament->getTournamentId());
             if ($type_crawl == MatchCrawl::TYPE_FLASH_SCORE) {
@@ -96,7 +89,25 @@ class MatchRepo extends Component
                 $matchSave->setMatchLinkDetailLivescore($match->getHrefDetail());
             }
             $matchSave->setMatchOrder(1);
+
+            $matchSave->setMatchStartDay($day_start);
+            $matchSave->setMatchStartMonth($month_start);
+            $matchSave->setMatchStartYear($year_start);
+            $matchSave->setMatchStartTime($timeInfo['start_time']);
         }
+    
+
+       // if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
+            //use crawl api
+            if (in_array($matchSave->getMatchStatus(),[MatchRepo::MATH_CANCEL,MatchRepo::MATH_POSTPONED])) {
+                $matchSave->setMatchStartTime($timeInfo['start_time']);
+                $matchSave->setMatchStartDay($day_start);
+                $matchSave->setMatchStartMonth($month_start);
+                $matchSave->setMatchStartYear($year_start);
+            }
+           
+     //   }
+
         if ($match->getRound()) {
             $matchSave->setMatchRound($match->getRound());
         }
@@ -244,6 +255,24 @@ class MatchRepo extends Component
                 $start_time = time() - $time * 60;
                 $time_live = "Postponed";
                 $status = self::MATH_POSTPONED;
+                break;
+            case "Cancelled":
+                $time = 135;
+                $start_time = time() - $time * 60;
+                $time_live = "Cancelled";
+                $status = self::MATH_CANCEL;
+                break;
+            case "Walkover":
+                $time = 90;
+                $start_time = time() - $time * 60;
+                $time_live = "Walkover";
+                $status = self::MATH_STATUS_FINSH;
+                break;
+            case "Abandoned":
+                $time = 90;
+                $start_time = time() - $time * 60;
+                $time_live = "Abandoned";
+                $status = self::MATH_ABANDONED;
                 break;
             default:
                 if (strpos($match_time, "ExtraTime") !== false) {
@@ -407,13 +436,13 @@ class MatchRepo extends Component
             ->execute();
         return $match->toArray();
     }
-    public static function getMatchToday()
+    public static function getMatchToday($time_request)
     {
-        $today = strtotime(strftime('%Y-%m-%d', time()));
+        $today = strtotime($time_request);
         $start_day = $today - 7 * 60 * 60;
         //thời gian bonus là +- 160 phút
         $bonus_start_day = $start_day - 160 * 60;
-        $end_day = $today + 24 * 60 * 60;
+        $end_day = $start_day + 24 * 60 * 60;
         //thời gian bonus là +- 160 phút
         $bonus_end_day = $end_day + 160 * 60;
         $arrMatch = ScMatch::find([

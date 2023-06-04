@@ -12,7 +12,9 @@ use Score\Repositories\Article;
 use Score\Repositories\ArticleLang;
 use Score\Utils\Validator;
 use Phalcon\Paginator\Adapter\NativeArray;
+use Score\Models\ScTag;
 use Score\Repositories\Language;
+use Tag;
 
 class ArticleController extends ControllerBase
 {
@@ -85,17 +87,18 @@ class ArticleController extends ControllerBase
     {
         $data = array('id' => -1, 'article_order' => 1, 'article_active' => 'Y', 'article_is_home' => 'N', 'article_type_id' => "",);
         $messages = array();
+        $ar_tag_id = [];
         if ($this->request->isPost()) {
             $messages = array();
             $data = array(
                 'id' => -1,
                 'article_type_id' => $this->request->getPost("slcType"),
-                'article_name' => $this->request->getPost("txtName", array('string', 'trim')),
+                'article_name' => trim($this->request->getPost("txtName")),
                 'article_icon' => $this->request->getPost("txtIcon", array('string', 'trim')),
                 'article_keyword' => $this->request->getPost("txtKeyword", array('string', 'trim')),
                 'article_title' => $this->request->getPost("txtTitle", array('string', 'trim')),
-                'article_meta_keyword' => $this->request->getPost("txtMetakey", array('string', 'trim')),
-                'article_meta_description' => $this->request->getPost("txtMetades", array('string', 'trim')),
+                'article_meta_keyword' => trim($this->request->getPost("txtMetakey")),
+                'article_meta_description' => trim($this->request->getPost("txtMetades")),
                 'article_meta_image' => $this->request->getPost("txtMetaImage", array('string', 'trim')),
                 'article_summary' => $this->request->getPost("txtSummary"),
                 'article_content' => $this->request->getPost("txtContent"),
@@ -131,6 +134,8 @@ class ArticleController extends ControllerBase
             } else if (!is_numeric($data['article_order'])) {
                 $messages['article_order'] = "Order is not valid";
             }
+      
+
             if (count($messages) == 0) {
                 $msg_result = array();
                 $new_article = new ScArticle();
@@ -152,6 +157,21 @@ class ArticleController extends ControllerBase
                 $result = $new_article->save();
 
                 if ($result === true) {
+                    $arTag = $_POST['txtTag'];
+                    foreach ($arTag as $tag) {
+                        if (!$tag) {
+                            continue;
+                        }
+                        $tag_model = ScTag::findTagByName($tag);
+                        if (!$tag_model) {
+                            $tag_model = new ScTag();
+                            $tag_model->setTagName(trim($tag));
+                            $tag_model->save();
+                        }
+                        $ar_tag_id[] = $tag_model->getTagId();
+                    }
+                    $new_article->setArticleTagId(implode(",",$ar_tag_id));
+                    $new_article->save();
                     $message = 'Create the Article ID: ' . $new_article->getArticleId() . ' success';
                     $msg_result = array('status' => 'success', 'msg' => $message);
                 } else {
@@ -169,10 +189,13 @@ class ArticleController extends ControllerBase
         $type = new Type();
         $select_type = $type->getParentIdType("", 0, $data["article_type_id"]);
         $messages["status"] = "border-red";
+        $select_tag = Article::selectTag($ar_tag_id);
+
         $this->view->setVars([
             'oldinput' => $data,
             'messages' => $messages,
             'select_type' => $select_type,
+            'select_tag' => $select_tag
         ]);
     }
 
@@ -217,6 +240,8 @@ class ArticleController extends ControllerBase
             'article_update_time' => $this->globalVariable->curTime,
         );
         $save_mode = '';
+        $ar_tag_id = explode(",",$article_model->getArticleTagId());
+        
 
         if ($this->request->isPost()) {
             if (!isset($_POST['save'])) {
@@ -229,11 +254,11 @@ class ArticleController extends ControllerBase
                 $lang_current = $save_mode;
             }
             if ($save_mode != ScLanguage::GENERAL) {
-                $data_post['article_name'] = $this->request->getPost('txtName', array('string', 'trim'));
-                $data_post['article_title'] = $this->request->getPost('txtTitle', array('string', 'trim'));
-                $data_post['article_meta_keyword'] = $this->request->getPost('txtMetaKey', array('string', 'trim'));
-                $data_post['article_meta_description'] = $this->request->getPost('txtMetaDesc', array('string', 'trim'));
-                $data_post['article_meta_image'] = $this->request->getPost('txtMetaImage', array('string', 'trim'));
+                $data_post['article_name'] = trim($this->request->getPost('txtName'));
+                $data_post['article_title'] = trim($this->request->getPost('txtTitle'));
+                $data_post['article_meta_keyword'] = trim($this->request->getPost('txtMetaKey'));
+                $data_post['article_meta_description'] = trim($this->request->getPost('txtMetaDesc'));
+                $data_post['article_meta_image'] = trim($this->request->getPost('txtMetaImage'));
                 $data_post['article_summary'] = $this->request->getPost('txtSummary');
                 $data_post['article_content'] = $this->request->getPost('txtContent');
                 $data_post['article_keyword'] = $this->request->getPost('txtKeyword', array('string', 'trim'));
@@ -258,6 +283,8 @@ class ArticleController extends ControllerBase
                 $data_post['article_order'] = $this->request->getPost('txtOrder', array('string', 'trim'));
                 $data_post['article_active'] = $this->request->getPost("radActive");
                 $data_post['article_is_home'] = $this->request->getPost("txtHome");
+                $data_post['article_tag'] = trim($this->request->get("txtTag"));
+
 
                 if (empty($data_post["article_type_id"])) {
                     $messages["article_type_id"] = "Type field is required.";
@@ -316,6 +343,27 @@ class ArticleController extends ControllerBase
                         break;
                 }
                 if ($result) {
+                    if($save_mode == ScLanguage::GENERAL) {
+                        
+                        $arTag = $_POST['txtTag'];
+                        $ar_tag_id = [];
+                    
+                        foreach ($arTag as $tag) {
+                            if (!$tag) {
+                                continue;
+                            }
+                            $tag_model = ScTag::findTagByName($tag);
+                            if (!$tag_model) {
+                                $tag_model = new ScTag();
+                                $tag_model->setTagName(trim($tag));
+                                $tag_model->save();
+                            }
+                            $ar_tag_id[] = $tag_model->getTagId();
+                        }
+                        $article_model->setArticleTagId(implode(",",$ar_tag_id));
+                        $article_model->save();
+                    }
+                   
                     $messages = array(
                         'message' => ucfirst($info . " Update article success"),
                         'typeMessage' => "success",
@@ -371,6 +419,14 @@ class ArticleController extends ControllerBase
                );
             $arr_translate[$save_mode] = $item;
         }
+        $arTagId = $article_model->getArticleTagId();
+        $arTag = [];
+        foreach(explode(",",$arTagId) as $id) {
+            $name = ScTag::findTagNameById($id);
+            if ($name) {
+                $arTag[] = $name;
+            }
+        }
         $formData = array(
             'article_id' => $article_model->getArticleId(),
             'article_order' => ($save_mode === ScLanguage::GENERAL) ? $data_post['article_order'] : $article_model->getArticleOrder(),
@@ -378,16 +434,19 @@ class ArticleController extends ControllerBase
             'article_icon' => ($save_mode === ScLanguage::GENERAL) ? $data_post['article_icon'] : $article_model->getArticleIcon(),
             'article_active' => ($save_mode === ScLanguage::GENERAL) ? $data_post['article_active'] : $article_model->getArticleActive(),
             'article_is_home' => ($save_mode === ScLanguage::GENERAL) ? $data_post['article_is_home'] : $article_model->getArticleIsHome(),
+            'article_tag'  => ($save_mode === ScLanguage::GENERAL) ? $data_post['article_tag'] : implode(";",$arTag),
             'arr_translate' => $arr_translate,
             'arr_language' => $arr_language,
             'lang_current' => $lang_current
         );
         $messages["status"] = "border-red";
         $select_type = Type::getParentIdType("", 0, $formData["article_type_id"]);
+        $select_tag = Article::selectTag($ar_tag_id);
         $this->view->setVars([
             'formData' => $formData,
             'messages' => $messages,
             'select_type' => $select_type,
+            'select_tag' => $select_tag
         ]);
     }
 

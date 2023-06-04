@@ -70,6 +70,7 @@ class Crawlertourv2Controller extends ControllerBase
         $strTour = implode(",", $strTour);
         $tourCrawlRepo = new TournamentCrawlRepo();
         $tour = $tourCrawlRepo->getTournamentToshow($strTour);
+        
 
         //$tour = ScTournament::findFirst("2827");
         if (!$tour) {
@@ -102,6 +103,7 @@ class Crawlertourv2Controller extends ControllerBase
         $is_new = false;
         //start crawler
 
+
         try {
             statCrawler:
             // $list_match = $crawler->CrawlMatchScore($divParent);
@@ -120,7 +122,7 @@ class Crawlertourv2Controller extends ControllerBase
             $clientGuzzle = new \GuzzleHttp\Client();
             $url = API_END_PONT . '/save-match';
             try {
-                $clientGuzzle->post(
+                $response = $clientGuzzle->post(
                     $url,
                     array(
                             //      'headers' => $header,
@@ -132,11 +134,14 @@ class Crawlertourv2Controller extends ControllerBase
             } catch (Exception $e) {
             }
             $start_time_call = microtime(true);
-            //        $result = json_decode($response->getBody()->getContents(),true);
+             //    $result = json_decode($response->getBody()->getContents(),true);
+       
+                 
             $total = count($list_tour['list_live_match']);
 
             //lưu tour:
             //
+            
             foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
                 $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
                 $arrEnemy = [];

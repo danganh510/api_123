@@ -48,13 +48,22 @@ class MatchDetailRepo extends Component
 
         if ($is_live) {
             $arrTourKey = ScTournament::getTourIdCrawl();
-            $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
+
+            //25-5: chỉnh lại crawl detail tất cả các trận ở ngày thường, riêng t7 chủ nhật mới crawl riêng các trận chính
+            if (MyRepo::checkTimeEndWeek()) {
+                $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
+            } else {
+                $matchCrawl = false;
+                goto not_primary;
+            }
+
             if (!$matchCrawl) {
                 $this->resetFlagTourKey($arrTourKey);
                 echo "--All restart: \r\n";
                 $matchCrawl = MatchDetailRepo::getMatchStartTourKey($arrTourKey);
             }
             //for not found primary
+            not_primary: 
             if (!$matchCrawl) {
                 echo "--Start crawl not primary: \r\n";
                 $matchCrawl = MatchDetailRepo::getMatchStartTour();
@@ -65,16 +74,19 @@ class MatchDetailRepo extends Component
             }
         } else {
             //7h tới 11h tối thứ 7 cn tắt detail
-            $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
-            $currentHour = date('G');
-            echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
-            if ($dayOfWeek == 6 ||  $dayOfWeek == 7) {
+            if (!$id) {
+                $dayOfWeek = date('N', time()); // Lấy số thứ tự của ngày trong tuần
+                $currentHour = date('G');
+                echo "Today is: " . $dayOfWeek . " and " . $currentHour . " Hour \r\n";
+                if ($dayOfWeek == 6 || $dayOfWeek == 7) {
 
-                if ($currentHour >= 11 && $currentHour <= 16) {
-                    echo "Wait for crawl list";
-                    die();
+                    if ($currentHour >= 11 && $currentHour <= 16) {
+                        echo "Wait for crawl list";
+                        die();
+                    }
                 }
             }
+
 
             echo "match wait\r\n";
             //ưu tiên trận lỗi:
