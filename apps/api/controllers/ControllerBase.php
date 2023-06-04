@@ -28,6 +28,7 @@ class ControllerBase extends Controller
 
         // var_dump($headerBear);
         // exit;
+       // $this->beforeExecuteRoute();
 
         try {
             if ($this->request->isGet()) {
@@ -48,7 +49,7 @@ class ControllerBase extends Controller
             return $response;
         }
     }
-    public function beforeExecuteRoute($dispatcher)
+    public function beforeExecuteRoute()
     {
 
         $headerBear = $this->getAuthorizationHeader();
