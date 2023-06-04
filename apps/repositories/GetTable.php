@@ -113,6 +113,8 @@ class GetTable extends Component
         if (isset($modelInfo['conditions']) && !empty($modelInfo['conditions'])) {
             $sql = $sql->andWhere($modelInfo['conditions']);
         }
+        $total = count($sql->getQuery()->execute());
+
         if (isset($params['limit'])) {
             $sql = $sql->limit($params['limit']);
         }
@@ -121,6 +123,9 @@ class GetTable extends Component
         }
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();
-        return $list_data;
+        return [
+            'list_data' => $list_data->toArray(),
+            'total' => $total
+        ];
     }
 }

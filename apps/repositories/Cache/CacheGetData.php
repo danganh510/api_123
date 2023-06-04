@@ -7,6 +7,7 @@ use Phalcon\Mvc\User\Component;
 use Phalcon\Cache\Backend\File as BackFile;
 use Phalcon\Cache\Frontend\Data as FrontData;
 use Score\Models\ScTournament;
+use Score\Utils\PasswordGenerator;
 
 class CacheGetData extends Component
 {
@@ -33,15 +34,15 @@ class CacheGetData extends Component
         $key = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $key);
 
         if (!empty($param)) {
-            foreach ($param as $key => $value) {
-
+            foreach ($param as $value) {
                 $value = trim(json_encode($value));
-                $value = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $value);
+            //    $value = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $value);
                 $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
-                $key .= "_$value";
+                $key .= $value;
             }
         }
-        
+        //rút ngắn key lại
+        $key = str_replace(["a", "o", "e", " ", "i", "f"], ["", "", "", "", "", ""], $key);        
         return $key;
     }
     public function deleteFolder()
