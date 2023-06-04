@@ -46,7 +46,8 @@ class GetdataController extends ControllerBase
 
         $paramsRequired = ["columns", "language", "orderBy"];
         $is_valid = $this->checkDataValid($paramsRequired, $this->requestParams, $dataReturn);
-        if (!$is_valid) goto end;
+        if (!$is_valid)
+            goto end;
         $getData = new GetTable();
         $modelInfo = $getData->getColumnsModel($table);
         if (!$modelInfo) {
@@ -85,7 +86,11 @@ class GetdataController extends ControllerBase
         // } else {
         //     $result = $getData->getListTableLang($this->requestParams, $modelInfo);
         // }
-        $result = $getData->getListTable($this->requestParams, $modelInfo);
+        if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
+            $result = $getData->getListTable($this->requestParams, $modelInfo);
+        } else {
+            $result = $getData->getListTableLang($this->requestParams, $modelInfo);
+        }
         $dataReturn = [
             'code' => 200,
             'status' => true,
@@ -111,7 +116,8 @@ class GetdataController extends ControllerBase
 
         $paramsRequired = ["columns", "language", "orderBy"];
         $is_valid = $this->checkDataValid($paramsRequired, $this->requestParams, $dataReturn);
-        if (!$is_valid) goto end;
+        if (!$is_valid)
+            goto end;
 
         $getData = new GetTable();
         $modelInfo = $getData->getColumnsModel($table);
