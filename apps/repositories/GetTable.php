@@ -116,6 +116,9 @@ class GetTable extends Component
         if (isset($params['limit'])) {
             $sql = $sql->limit($params['limit']);
         }
+        if (isset($params['offset'])) {
+            $sql = $sql->offset($params['offset'] * $params['limit']);
+        }
         $sql = $sql->orderBy("nlang.{$orderBy} DESC");
         $list_data = $sql->getQuery()->execute();
         return $list_data;
