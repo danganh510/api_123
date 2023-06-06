@@ -347,10 +347,11 @@ class ScCountry extends \Phalcon\Mvc\Model
     }
     public static function findFirstCodeByName($name)
     {
+        //use for crawl. 
 
         $country =  self::findFirst([
             'columns' => "country_code",
-            'country_name = :name:',
+            'country_nationality = :name:',
             'bind' => [
                 'name' => $name
             ]
