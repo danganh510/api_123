@@ -158,14 +158,22 @@ class MatchController extends ControllerBase
     {
 
         $id = $this->request->get('id');
-        $matchInfo = ScMatch::query()
+        $sql = ScMatch::query()
             ->innerJoin('Score\Models\ScTournament', 'match_tournament_id = t.tournament_id', 't')
-            ->leftJoin('Score\Models\ScMatchInfo', 'match_id  = i.info_match_id', 'i')
-            ->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,match_status,match_score_ht,
-        i.info_summary,i.info_time,i.info_stats,t.tournament_name,t.tournament_country_code")
-            ->where("match_id = :id:", [
-                'id' => $id
-            ])->execute();
+            ->leftJoin('Score\Models\ScMatchInfo', 'match_id  = i.info_match_id', 'i');
+        if ($this->requestParams['language'] == "vi") {
+            $sql = $sql->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,match_status,match_score_ht,
+                i.info_summary,i.info_time,i.info_stats,t.tournament_name,t.tournament_country_code");
+        } else {
+            $sql = $sql->innerJoin('Score\Models\ScTournamentLang', 'tl.tournament_id = t.tournament_id', 'tl');
+            $sql = $sql->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,match_status,match_score_ht,
+            i.info_summary,i.info_time,i.info_stats,tl.tournament_name,t.tournament_country_code");
+        }
+
+        $sql =  $sql->where("match_id = :id:", [
+            'id' => $id
+        ]);
+        $matchInfo = $sql->execute();
         if (empty($matchInfo->toArray())) {
             return [
                 'stautus' => false,
@@ -173,8 +181,9 @@ class MatchController extends ControllerBase
             ];
         }
         $matchInfo = $matchInfo->toArray()[0];
-        $home = Team::getTeamById($matchInfo['match_home_id']);
-        $away = Team::getTeamById($matchInfo['match_away_id']);
+        $teamRepo = new Team();
+        $home = $teamRepo->getTeamByIdAndLang($matchInfo['match_home_id'],$this->requestParams['language']);
+        $away = $teamRepo->getTeamByIdAndLang($matchInfo['match_away_id'],$this->requestParams['language']);
         $info = [
             'id' => $matchInfo['match_id'],
             'name' => $matchInfo['match_name'],
@@ -183,12 +192,12 @@ class MatchController extends ControllerBase
             'status' => $matchInfo['match_status'],
             'tournament' => $matchInfo['tournament_name'],
             'tournamentCountryCode' => $matchInfo['tournament_country_code'],
-            'home' => $home->getTeamName(),
-            'homeLogo' => $home->getTeamLogoMedium(),
-            'away' => $away->getTeamName(),
-            'awayLogo' => $away->getTeamLogoMedium(),
-            'homeSlug' => $home->getTeamSlug(),
-            'awaySlug' => $away->getTeamSlug(),
+            'home' => $home['team_name'],
+            'homeLogo' => $home['team_logo_medium'],
+            'away' => $away['team_name'],
+            'awayLogo' => $away['team_logo_medium'],
+            'homeSlug' => $home['team_slug'],
+            'awaySlug' => $away['team_slug'],
             'homeScore' => $matchInfo['match_home_score'],
             'awayScore' => $matchInfo['match_away_score'],
             'htScore' => $matchInfo['match_score_ht'],
