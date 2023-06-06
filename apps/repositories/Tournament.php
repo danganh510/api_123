@@ -94,4 +94,19 @@ class Tournament extends Component
         }        
         return $tournament;
     }
+    public function getTourByLang($language) {
+        if ($language == "vi") {
+            return ScTournament::find("tour_active = 'Y'")->toArray();
+        } else {
+            return $this->modelsManager->createBuilder()
+            ->columns("t.tournament_id, t.tournament_type, t.tournament_href_flashscore, t.tournament_name_flash_score, t.tournament_country, t.tournament_country_code,
+             t.tournament_image, t.tournament_order, t.tournament_crawl , t.tournament_is_show, t.tournament_is_crawling, t.tournament_active ,
+            tl.tournament_name,tl.tournament_slug")
+            ->from("Score\Models\ScTournament", "t")
+            ->innerJoin("Score\Models\ScTournamentLang", "t.tournament_id = tl.tournament_id", "tl")
+            ->where("t.tournament_active = 'Y'")
+            ->excute()
+            ->toArray();
+        }
+    }
 }

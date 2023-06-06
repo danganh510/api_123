@@ -6,22 +6,12 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Score\Models\ScCronTour;
-use Score\Models\ScMatch;
 use Score\Repositories\Team;
 
-
-use Score\Models\ScTeam;
-use Score\Models\ScTournament;
 use Score\Models\ScTournamentStandings;
-use Score\Repositories\CacheMatch;
-use Score\Repositories\CacheMatchLive;
-use Score\Repositories\CacheTeam;
-use Score\Repositories\CacheTour;
 use Score\Repositories\CrawlerList;
 use Score\Repositories\MatchCrawl;
-use Score\Repositories\MatchRepo;
 use Score\Repositories\MyRepo;
-use Score\Repositories\Tournament;
 use Score\Repositories\TournamentCrawlRepo;
 
 class Crawlertourv2Controller extends ControllerBase

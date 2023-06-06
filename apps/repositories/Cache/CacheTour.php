@@ -14,7 +14,8 @@ class CacheTour extends Component
     const filePath = __DIR__ . "/../../Cache/Tour/";
     static $frontCache = null;
     static $backCache = null;
-    public function __construct()
+    public $language;
+    public function __construct($language = "vi")
     {
         if (!is_dir(__DIR__ . "/../../Cache")) {
             mkdir(__DIR__ . "/../../Cache");
@@ -22,13 +23,15 @@ class CacheTour extends Component
         if (!is_dir(self::filePath)) {
             mkdir(self::filePath);
         }
+        $this->language = $language;
     }
     public function get($type)
     {
         $arrTour = $this->getCache($type);
         if (empty($arrTeam)) {
-            $arrTour = ScTournament::find("tournament_active = 'Y'");
-            $arrTour = $arrTour->toArray();
+            $tourRepo = new Tournament();
+            $arrTour = $tourRepo->getTourByLang($this->language);
+
             $arrTourCache = [];
 
             switch ($type) {
@@ -58,8 +61,8 @@ class CacheTour extends Component
     {
         $arrTour = $this->getCache($type);
         if (empty($arrTeam)) {
-            $arrTour = ScTournament::find("tournament_active = 'Y'");
-            $arrTour = $arrTour->toArray();
+            $tourRepo = new Tournament();
+            $arrTour = $tourRepo->getTourByLang($this->language);
             $arrTourCache = [];
 
             switch ($type) {
@@ -111,7 +114,7 @@ class CacheTour extends Component
     }
     public  function getCache($type)
     {
-        $sessionId = self::PRE_SESSION_CACHE . $type;
+        $sessionId = self::PRE_SESSION_CACHE . $type . "_" . $this->language;
 
         $cache = self::getBackCache();
         $cacheKey = self::cacheKeyClients($sessionId);
@@ -121,7 +124,7 @@ class CacheTour extends Component
     }
     public  function deleteCache($type)
     {
-        $sessionId = self::PRE_SESSION_CACHE . $type;
+        $sessionId = self::PRE_SESSION_CACHE . $type . "_" . $this->language;
         $cache = self::getBackCache();
         $cacheKey = $this->cacheKeyClients($sessionId);
 
@@ -139,7 +142,7 @@ class CacheTour extends Component
     }
     public function setCache($arrTeam, $type)
     {
-        $sessionId = self::PRE_SESSION_CACHE . $type;
+        $sessionId = self::PRE_SESSION_CACHE . $type . "_" . $this->language;
         $cache = self::getBackCache();
         $cacheKey = $this->cacheKeyClients($sessionId);
         try {

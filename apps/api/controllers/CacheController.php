@@ -29,7 +29,7 @@ class CacheController extends ControllerBase
     public function getcacheteamAction()
     {
         $type = $this->request->get("type");
-        $teamCache = new CacheTeam();
+        $teamCache = new CacheTeam($this->requestParams['language']);
         $arrTeam = $teamCache->get($type);
 
         die(json_encode($arrTeam));
@@ -37,7 +37,7 @@ class CacheController extends ControllerBase
     public function getcachetournamentAction()
     {
         $type = $this->request->get("type");
-        $cacheTour = new CacheTour();
+        $cacheTour = new CacheTour($this->requestParams['language']);
         $arrTour = $cacheTour->get($type);
         die(json_encode($arrTour));
     }
