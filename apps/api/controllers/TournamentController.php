@@ -29,10 +29,8 @@ class TournamentController extends ControllerBase
   public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
   public function gettounamentshowAction()
   {
-    $arrTour = ScTournament::find([
-      'tournament_is_show = "Y"',
-      "order" => "tournament_order DESC"
-    ]);
+    $tourRepo = new Tournament();
+    $arrTour = $tourRepo->getTourIsShowByLang($this->requestParams['language']);
     $list_data = [];
     foreach ($arrTour as $tour) {
       $list_data[] = [
@@ -54,11 +52,9 @@ class TournamentController extends ControllerBase
   {
     $limit = $this->request->get("limit");
     $day = $this->request->get("day");
-    $arrTourIsShow = ScTournament::find([
-      'tournament_is_show = "Y"',
-      'columns' => "tournament_id"
-    ]);
-    $str_tour = array_column($arrTourIsShow->toArray(), "tournament_id");
+    $tourRepo = new Tournament();
+    $arrTourIsShow = $tourRepo->getTourIsShowByLang($this->requestParams['language']);
+    $str_tour = array_column($arrTourIsShow, "tournament_id");
     $str_tour = implode(",", $str_tour);
 
     $cacheTeam = new CacheTeam();
@@ -83,9 +79,10 @@ class TournamentController extends ControllerBase
   public function getscheduletourAction()
   {
     $tour_id = $this->request->get("id");
-    $tourModel = Tournament::findFirstById($tour_id);
     $limit = $this->request->get("limit");
-    if (!$tourModel) {
+
+    $tourInfo = $this->getTourInfor($tour_id);
+    if (!$tourInfo) {
       $dataReturn = [
         'code' => 200,
         'status' => false,
@@ -94,28 +91,12 @@ class TournamentController extends ControllerBase
       goto end;
     }
 
-
-    $tourInfo = [
-      'name' => $tourModel->getTournamentName(),
-      'slug' => $tourModel->getTournamentSlug(),
-      'category' => [
-        'name' => $tourModel->getTournamentCountry(),
-        'slug' => MyRepo::create_slug($tourModel->getTournamentCountry()),
-        'sport' => [
-          "name" => "football",
-          "slug" => "football"
-        ],
-        'flag' => $tourModel->getTournamentCountry(),
-        "countryCode" => $tourModel->getTournamentCountryCode()
-      ]
-    ];
-
     $cacheTeam = new CacheTeam();
     $arrTeam = $cacheTeam->get(ConstEnv::CACHE_TYPE_ID);
 
-    $matchOld = MatchRepo::getMatchOldByTourId($tour_id,$limit);
-    $matchToday = MatchRepo::getMatchTodayByTourId($tour_id,$limit);
-    $matchSchedule = MatchRepo::getMatchScheduleByTourId($tour_id,$limit);
+    $matchOld = MatchRepo::getMatchOldByTourId($tour_id, $limit);
+    $matchToday = MatchRepo::getMatchTodayByTourId($tour_id, $limit);
+    $matchSchedule = MatchRepo::getMatchScheduleByTourId($tour_id, $limit);
 
     $arrMatchOld = MatchRepo::implementsMatch($matchOld, $arrTeam);
     $arrMatchToday = MatchRepo::implementsMatch($matchToday, $arrTeam);
@@ -144,8 +125,9 @@ class TournamentController extends ControllerBase
     $limit = $this->request->get("limit");
     $type = $this->request->get("type");
     $type = $type ? $type : "all";
-    $tourModel = Tournament::findFirstById($tour_id);
-    if (!$tourModel) {
+
+    $tourInfo = $this->getTourInfor($tour_id);
+    if (!$tourInfo) {
       $dataReturn = [
         'code' => 200,
         'status' => false,
@@ -154,20 +136,6 @@ class TournamentController extends ControllerBase
       goto end;
     }
 
-    $tourInfo = [
-      'name' => $tourModel->getTournamentName(),
-      'slug' => $tourModel->getTournamentSlug(),
-      'category' => [
-        'name' => $tourModel->getTournamentCountry(),
-        'slug' => MyRepo::create_slug($tourModel->getTournamentCountry()),
-        'sport' => [
-          "name" => "football",
-          "slug" => "football"
-        ],
-        'flag' => $tourModel->getTournamentCountry(),
-        "countryCode" => $tourModel->getTournamentCountryCode()
-      ]
-    ];
     $standingHome = [];
     $standingAway = [];
     $standingOveral = [];
@@ -201,5 +169,29 @@ class TournamentController extends ControllerBase
     ];
     end:
     return $dataReturn;
+  }
+  public function getTourInfor($tour_id)
+  {
+    $tourRepo = new Tournament();
+    $tourModel = $tourRepo->getTourByIdAndLang($tour_id, $this->requestParams['language']);
+    if (!$tourModel) {
+      return false;
+    }
+
+    $tourInfo = [
+      'name' => $tourModel['tournament_name'],
+      'slug' => $tourModel['tournament_slug'],
+      'category' => [
+        'name' => $tourModel['tournament_country_code'],
+        'slug' => MyRepo::create_slug($tourModel['tournament_country']),
+        'sport' => [
+          "name" => "football",
+          "slug" => "football"
+        ],
+        'flag' => $tourModel['tournament_country'],
+        "countryCode" => $tourModel['tournament_country_code']
+      ]
+    ];
+    return $tourInfo;
   }
 }
