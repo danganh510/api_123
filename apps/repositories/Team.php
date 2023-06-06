@@ -113,4 +113,18 @@ class Team extends Component
         ]);
         return $team;
     }
+    public function getTeamByLang($language) {
+        if ($language == "vi") {
+            return ScTeam::find("team_active = 'Y'")->toArray();
+        } else {
+            return $this->->modelsManager->createBuilder()
+            ->columns("t.team_id, t.team_country_code, t.team_name_flashscore, t.team_logo, t.team_logo_crawl, t.team_logo_small, t.team_logo_medium, t.team_active, t.team_is_public,
+            tl.team_name,tl.team_slug")
+            ->from("Score\Models\ScTeam", "t")
+            ->innerJoin("Score\Models\ScTeamLang", "t.team_id = tl.team_id", "tl")
+            ->where("t.team_active = 'Y'")
+            ->excute()
+            ->toArray();
+        }
+    }
 }
