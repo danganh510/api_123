@@ -57,4 +57,25 @@ class ScTeamLang extends \Phalcon\Mvc\Model
     {
         return 'sc_team_lang';
     }
+        /**
+     * Allows to query a set of records that Team the specified conditions
+     *
+     * @param mixed $parameters
+     * @return ScTeamLang[]|ScTeamLang
+     */
+    public static function find($parameters = null)
+    {
+        return parent::find($parameters);
+    }
+
+    /**
+     * Allows to query the first record that Team the specified conditions
+     *
+     * @param mixed $parameters
+     * @return ScTeamLang
+     */
+    public static function findFirst($parameters = null)
+    {
+        return parent::findFirst($parameters);
+    }
 }

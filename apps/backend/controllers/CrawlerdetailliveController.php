@@ -37,6 +37,10 @@ class CrawlerdetailliveController extends ControllerBase
         $is_live =  $this->request->get("isLive");
         $this->type_crawl = $this->request->get("type");
         $is_nomal = $this->request->get("isNomal");
+        $language = $this->request->get("language");
+        if (!$language) {
+            $language = "en";
+        }
 
 
         $detailRepo = new MatchDetailRepo();
@@ -70,9 +74,13 @@ class CrawlerdetailliveController extends ControllerBase
             goto end;
         }
 
-        $urlDetail = "https://www.flashscore.com/" . $matchCrawl->getMatchLinkDetailFlashscore() . "/#/match-summary/match-summary";
-     //   $urlDetail = "https://www.flashscore.com/match/xU7bnMdH/#/match-summary/match-summary";
-        //tab: info,tracker,statistics
+        if ($language == "en" ) {
+            $urlDetail = "https://www.flashscore.com/" . $matchCrawl->getMatchLinkDetailFlashscore() . "/#/match-summary/match-summary";
+        } else {
+            $urlDetail = "https://www.flashscore.vn/" . str_replace("match","trandau",$matchCrawl->getMatchLinkDetailFlashscore()) . "/#/tom-tat-tran-dau/tom-tat-tran-dau";
+        }
+    
+
         $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
         $detail = $crawler->getInstance();
         $infoModel = ScMatchInfo::findFirst([
@@ -96,9 +104,15 @@ class CrawlerdetailliveController extends ControllerBase
             die();
            
         }
-        $infoModel->setInfoTime(json_encode($detail['info']));
-        $infoModel->setInfoStats(json_encode($detail['start']));
-        $infoModel->setInfoSummary(json_encode($detail['tracker']));
+        if (!empty($detail['info'])) {
+            $infoModel->setInfoTime(json_encode($detail['info']));
+        }
+        if (!empty($detail['start'])) {
+            $infoModel->setInfoStats(json_encode($detail['start']));
+        }
+        if (!empty($detail['tracker'])) {
+            $infoModel->setInfoSummary(json_encode($detail['tracker']));
+        }
      
         $result = $infoModel->save();
         if ($result) {
@@ -147,6 +161,7 @@ class CrawlerdetailliveController extends ControllerBase
 
         //save logo team:
         $homeTeam = ScTeam::findFirstById($matchCrawl->getMatchHomeId());
+       
         if ($homeTeam && !$homeTeam->getTeamLogoCrawl() && !empty($detail['match']['homeLogo'])) {
             $homeTeam->setTeamLogoCrawl($detail['match']['homeLogo']);
             $homeTeam->save();
@@ -156,6 +171,12 @@ class CrawlerdetailliveController extends ControllerBase
         if ($awayTeam && !$awayTeam->getTeamLogoCrawl() && !empty($detail['match']['awayLogo'])) {
             $awayTeam->setTeamLogoCrawl($detail['match']['awayLogo']);
             $awayTeam->save();
+        }
+        if ($language == "vi") {
+            $homeTeam->setTeamName($detail['match']['homeName']);
+            $awayTeam->setTeamName($detail['match']['awayName']);
+            $awayTeam->save();
+            $homeTeam->save();
         }
         $matchCrawl->save();
                 

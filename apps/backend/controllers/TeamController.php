@@ -6,6 +6,8 @@ use Score\Repositories\Country;
 use Score\Models\ScTeam;
 use Score\Utils\Validator;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
+use Score\Models\ScLanguage;
+use Score\Models\ScTeamLang;
 use Score\Repositories\Team;
 
 class TeamController extends ControllerBase
@@ -48,6 +50,12 @@ class TeamController extends ControllerBase
     public function editAction()
     {
         $id = $this->request->get('id');
+        $lang_current = $this->request->get('slcLang');
+        $lang_current = $lang_current ? $lang_current : $this->globalVariable->defaultLanguage;
+        $arr_language = Language::arrLanguages();
+        if (!in_array($lang_current, array_keys($arr_language))) {
+            return $this->response->redirect('notfound');
+        }
         $checkID = new Validator();
         if (!$checkID->validInt($id)) {
             return $this->response->redirect('notfound');
@@ -59,12 +67,22 @@ class TeamController extends ControllerBase
         $data = $team_model->toArray();
         $messages = array();
         if ($this->request->isPost()) {
+            if (!isset($_POST['save'])) {
+                $this->view->disable();
+                $this->response->redirect("notfound");
+                return;
+            }
+            $save_mode = $_POST['save'];
+            if (isset($arr_language[$save_mode])) {
+                $lang_current = $save_mode;
+            }
             foreach ($_POST as $key => $value) {
                 if ($key == "match_start_time") {
                     $data[$key] = strtotime($value);
                 } else {
                     $data[$key] = $value;
                 }
+             
             }
             if (empty($data["team_name"])) {
                 $messages["name"] = "Name field is required.";
@@ -72,15 +90,36 @@ class TeamController extends ControllerBase
          
             if (count($messages) == 0) {
                 $msg_result = array();
-                if ($team_model->update($data)) {
-                    $msg_result = array('status' => 'success', 'msg' => 'Edit tournament Success');
-                } else {
-                    $message = "We can't store your info now: \n";
-                    foreach ($team_model->getMessages() as $msg) {
-                        $message .= $msg . "\n";
+                if ($save_mode != ScLanguage::GENERAL && $save_mode != "vi") {
+                    $team_model_lang = Team::getTeamLangByIdAndLang($id, $save_mode);
+                    if (!$team_model_lang) {
+                        $team_model_lang = new ScTeamLang();
+                        $team_model_lang->setTeamLangCode($save_mode);
                     }
-                    $msg_result['status'] = 'error';
-                    $msg_result['msg'] = $message;
+                    $team_model_lang->setTeamName($data["team_name"]);
+                    $team_model_lang->setTeamSlug($data["team_slug"]);
+
+                    if ($team_model_lang->update($data)) {
+                        $msg_result = array('status' => 'success', 'msg' => 'Edit tournament Success');
+                    } else {
+                        $message = "We can't store your info now: \n";
+                        foreach ($team_model_lang->getMessages() as $msg) {
+                            $message .= $msg . "\n";
+                        }
+                        $msg_result['status'] = 'error';
+                        $msg_result['msg'] = $message;
+                    }
+                } else {
+                    if ($team_model->update($data)) {
+                        $msg_result = array('status' => 'success', 'msg' => 'Edit tournament Success');
+                    } else {
+                        $message = "We can't store your info now: \n";
+                        foreach ($team_model->getMessages() as $msg) {
+                            $message .= $msg . "\n";
+                        }
+                        $msg_result['status'] = 'error';
+                        $msg_result['msg'] = $message;
+                    }
                 }
                 $this->session->set('msg_result', $msg_result);
                 return $this->response->redirect("/dashboard/list-team");

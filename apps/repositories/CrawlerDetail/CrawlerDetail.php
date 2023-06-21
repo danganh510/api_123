@@ -22,12 +22,14 @@ class CrawlerDetail extends Component
     public $list_live_tournaments = [];
     public $round;
     public $urlDetail;
+    public $language;
 
-    public function __construct($type_crawl,$urlDetail , $isLive = false)
+    public function __construct($type_crawl,$urlDetail , $isLive = false, $language = "en")
     {
         $this->type_crawl = $type_crawl;
         $this->isLive = $isLive;
         $this->urlDetail = $urlDetail;
+        $this->language = $language;
     }
     public function runSelenium()
     {
@@ -39,7 +41,7 @@ class CrawlerDetail extends Component
         switch ($this->type_crawl) {
             case MatchCrawl::TYPE_FLASH_SCORE:
                 $this->runSelenium();
-                $crawler = new CrawlerDetailFlashScore($this->seleniumDriver, $this->urlDetail, $day_time, $this->isLive);
+                $crawler = new CrawlerDetailFlashScore($this->seleniumDriver, $this->urlDetail, $day_time, $this->isLive, $this->language);
                 break;
         }
         return $crawler->crawlDetail();

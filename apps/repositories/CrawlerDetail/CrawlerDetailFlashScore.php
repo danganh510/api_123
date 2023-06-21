@@ -2,40 +2,44 @@
 
 namespace Score\Repositories;
 
+use ConstEnv;
 use DOMDocument;
 use Exception;
 
 
 class CrawlerDetailFlashScore extends CrawlerDetail
 {
-    public function __construct($seleniumDriver, $url_crawl, $day_time, $isLive)
+    public function __construct($seleniumDriver, $url_crawl, $day_time, $isLive, $language = "en")
     {
         $this->seleniumDriver = $seleniumDriver;
         $this->url_crawl = $url_crawl;
         $this->isLive = $isLive;
+        $this->language = $language;
     }
     public function crawlDetail()
     {
         require_once(__DIR__ . "/../../library/simple_html_dom.php");
         $result = [];
-        $time = microtime(true);
         $this->getDivParent();
         $info = $this->crawlDetailInfo();
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
+        $match = $this->crawlDetailMatch();
+
         if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
             return false;
         }
 
         $result = [
-            'match' => $info['match'],
-            'info' => $info['info'],
+            'match' => $match,
+            'info' => $info,
             'start' => $start,
             'tracker' => $tracker,
         ];
         return $result;
     }
-    public function checkHasExist() {
+    public function checkHasExist()
+    {
         $parentDiv = $this->seleniumDriver->findElement('p > strong');
         if ($parentDiv->text() == "Error:") {
             return true;
@@ -53,6 +57,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             $this->divInfo = $this->getDivInfo();
             $this->divStart = $this->getDivStart();
             $this->divTracker = $this->getDivTracker();
+            
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -74,9 +79,14 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     public function getDivStart()
     {
         $htmlDivStart = "";
+        if ($this->language == "en") {
+            $href = ConstEnv::HREF_DETAIL_START_EN;
+        } else {
+            $href = ConstEnv::HREF_DETAIL_START_VI;
+        }
 
         try {
-            $this->seleniumDriver->clickButton("a[href='#/match-summary/match-statistics']");
+            $this->seleniumDriver->clickButton("a[href='#$href']");
         } catch (Exception $e) {
             goto end;
         }
@@ -95,8 +105,13 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     {
 
         $htmlTRacker = "";
+        if ($this->language == "en") {
+            $href = ConstEnv::HREF_DETAIL_TRACKER_EN;
+        } else {
+            $href = ConstEnv::HREF_DETAIL_TRACKER_VI;
+        }
         try {
-            $this->seleniumDriver->clickButton("a[href='#/match-summary/live-commentary']");
+            $this->seleniumDriver->clickButton("a[href='#$href']");
         } catch (Exception $e) {
             goto end;
         }
@@ -111,6 +126,48 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
         end:
         return $htmlTRacker;
+    }
+    public function crawlDetailMatch()
+    {
+        $divCrawl =  str_get_html($this->divInfo);
+        $homeScore = "";
+        $awayScore = "";
+        $time = "";
+        $divScore = $divCrawl->find(".detailScore__matchInfo > div > span");
+        $startTime = $divCrawl->find(".duelParticipant__startTime > div", 0);
+        $divTime =  $divCrawl->find(".detailScore__matchInfo > div > .eventTime", 0);
+        if ($startTime) {
+            $startTime = $startTime->text();
+        }
+        if (isset($divScore[0])) {
+            $homeScore = $divScore[0]->innertext();
+        }
+        if (isset($divScore[2])) {
+            $awayScore = $divScore[2]->innertext();
+        }
+        if ($divTime) {
+            $time = $divTime->text();
+        } else {
+            $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus", 0);
+
+            if ($divStatus) {
+                $time = $divStatus->text();
+            } 
+        }
+        $logo = $divCrawl->find(".participant__image");
+        $homeName = $divCrawl->find(".participant__participantName",1)->text();
+        $awayName = $divCrawl->find(".participant__participantName",3)->text();
+       
+        return  [
+            'homeName' => $homeName,
+            'awayName' => $awayName,
+            'homeScore' => $homeScore,
+            'awayScore' => $awayScore,
+            'homeLogo' => $logo[0]->getAttribute("src"),
+            'awayLogo' => $logo[1]->getAttribute("src"),
+            'timeNow' => $time,
+            'startTime' => $startTime
+        ];
     }
 
     public function crawlDetailInfo()
@@ -242,42 +299,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             }
         }
 
-        $homeScore = "";
-        $awayScore = "";
-        $time = "";
-        $divScore = $divCrawl->find(".detailScore__matchInfo > div > span");
-        $startTime = $divCrawl->find(".duelParticipant__startTime > div", 0);
-        $divTime =  $divCrawl->find(".detailScore__matchInfo > div > .eventTime", 0);
-        if ($startTime) {
-            $startTime = $startTime->text();
-        }
-        if (isset($divScore[0])) {
-            $homeScore = $divScore[0]->innertext();
-        }
-        if (isset($divScore[2])) {
-            $awayScore = $divScore[2]->innertext();
-        }
-        if ($divTime) {
-            $time = $divTime->text();
-        } else {
-            $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus", 0);
-
-            if ($divStatus) {
-                $time = $divStatus->text();
-            }
-        }
-        $logo = $divCrawl->find(".participant__image");
-        return [
-            'info' => $info,
-            'match' => [
-                'homeScore' => $homeScore,
-                'awayScore' => $awayScore,
-                'homeLogo' => $logo[0]->getAttribute("src"),
-                'awayLogo' => $logo[1]->getAttribute("src"),
-                'timeNow' => $time,
-                'startTime' => $startTime
-            ]
-        ];
+        return $info;
     }
     public function crawlDetailTracker()
     {
@@ -343,8 +365,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         if (!$svg) {
             $svg = $description->find("div", 0);
             if (!$svg->find("title")) {
-                $svg = $description->find("div",1);
-
+                $svg = $description->find("div", 1);
             }
         }
         //get event
@@ -376,11 +397,9 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 }
             } else {
                 $class_attr = $svg->getAttribute('class');
-                $class_attr = explode(" ",$class_attr)[0];
+                $class_attr = explode(" ", $class_attr)[0];
                 $event = trim($class_attr);
             }
-            
-          
         }
         $strDescription = $description->getAttribute("title");
         if (!$strDescription) {

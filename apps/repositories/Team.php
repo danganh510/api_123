@@ -5,6 +5,7 @@ namespace Score\Repositories;
 use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
 use Score\Models\ScTeam;
+use Score\Models\ScTeamLang;
 use Symfony\Component\DomCrawler\Crawler;
 use Score\Repositories\CacheTeam;
 
@@ -109,6 +110,17 @@ class Team extends Component
             'team_id = :id:',
             'bind' => [
                 'id' => $team_id
+            ]
+        ]);
+        return $team;
+    }
+    public static function getTeamLangByIdAndLang($team_id,$lang)
+    {
+        $team = ScTeamLang::findFirst([
+            'team_id = :id: AND team_lang_code = :lang:',
+            'bind' => [
+                'id' => $team_id,
+                'lang' => $lang
             ]
         ]);
         return $team;
