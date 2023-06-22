@@ -20,6 +20,7 @@ class MatchController extends ControllerBase
 {
     public function listAction()
     {
+        
         $time_zone = 7;
         //get các trận cần lấy theo thời gian
 
