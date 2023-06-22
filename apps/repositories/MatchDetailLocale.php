@@ -9,7 +9,7 @@ class MatchDetailLocale extends Component
 {
 
     public static function changeKeyToContentStart($arrStart, $language) {
-        if (!empty($arrStart)) {
+        if (empty($arrStart)) {
             return [];
         }
         $ar_config = self::getAllConfig();
@@ -31,7 +31,7 @@ class MatchDetailLocale extends Component
         return $arrStartNew;
     }
     public static function changeContentToKeyStart($arrStart, $language) {
-        if (!empty($arrStart)) {
+        if (empty($arrStart)) {
             return [];
         }
         $ar_config = self::getAllConfig();
