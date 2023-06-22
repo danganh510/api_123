@@ -40,7 +40,7 @@ class CrawlerdetailliveController extends ControllerBase
         $is_nomal = $this->request->get("isNomal");
         $language = $this->request->get("language");
         if (!$language) {
-            $language = "en";
+            $language = "vi";
         }
 
 
