@@ -55,7 +55,7 @@ class MatchController extends ControllerBase
         if (!$arrMatch) {
             goto end;
         }
-        var_dump($arrMatch);exit;
+      
         
         foreach ($arrMatch as $key => $match) {
             if (!is_array($match)) {

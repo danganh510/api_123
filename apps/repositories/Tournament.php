@@ -96,7 +96,7 @@ class Tournament extends Component
     }
     public function getTourByLang($language) {
         if ($language == "vi") {
-            return ScTournament::find("tour_active = 'Y'")->toArray();
+            return ScTournament::find())->toArray();
         } else {
             return $this->modelsManager->createBuilder()
             ->columns("t.tournament_id, t.tournament_type, t.tournament_href_flashscore, t.tournament_name_flash_score, t.tournament_country, t.tournament_country_code,
@@ -111,7 +111,7 @@ class Tournament extends Component
     }
     public function getTourByIdAndLang($id,$language) {
         if ($language == "vi") {
-            return ScTournament::find("tour_active = 'Y'")->toArray();
+            return ScTournament::find("tournament_id = $id")->toArray()[0];
         } else {
             return $this->modelsManager->createBuilder()
             ->columns("t.tournament_id, t.tournament_type, t.tournament_href_flashscore, t.tournament_name_flash_score, t.tournament_country, t.tournament_country_code,
