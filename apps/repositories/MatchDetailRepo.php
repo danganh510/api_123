@@ -2,12 +2,10 @@
 
 namespace Score\Repositories;
 
-use Exception;
-use Score\Models\ForexcecConfig;
+
 use Phalcon\Mvc\User\Component;
 use Score\Models\ScMatch;
 use Score\Models\ScTournament;
-use Symfony\Component\DomCrawler\Crawler;
 
 class MatchDetailRepo extends Component
 {
