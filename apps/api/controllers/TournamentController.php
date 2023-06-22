@@ -33,6 +33,8 @@ class TournamentController extends ControllerBase
     $arrTour = $tourRepo->getTourIsShowByLang($this->requestParams['language']);
     $list_data = [];
     foreach ($arrTour as $tour) {
+      var_dump($tour);exit;
+      
       $list_data[] = [
         'id' => $tour->getTournamentId(),
         'name' => $tour->getTournamentName(),
