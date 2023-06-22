@@ -9,6 +9,9 @@ class MatchDetailLocale extends Component
 {
 
     public static function changeKeyToContentStart($arrStart, $language) {
+        if (!empty($arrStart)) {
+            return [];
+        }
         $ar_config = self::getAllConfig();
         if ($language == "en") {
             $ar_config = array_column($ar_config,"config_content_en","config_key");
@@ -28,6 +31,9 @@ class MatchDetailLocale extends Component
         return $arrStartNew;
     }
     public static function changeContentToKeyStart($arrStart, $language) {
+        if (!empty($arrStart)) {
+            return [];
+        }
         $ar_config = self::getAllConfig();
         if ($language == "en") {
             $ar_config = array_column($ar_config,"config_key","config_crawl_en");
