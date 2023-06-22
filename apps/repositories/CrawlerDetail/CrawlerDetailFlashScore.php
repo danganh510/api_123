@@ -57,7 +57,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             $this->divInfo = $this->getDivInfo();
             $this->divStart = $this->getDivStart();
             $this->divTracker = $this->getDivTracker();
-            
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -152,12 +151,12 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
             if ($divStatus) {
                 $time = $divStatus->text();
-            } 
+            }
         }
         $logo = $divCrawl->find(".participant__image");
-        $homeName = $divCrawl->find(".participant__participantName",1)->text();
-        $awayName = $divCrawl->find(".participant__participantName",3)->text();
-       
+        $homeName = $divCrawl->find(".participant__participantName", 1)->text();
+        $awayName = $divCrawl->find(".participant__participantName", 3)->text();
+
         return  [
             'homeName' => $homeName,
             'awayName' => $awayName,

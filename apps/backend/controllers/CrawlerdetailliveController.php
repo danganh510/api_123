@@ -79,9 +79,7 @@ class CrawlerdetailliveController extends ControllerBase
         } else {
             $urlDetail = "https://www.flashscore.vn/" . str_replace("match","trandau",$matchCrawl->getMatchLinkDetailFlashscore()) . "/#/tom-tat-tran-dau/tom-tat-tran-dau";
         }
-    
-
-        $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live);
+        $crawler = new CrawlerDetail($this->type_crawl, $urlDetail, $is_live, $language);
         $detail = $crawler->getInstance();
         $infoModel = ScMatchInfo::findFirst([
             'info_match_id = :id:',
