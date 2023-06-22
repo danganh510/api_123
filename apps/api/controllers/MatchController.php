@@ -191,7 +191,7 @@ class MatchController extends ControllerBase
 
 
         
-        $match_start = MatchDetailLocale::changeKeyToContentStart($matchInfo['info_stats'],$this->requestParams['language']);
+        $match_start = MatchDetailLocale::changeKeyToContentStart(json_decode($matchInfo['info_stats'],true),$this->requestParams['language']);
         $info = [
             'id' => $matchInfo['match_id'],
             'name' => $matchInfo['match_name'],
@@ -211,7 +211,7 @@ class MatchController extends ControllerBase
             'htScore' => $matchInfo['match_score_ht'],
             'summary' => $matchInfo['info_summary'],
             'timeLine' => $matchInfo['info_time'],
-            'stats' => $match_start,
+            'stats' => json_encode($match_start,true),
         ];
         return $info;
     }
