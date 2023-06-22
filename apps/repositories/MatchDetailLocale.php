@@ -11,9 +11,9 @@ class MatchDetailLocale extends Component
     public static function changeKeyToContentStart($arrStart, $language) {
         $ar_config = self::getAllConfig();
         if ($language == "en") {
-            $ar_config = array_column($ar_config,"config_crawl_en","config_key");
+            $ar_config = array_column($ar_config,"config_content_en","config_key");
         } else {
-            $ar_config = array_column($ar_config,"config_crawl_vi","config_key");
+            $ar_config = array_column($ar_config,"config_content_vi","config_key");
         }
         $arrStartNew = [];        
         foreach ($arrStart as $start) {
