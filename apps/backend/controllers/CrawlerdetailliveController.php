@@ -118,6 +118,9 @@ class CrawlerdetailliveController extends ControllerBase
         if ($result) {
             echo "crawl succes--";
         }
+        if ($language == "vi") {
+            goto not_save_status;
+        }
 
 
         //lưu thông tin mới của match
@@ -150,13 +153,14 @@ class CrawlerdetailliveController extends ControllerBase
                 $matchCrawl->setMatchStatus($timeInfo['status']);
             }
         }
-        if ($detail['match']['startTime'] && isset($detail['match']['startTime'])) {
+        if ($detail['match']['startTime'] && isset($detail['match']['startTime']) && $language == "en") {
             $start_time = strtotime($detail['match']['startTime']);
             $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;
             if ($start_time) {
                 $matchCrawl->setMatchStartTime($start_time);
             }
         }
+        not_save_status:
 
         //save logo team:
         $homeTeam = ScTeam::findFirstById($matchCrawl->getMatchHomeId());
