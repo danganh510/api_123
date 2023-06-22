@@ -20,7 +20,7 @@ class MatchController extends ControllerBase
 {
     public function listAction()
     {
-        
+
         $time_zone = 7;
         //get các trận cần lấy theo thời gian
 
@@ -186,6 +186,8 @@ class MatchController extends ControllerBase
         $teamRepo = new Team();
         $home = $teamRepo->getTeamByIdAndLang($matchInfo['match_home_id'],$this->requestParams['language']);
         $away = $teamRepo->getTeamByIdAndLang($matchInfo['match_away_id'],$this->requestParams['language']);
+        var_dump($matchInfo['info_stats']);exit;
+        
         $match_start = MatchDetailLocale::changeKeyToContentStart($matchInfo['info_stats'],$this->requestParams['language']);
         $info = [
             'id' => $matchInfo['match_id'],
