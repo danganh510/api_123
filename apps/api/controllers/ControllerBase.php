@@ -48,7 +48,7 @@ class ControllerBase extends Controller
 
             return $response;
         }
-        $this->requestParams['language'] = $this->requestParams['language'] ? $this->requestParams['language'] : "vi";
+        $this->requestParams['language'] = isset($this->requestParams['language']) ? $this->requestParams['language'] : "vi";
     }
     public function beforeExecuteRoute()
     {
