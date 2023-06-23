@@ -107,7 +107,7 @@ class CrawlerdetailliveController extends ControllerBase
         }
         if (!empty($detail['start'])) {
             $arStartFormat = MatchDetailLocale::changeContentToKeyStart($detail['start'], $language);
-  
+
             $infoModel->setInfoStats(json_encode($arStartFormat));
         }
         if (!empty($detail['tracker'])) {
@@ -118,9 +118,9 @@ class CrawlerdetailliveController extends ControllerBase
         if ($result) {
             echo "crawl succes--";
         }
-        if ($language == "vi") {
-            goto not_save_status;
-        }
+        // if ($language == "vi") {
+        //     goto not_save_status;
+        // }
 
 
         //lưu thông tin mới của match
@@ -145,12 +145,12 @@ class CrawlerdetailliveController extends ControllerBase
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
 
-                $matchCrawl->setMatchTime($timeInfo['time_live']);
-                if ($id == 4800) {
-                    var_dump($time, $timeInfo);
+                if (is_numeric($timeInfo['time_live']) || $timeInfo['status'] != MatchRepo::MATH_STATUS_WAIT || $timeInfo['status'] != MatchRepo::MATH_STATUS_START) {
+                    $matchCrawl->setMatchTime($timeInfo['time_live']);
+                
+                    //còn 1 lỗi
+                    $matchCrawl->setMatchStatus($timeInfo['status']);
                 }
-                //còn 1 lỗi
-                $matchCrawl->setMatchStatus($timeInfo['status']);
             }
         }
         if ($detail['match']['startTime'] && isset($detail['match']['startTime']) && $language == "en") {
