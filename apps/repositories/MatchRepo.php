@@ -95,18 +95,18 @@ class MatchRepo extends Component
             $matchSave->setMatchStartYear($year_start);
             $matchSave->setMatchStartTime($timeInfo['start_time']);
         }
-    
 
-       // if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
-            //use crawl api
-            if (in_array($matchSave->getMatchStatus(),[MatchRepo::MATH_CANCEL,MatchRepo::MATH_POSTPONED])) {
-                $matchSave->setMatchStartTime($timeInfo['start_time']);
-                $matchSave->setMatchStartDay($day_start);
-                $matchSave->setMatchStartMonth($month_start);
-                $matchSave->setMatchStartYear($year_start);
-            }
-           
-     //   }
+
+        // if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
+        //use crawl api
+        if (in_array($matchSave->getMatchStatus(), [MatchRepo::MATH_CANCEL, MatchRepo::MATH_POSTPONED])) {
+            $matchSave->setMatchStartTime($timeInfo['start_time']);
+            $matchSave->setMatchStartDay($day_start);
+            $matchSave->setMatchStartMonth($month_start);
+            $matchSave->setMatchStartYear($year_start);
+        }
+
+        //   }
 
         if ($match->getRound()) {
             $matchSave->setMatchRound($match->getRound());
@@ -189,6 +189,7 @@ class MatchRepo extends Component
                 break;
             case "FT":
             case "Finished":
+            case "Kết thúc":
                 $time = 90;
                 $start_time = time() - $time * 60;
 
@@ -215,24 +216,22 @@ class MatchRepo extends Component
                 $status = self::MATH_WAIT_UPDATE;
                 break;
             case "AfterET":
+            case "Kết thúc Hiệp Phụ":
                 $time = 120;
                 $start_time = time() - $time * 60;
                 $time_live = "AfterET";
                 $status = self::MATH_STATUS_FINSH;
                 break;
             case "After Extra Time":
+            case "Kết thúc Hiệp Phụ":
                 $time = 120;
                 $start_time = time() - $time * 60;
                 $time_live = "After Extra Time";
                 $status = self::MATH_STATUS_FINSH;
                 break;
             case "After Penalties":
-                $time = 90;
-                $start_time = time() - $time * 60;
-                $time_live = "After Penalties";
-                $status = self::MATH_STATUS_FINSH;
-                break;
             case "AfterPen.":
+            case "Kết thúc Luân lưu":
                 $time = 90;
                 $start_time = time() - $time * 60;
                 $time_live = "After Penalties";
@@ -245,24 +244,28 @@ class MatchRepo extends Component
                 $status = self::MATH_AFTER_FT;
                 break;
             case "Awarded":
+            case "Xử thắng":
                 $time = 135;
                 $start_time = time() - $time * 60;
                 $time_live = "Awarded";
                 $status = self::MATH_AFTER_FT;
                 break;
             case "Postponed":
+            case "Hoãn":
                 $time = 135;
                 $start_time = time() - $time * 60;
                 $time_live = "Postponed";
                 $status = self::MATH_POSTPONED;
                 break;
             case "Cancelled":
+            case "Hủy":
                 $time = 135;
                 $start_time = time() - $time * 60;
                 $time_live = "Cancelled";
                 $status = self::MATH_CANCEL;
                 break;
             case "Walkover":
+            case "Tự động thắng":
                 $time = 90;
                 $start_time = time() - $time * 60;
                 $time_live = "Walkover";
