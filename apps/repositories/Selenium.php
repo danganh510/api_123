@@ -159,6 +159,7 @@ class Selenium extends Component
     public function waitGetUrl()
     {
 
+        $url = "";
         try {
             $this->driver->wait()->until(function ($driver) {
                 return count($driver->getWindowHandles()) > 1;
