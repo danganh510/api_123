@@ -108,6 +108,9 @@ class MatchDetailRepo extends Component
         if (!$matchCrawl) {
             $matchCrawl = MatchDetailRepo::getMatchWait();
         }
+        if (!$matchCrawl) {
+            $matchCrawl = MatchDetailRepo::getMatchCrawlMin();
+        }
         if ($id) {
             $matchCrawl = ScMatch::findFirst([
                 'match_id = :id:',
@@ -161,6 +164,12 @@ class MatchDetailRepo extends Component
     {
         return ScMatch::findFirst([
             '(match_crawl_detail = 1 OR match_crawl_detail = 0) AND match_status = "F"'
+        ]);
+    }
+    public static function getMatchCrawlMin()
+    {
+        return ScMatch::findFirst([
+            'orderBy' => 'match_crawl_detail ASC'
         ]);
     }
     public function resetFlagTourKey($arrTourKey)
