@@ -333,7 +333,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 }
             }
 
-            var_dump($timeNow);exit;
             if ($timeNow) {
                 $info[] = [
                     'time' => $timeNow,
