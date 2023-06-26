@@ -60,7 +60,7 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl = $detailRepo->getMatchCrawl($is_live, $id);
         }
         $matchCrawl->setTransaction($transaction);
-
+var_dump($matchCrawl);exit;
         if (!$matchCrawl) {
             echo "Not found Match";
             die();

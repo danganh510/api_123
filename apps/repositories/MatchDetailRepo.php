@@ -117,7 +117,6 @@ class MatchDetailRepo extends Component
                 'bind' => ['id' => $id]
             ]);
         }
-        var_dump($matchCrawl);exit;
         return $matchCrawl;
     }
     public static function getMatchStartTourKey($arrTourKey)
