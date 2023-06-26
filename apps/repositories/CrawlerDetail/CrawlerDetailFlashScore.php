@@ -235,6 +235,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     {
         $info = [];
         $divCrawl = str_get_html($this->divInfo);
+        var_dump($divCrawl);exit;
         if (!$divCrawl) {
             return [];
         }
