@@ -141,7 +141,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         try {
             $this->seleniumDriver->clickButton("a[href='#$href']");
         } catch (Exception $e) {
-            echo $e->getMessage();
+            echo "not found video 1";
             goto end;
       
         }
@@ -151,8 +151,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             $this->seleniumDriver->clickButton(".videoInner");
             $url_video = $this->seleniumDriver->waitGetUrl();            
         } catch (Exception $e) {
-            echo $e->getMessage();
-
+            echo "not found video 2";
         }        
         end:
         return $url_video;
