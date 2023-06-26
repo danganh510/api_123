@@ -57,6 +57,9 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             //$html = $this->seleniumDriver->getPageSource();
             //  $this->seleniumDriver->clickButton('.filters__tab > .filters');
             $this->divInfo = $this->getDivInfo();
+            if (!$this->divInfo) {
+                goto end;
+            }
             $this->divStart = $this->getDivStart();
             $this->divTracker = $this->getDivTracker();
             $this->divVideo = $this->getDivVideo();
@@ -64,12 +67,18 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             echo $e->getMessage();
         }
         echo $this->seleniumDriver->checkRam();
+        end:
         $this->seleniumDriver->quit();
     }
     public function getDivInfo()
     {
-        $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
-        if (!$parentDiv) return "";
+        try{
+            $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
+        } catch (Exception $e) {
+            echo "Tran đấu đã bị hủy \r\n";
+            return "";
+        }
+    
 
         $htmlDivInfo = $parentDiv->getAttribute("outerHTML");
 
@@ -131,7 +140,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     }
     public function getDivVideo()
     {
-        echo "2";
         $url_video = "";
         if ($this->language == "en") {
             $href = ConstEnv::HREF_DETAIL_VIDIEO_EN;
