@@ -263,7 +263,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 $time = $div->find(".smv__timeBox", 0);
                 if ($time) {
                     $timeNow = $time->text();
-                    var_dump($timeNow);exit;
                 }
 
                 $description = $div->find("div > .smv__incidentIcon", 0);

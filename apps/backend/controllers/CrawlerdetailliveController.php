@@ -191,7 +191,6 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->setTeamLogoCrawl($detail['match']['awayLogo']);
             $awayTeam->save();
         }
-        var_dump($detail);exit;
         if ($language == "vi") {
             $homeTeam->setTeamName($detail['match']['homeName']);
             $awayTeam->setTeamName($detail['match']['awayName']);
