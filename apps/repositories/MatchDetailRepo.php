@@ -41,7 +41,7 @@ class MatchDetailRepo extends Component
         }
         return $matchCrawl;
     }
-    public function getMatchCrawl($is_live, $id)
+    public function getMatchCrawl(&$is_live, $id)
     {
 
         if ($is_live) {
@@ -98,6 +98,7 @@ class MatchDetailRepo extends Component
             //crawl detail cho trận FT
             echo "match finish\r\n";
             $matchCrawl = MatchDetailRepo::getMatchFinish();
+            $is_live = false;
         }
         if (!$matchCrawl) {
             //crawl detail cho trận FT
