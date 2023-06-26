@@ -9,6 +9,8 @@ use Score\Models\ScMatch;
 use Score\Models\ScTeam;
 use Score\Models\ScTournament;
 use Symfony\Component\DomCrawler\Crawler;
+use Phalcon\Mvc\Model\Transaction\Failed as TxFailed;
+use Phalcon\Mvc\Model\Transaction\Manager as TxManager;
 
 class MatchRepo extends Component
 {
@@ -24,6 +26,9 @@ class MatchRepo extends Component
 
     public function saveMatch($match, $home, $away, $tournament, $time_plus, $type_crawl, &$arrIdMatch = [], $is_list = true)
     {
+        $manager = new TxManager();
+        // Request a transaction
+        $transaction = $manager->get();
 
         $is_new = false;
         $timeInfo = $this->getTime($match->getTime(), $time_plus);
@@ -96,6 +101,7 @@ class MatchRepo extends Component
             $matchSave->setMatchStartTime($timeInfo['start_time']);
             $matchSave->setMatchSeaSon($tournament->getTournamentSeason());
         }
+        $matchSave->setTransaction($transaction);
 
 
         // if (abs($timeInfo['start_time'] - $matchSave->getMatchStartTime()) > 2 * 60 * 60) {
@@ -156,7 +162,7 @@ class MatchRepo extends Component
         // }
 
         $result = $matchSave->save();
-
+        $matchSave->commit();
         if ($matchSave->getMessages()) {
             echo json_encode($matchSave->getMessages());
         }
