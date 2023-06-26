@@ -27,7 +27,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
-        $match = $this->crawlDetailMatch();
         // $video = $this->crawlDetailVideo();
 
         if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
@@ -262,6 +261,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
             if (strpos($classDiv, 'smv__homeParticipant') !== false) {
                 $time = $div->find(".smv__timeBox", 0);
+                var_dump($time);exit;
                 if ($time) {
                     $timeNow = $time->text();
                 }
@@ -355,7 +355,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 ];
             }
         }
-        var_dump($info);exit;
 
         return $info;
     }
