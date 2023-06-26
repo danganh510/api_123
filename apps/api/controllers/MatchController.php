@@ -167,11 +167,11 @@ class MatchController extends ControllerBase
             ->leftJoin('Score\Models\ScMatchInfo', 'match_id  = i.info_match_id', 'i');
         if ($this->requestParams['language'] == "vi") {
             $sql = $sql->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,match_status,match_score_ht,
-                i.info_summary,i.info_time,i.info_stats,t.tournament_name,t.tournament_country_code");
+                i.info_summary,i.info_time,i.info_stats,i.info_video,t.tournament_name,t.tournament_country_code");
         } else {
             $sql = $sql->innerJoin('Score\Models\ScTournamentLang', 'tl.tournament_id = t.tournament_id', 'tl');
             $sql = $sql->columns("match_tournament_id,match_name,match_home_id,match_away_id,match_home_score,match_away_score,match_id,match_start_time,match_time,match_status,match_score_ht,
-            i.info_summary,i.info_time,i.info_stats,tl.tournament_name,t.tournament_country_code");
+            i.info_summary,i.info_time,i.info_stats,i.info_video,tl.tournament_name,t.tournament_country_code");
         }
 
         $sql =  $sql->where("match_id = :id:", [
@@ -211,6 +211,7 @@ class MatchController extends ControllerBase
             'htScore' => $matchInfo['match_score_ht'],
             'summary' => $matchInfo['info_summary'],
             'timeLine' => $matchInfo['info_time'],
+            'video' => $matchInfo['video'],
             'stats' => json_encode($match_start,true),
         ];
         return $info;
