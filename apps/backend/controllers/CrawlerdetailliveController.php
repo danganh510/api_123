@@ -61,15 +61,12 @@ class CrawlerdetailliveController extends ControllerBase
         if ($is_live) {
             $matchCrawl->setMatchCrawlDetailLive(1);
         } else {
-            if ($matchCrawl->getMatchStatus() == "F") {
-                $flag_crawl = 2;
-            } else {
-                $flag_crawl = $matchCrawl->getMatchCrawlDetail() + 1;
-            }
+            $flag_crawl = $matchCrawl->getMatchCrawlDetail() + 1;
             $matchCrawl->setMatchCrawlDetail($flag_crawl);
         }
         $matchCrawl->setMatchInsertTime(time());
         $result = $matchCrawl->save();
+        
         echo $matchCrawl->getMatchId() . "---";
         if ($matchCrawl->getMatchLinkDetailFlashscore() == "" || $matchCrawl->getMatchLinkDetailFlashscore() == null) {
             goto end;
@@ -192,7 +189,7 @@ class CrawlerdetailliveController extends ControllerBase
             $awayTeam->save();
             $homeTeam->save();
         }
-        $matchCrawl->save();
+        $result = $matchCrawl->save();
 
         if ($is_live) {
             $cache =  file_get_contents("http://123tyso.live/cache-match-live");
