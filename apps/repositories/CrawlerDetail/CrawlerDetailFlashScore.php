@@ -157,7 +157,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
             $videoElement = $this->seleniumDriver->findElement(".videoInner > object");
             if ($videoElement) {
-                $videoElement = $videoElement->getAttribute("data");
+                $url_video = $videoElement->getAttribute("data");
             } else {
                 $this->seleniumDriver->clickButton(".videoInner");
                 $url_video = $this->seleniumDriver->waitGetUrl();
