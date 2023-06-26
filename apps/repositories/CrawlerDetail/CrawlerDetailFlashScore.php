@@ -355,6 +355,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 ];
             }
         }
+        var_dump($info);exit;
 
         return $info;
     }
