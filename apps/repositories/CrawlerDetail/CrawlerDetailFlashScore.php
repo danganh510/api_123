@@ -261,7 +261,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
             if (strpos($classDiv, 'smv__homeParticipant') !== false) {
                 $time = $div->find(".smv__timeBox", 0);
-                var_dump($time);exit;
+                echo ($time);exit;
                 if ($time) {
                     $timeNow = $time->text();
                 }
