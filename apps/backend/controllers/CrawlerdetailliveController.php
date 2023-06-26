@@ -18,6 +18,8 @@ use Score\Repositories\MatchDetailRepo;
 use Score\Repositories\MatchRepo;
 use Score\Repositories\MyRepo;
 use Score\Repositories\Team;
+use Phalcon\Mvc\Model\Transaction\Failed as TxFailed;
+use Phalcon\Mvc\Model\Transaction\Manager as TxManager;
 
 class CrawlerdetailliveController extends ControllerBase
 {
@@ -43,6 +45,10 @@ class CrawlerdetailliveController extends ControllerBase
             $language = "vi";
         }
 
+        $manager = new TxManager();
+
+        // Request a transaction
+        $transaction = $manager->get();
 
         $detailRepo = new MatchDetailRepo();
 
@@ -53,6 +59,7 @@ class CrawlerdetailliveController extends ControllerBase
         } else {
             $matchCrawl = $detailRepo->getMatchCrawl($is_live, $id);
         }
+        $matchCrawl->setTransaction($transaction);
 
         if (!$matchCrawl) {
             echo "Not found Match";
@@ -66,7 +73,8 @@ class CrawlerdetailliveController extends ControllerBase
         }
         $matchCrawl->setMatchInsertTime(time());
         $result = $matchCrawl->save();
-        
+        $transaction->commit();
+
         echo $matchCrawl->getMatchId() . "---";
         if ($matchCrawl->getMatchLinkDetailFlashscore() == "" || $matchCrawl->getMatchLinkDetailFlashscore() == null) {
             goto end;
@@ -141,14 +149,14 @@ class CrawlerdetailliveController extends ControllerBase
             }
             $time = $detail['match']['timeNow'];
             $time = trim($time);
-            
+
             if ($time || strtotime($detail['match']['startTime']) > time() + 90 * 60) {
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
 
                 if (is_numeric($timeInfo['time_live']) || $timeInfo['status'] != MatchRepo::MATH_STATUS_WAIT || $timeInfo['status'] != MatchRepo::MATH_STATUS_START) {
                     $matchCrawl->setMatchTime($timeInfo['time_live']);
-                
+
                     //còn 1 lỗi
                     $matchCrawl->setMatchStatus($timeInfo['status']);
                 }
@@ -156,7 +164,7 @@ class CrawlerdetailliveController extends ControllerBase
         }
         if ($detail['match']['startTime'] && isset($detail['match']['startTime'])) {
             $start_time = strtotime($detail['match']['startTime']);
-            $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;            
+            $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;
             if ($start_time) {
                 $day_start = date('d', $start_time);
                 $month_start = date('m', $start_time);
