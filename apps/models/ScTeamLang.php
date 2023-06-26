@@ -78,4 +78,14 @@ class ScTeamLang extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
+    public static function findFirstByIdAndLang($id,$lang_code)
+    {
+        return self::findFirst([
+            'team_id = :id: AND team_lang_code = :lang_code:',
+            'bind' => [
+                'id' => $id,
+                'lang_code' => $lang_code
+            ]
+        ]);
+    }
 }

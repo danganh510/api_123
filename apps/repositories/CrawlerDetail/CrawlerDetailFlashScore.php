@@ -25,6 +25,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
         $match = $this->crawlDetailMatch();
+        $video = $this->crawlDetailVideo();
 
         if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
             return false;
@@ -35,6 +36,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             'info' => $info,
             'start' => $start,
             'tracker' => $tracker,
+            'video' => $video
         ];
         return $result;
     }
@@ -57,6 +59,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             $this->divInfo = $this->getDivInfo();
             $this->divStart = $this->getDivStart();
             $this->divTracker = $this->getDivTracker();
+            $this->divVideo = $this->getDivVideo();
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -125,6 +128,35 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
         end:
         return $htmlTRacker;
+    }
+    public function getDivVideo()
+    {
+
+        $htmlTRacker = "";
+        if ($this->language == "en") {
+            $href = ConstEnv::HREF_DETAIL_TRACKER_EN;
+        } else {
+            $href = ConstEnv::HREF_DETAIL_TRACKER_VI;
+        }
+        try {
+            $this->seleniumDriver->clickButton("a[href='#$href']");
+        } catch (Exception $e) {
+            goto end;
+        }
+        sleep(0.5);
+        $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
+        if (!$parentDiv) return "";
+        $htmlTRacker = $parentDiv->getAttribute("outerHTML");
+
+        $htmlTRacker = "<!DOCTYPE html>" . $htmlTRacker;
+        //khai bao cho the svg
+        $htmlTRacker = str_replace(["<svg ", "/svg>"], ["<div ", "/div>"], $htmlTRacker);
+
+        end:
+        return $htmlTRacker;
+    }
+    public function crawlDetailVideo()
+    {
     }
     public function crawlDetailMatch()
     {

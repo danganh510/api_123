@@ -13,6 +13,7 @@ class CrawlerDetail extends Component
     public $divInfo;
     public $divStart;
     public $divTracker;
+    public $divVideo;
     public $type_crawl;
     public $url_crawl;
     public $isLive;

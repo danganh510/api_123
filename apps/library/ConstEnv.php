@@ -17,4 +17,7 @@ class ConstEnv extends Component
 
     const HREF_DETAIL_TRACKER_EN = "/match-summary/live-commentary";
     const HREF_DETAIL_TRACKER_VI = "/tom-tat-tran-dau/binh-luan-truc-tiep";
+
+    const HREF_DETAIL_VIDIEO_EN = "/video";
+    const HREF_DETAIL_VIDIEO_VI = "/video";
 }
