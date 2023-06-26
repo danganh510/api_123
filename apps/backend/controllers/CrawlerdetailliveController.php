@@ -97,11 +97,10 @@ class CrawlerdetailliveController extends ControllerBase
             $infoModel = new ScMatchInfo();
             $infoModel->setInfoMatchId($matchCrawl->getMatchId());
         }
-        var_dump($detail);exit;
         if (!$detail) {
             $matchCrawl->setMatchStatus("C");
             $matchCrawl->save();
-            echo "not found match";
+            echo "not crawl match";
             $infoModel->setInfoTime(json_encode([]));
             $infoModel->setInfoStats(json_encode([]));
             $infoModel->setInfoSummary(json_encode([]));

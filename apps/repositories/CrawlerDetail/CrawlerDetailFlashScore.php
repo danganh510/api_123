@@ -22,7 +22,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $result = [];
         $this->getDivParent();
         $info = $this->crawlDetailInfo();
-        if (empty($info['info'])) {
+        if (empty($info)) {
             return false;
         }
         $start = $this->crawlDetailStarts();
@@ -236,11 +236,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $info = [];
         $divCrawl = str_get_html($this->divInfo);
         if (!$divCrawl) {
-            return [
-                'info' => [],
-                'match' => [],
-
-            ];
+            return [];
         }
 
         $divsInfo = $divCrawl->find("div[elementtiming='SpeedCurveFRP'] > div");
