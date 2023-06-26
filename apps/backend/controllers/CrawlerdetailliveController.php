@@ -105,6 +105,9 @@ class CrawlerdetailliveController extends ControllerBase
         if (!empty($detail['info'])) {
             $infoModel->setInfoTime(json_encode($detail['info']));
         }
+        if (!empty($detail['video'])) {
+            $infoModel->setInfoVideo($detail['video']);
+        }
         if (!empty($detail['start'])) {
             $arStartFormat = MatchDetailLocale::changeContentToKeyStart($detail['start'], $language);
 

@@ -2,6 +2,7 @@
 
 namespace Score\Repositories;
 
+use Exception;
 use Phalcon\Mvc\User\Component;
 
 class CrawlerDetail extends Component
@@ -35,6 +36,12 @@ class CrawlerDetail extends Component
     public function runSelenium()
     {
         $this->seleniumDriver = new Selenium($this->urlDetail);
+        //k lưu cokkie
+        try {
+            $this->seleniumDriver->clickButton("#onetrust-accept-btn-handler");
+            echo "---click cookie---";
+        } catch (Exception $e) {
+        }
     }
     public function getInstance()
     {

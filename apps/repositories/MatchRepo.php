@@ -27,15 +27,15 @@ class MatchRepo extends Component
 
         $is_new = false;
         $timeInfo = $this->getTime($match->getTime(), $time_plus);
-        if (is_numeric($timeInfo['start_time']) && $timeInfo['start_time'] !== 0) {
-            $month = date("m", $timeInfo['start_time']);
-            $year = date("Y", $timeInfo['start_time']);
-            $day = date("d", $timeInfo['start_time']);
-        } else {
-            $month = date("m", time());
-            $year = date("Y", time());
-            $day = date("d", time());
-        }
+        // if (is_numeric($timeInfo['start_time']) && $timeInfo['start_time'] !== 0) {
+        //     $month = date("m", $timeInfo['start_time']);
+        //     $year = date("Y", $timeInfo['start_time']);
+        //     $day = date("d", $timeInfo['start_time']);
+        // } else {
+        //     $month = date("m", time());
+        //     $year = date("Y", time());
+        //     $day = date("d", time());
+        // }
 
         // $matchSave = ScMatch::findFirst([
         //     "match_home_id = :home_id: AND match_away_id = :away_id: 
@@ -94,6 +94,7 @@ class MatchRepo extends Component
             $matchSave->setMatchStartMonth($month_start);
             $matchSave->setMatchStartYear($year_start);
             $matchSave->setMatchStartTime($timeInfo['start_time']);
+            $matchSave->setMatchSeaSon($tournament->getTournamentSeason());
         }
 
 

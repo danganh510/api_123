@@ -9,6 +9,7 @@ class ScMatchInfo extends \Phalcon\Mvc\Model
     public $info_summary;
     public $info_time;
     public $info_stats;
+    public $info_video;
     public $info_H2H;
     public $info_H2H_home;
     public $info_H2H_away;
@@ -66,6 +67,15 @@ class ScMatchInfo extends \Phalcon\Mvc\Model
     public function getInfoStats()
     {
         return $this->info_stats;
+    }
+    public function setInfoVideo($video)
+    {
+        $this->info_video = $video;
+    }
+
+    public function getInfoVideo()
+    {
+        return $this->info_video;
     }
 
     public function setInfoH2h($h2h)

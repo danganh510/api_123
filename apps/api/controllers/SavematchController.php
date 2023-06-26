@@ -71,7 +71,9 @@ class SavematchController extends ControllerBase
                 echo "can't save tournament team";
                 continue;
             }
+            //tournament infor
             $result =  $matchRepo->saveMatch($match, $home, $away, $tournament, $time_plus, $this->type_crawl, $arrMatchIdLive, $is_list);
+            
             if (isset($result['matchSave'])) {
                 $total++;
                 //  echo "Save match success --- ";

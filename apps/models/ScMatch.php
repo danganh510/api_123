@@ -6,6 +6,7 @@ class ScMatch extends \Phalcon\Mvc\Model
 {
     protected $match_id;
     protected $match_tournament_id;
+    protected $match_season;
     protected $match_name;
     protected $match_status;
     protected $match_crawl_detail;
@@ -47,6 +48,20 @@ class ScMatch extends \Phalcon\Mvc\Model
      * @param mixed $match_id
      */
     public function setMatchId($match_id)
+    {
+        $this->match_id = $match_id;
+    }
+    /**
+     * @param mixed
+     */
+    public function getMatchSeaSon()
+    {
+        return $this->match_id;
+    }
+    /**
+     * @param mixed $match_id
+     */
+    public function setMatchSeaSon($match_id)
     {
         $this->match_id = $match_id;
     }

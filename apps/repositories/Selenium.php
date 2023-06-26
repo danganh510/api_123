@@ -156,4 +156,21 @@ class Selenium extends Component
         // $this->cache->setCache($count - 1);
         return $this->driver->quit();
     }
+    public function waitGetUrl()
+    {
+
+        try {
+            $this->driver->wait()->until(function ($driver) {
+                return count($driver->getWindowHandles()) > 1;
+            });
+            $handles = $this->driver->getWindowHandles();
+            $this->driver->switchTo()->window(end($handles));
+            $url = $this->driver->getCurrentURL();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+           // exit;
+        }
+
+        return $url;
+    }
 }

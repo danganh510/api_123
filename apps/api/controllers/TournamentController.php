@@ -14,6 +14,8 @@ use Score\Models\ScTournamentStandings;
 use Score\Repositories\CacheMatch;
 use Score\Repositories\CacheMatchIdLive;
 use Score\Repositories\CacheMatchLive;
+use Score\Repositories\CacheRepo;
+use Score\Repositories\CacheRepoNew;
 use Score\Repositories\CacheTeam;
 use Score\Repositories\CacheTour;
 use Score\Repositories\CrawlerList;
@@ -173,26 +175,32 @@ class TournamentController extends ControllerBase
   }
   public function getTourInfor($tour_id)
   {
-    $tourRepo = new Tournament();
-    $tourModel = $tourRepo->getTourByIdAndLang($tour_id, $this->requestParams['language']);
-    if (!$tourModel) {
-      return false;
-    }
-
-    $tourInfo = [
-      'name' => $tourModel['tournament_name'],
-      'slug' => $tourModel['tournament_slug'],
-      'category' => [
-        'name' => $tourModel['tournament_country_code'],
-        'slug' => MyRepo::create_slug($tourModel['tournament_country']),
-        'sport' => [
-          "name" => "football",
-          "slug" => "football"
-        ],
-        'flag' => $tourModel['tournament_country'],
-        "countryCode" => $tourModel['tournament_country_code']
-      ]
-    ];
-    return $tourInfo;
+    $cache = new CacheRepoNew("tournamencontroller_getTourInfor_".$tour_id."_".$this->requestParams['language']);
+    $data = $cache->getCache();
+    if (!$data) {
+      $tourRepo = new Tournament();
+      $tourModel = $tourRepo->getTourByIdAndLang($tour_id, $this->requestParams['language']);
+      if (!$tourModel) {
+        return false;
+      }
+  
+      $tourInfo = [
+        'name' => $tourModel['tournament_name'],
+        'slug' => $tourModel['tournament_slug'],
+        'category' => [
+          'name' => $tourModel['tournament_country_code'],
+          'slug' => MyRepo::create_slug($tourModel['tournament_country']),
+          'sport' => [
+            "name" => "football",
+            "slug" => "football"
+          ],
+          'flag' => $tourModel['tournament_country'],
+          "countryCode" => $tourModel['tournament_country_code']
+        ]
+      ];
+      $data = $cache->setCache($tourInfo);
+    } 
+   
+    return $data;
   }
 }

@@ -25,7 +25,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
         $match = $this->crawlDetailMatch();
-        $video = $this->crawlDetailVideo();
+       // $video = $this->crawlDetailVideo();
 
         if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
             return false;
@@ -36,7 +36,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
             'info' => $info,
             'start' => $start,
             'tracker' => $tracker,
-            'video' => $video
+            'video' => $this->divVideo
         ];
         return $result;
     }
@@ -131,32 +131,36 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     }
     public function getDivVideo()
     {
-
-        $htmlTRacker = "";
+        echo "2";
+        $url_video = "";
         if ($this->language == "en") {
-            $href = ConstEnv::HREF_DETAIL_TRACKER_EN;
+            $href = ConstEnv::HREF_DETAIL_VIDIEO_EN;
         } else {
-            $href = ConstEnv::HREF_DETAIL_TRACKER_VI;
+            $href = ConstEnv::HREF_DETAIL_VIDIEO_VI;
         }
         try {
             $this->seleniumDriver->clickButton("a[href='#$href']");
         } catch (Exception $e) {
+            echo $e->getMessage();
             goto end;
+      
         }
         sleep(0.5);
-        $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
-        if (!$parentDiv) return "";
-        $htmlTRacker = $parentDiv->getAttribute("outerHTML");
 
-        $htmlTRacker = "<!DOCTYPE html>" . $htmlTRacker;
-        //khai bao cho the svg
-        $htmlTRacker = str_replace(["<svg ", "/svg>"], ["<div ", "/div>"], $htmlTRacker);
+        try {
+            $this->seleniumDriver->clickButton(".videoInner");
+            $url_video = $this->seleniumDriver->waitGetUrl();            
+        } catch (Exception $e) {
+            echo $e->getMessage();
 
+        }        
         end:
-        return $htmlTRacker;
+        return $url_video;
     }
     public function crawlDetailVideo()
     {
+        //$divCrawl =  str_get_html($this->divVideo);
+
     }
     public function crawlDetailMatch()
     {
