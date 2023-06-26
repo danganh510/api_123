@@ -144,7 +144,8 @@ class CrawlerdetailliveController extends ControllerBase
             }
             $time = $detail['match']['timeNow'];
             $time = trim($time);
-            if ($time) {
+            
+            if ($time || strtotime($detail['match']['startTime']) > time() + 90 * 60) {
                 $matchRepo = new MatchRepo();
                 $timeInfo = $matchRepo->getTime($time, 0, "detail");
 
@@ -156,11 +157,18 @@ class CrawlerdetailliveController extends ControllerBase
                 }
             }
         }
-        if ($detail['match']['startTime'] && isset($detail['match']['startTime']) && $language == "en") {
+        if ($detail['match']['startTime'] && isset($detail['match']['startTime'])) {
             $start_time = strtotime($detail['match']['startTime']);
-            $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;
+            $start_time = is_numeric($start_time) && $start_time != 0 ? $start_time : false;            
             if ($start_time) {
+                $day_start = date('d', $start_time);
+                $month_start = date('m', $start_time);
+                $year_start = date('Y', $start_time);
+
                 $matchCrawl->setMatchStartTime($start_time);
+                $matchCrawl->setMatchStartDay($day_start);
+                $matchCrawl->setMatchStartMonth($month_start);
+                $matchCrawl->setMatchStartYear($year_start);
             }
         }
         not_save_status:

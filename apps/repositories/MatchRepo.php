@@ -177,7 +177,7 @@ class MatchRepo extends Component
     }
     public function getTime($match_time, $time_plus, $type = "list")
     {
-        $match_time = trim($match_time);
+        $match_time = trim($match_time);        
         switch ($match_time) {
             case "HT":
             case "Half Time":
@@ -210,7 +210,11 @@ class MatchRepo extends Component
                 $time_live = "Interrupted";
                 $status = self::MATH_STATUS_FINSH;
                 break;
+
             case "Awaiting updates":
+            case "FRO - Chỉ có kết quả chung cuộc.":
+            case "FRO":
+            case "Chỉ có kết quả chung cuộc.":
                 $time = 90;
                 $start_time = 0;
                 $time_live = "Awaiting updates";

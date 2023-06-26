@@ -25,7 +25,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
         $match = $this->crawlDetailMatch();
-       // $video = $this->crawlDetailVideo();
+        // $video = $this->crawlDetailVideo();
 
         if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
             return false;
@@ -143,16 +143,15 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         } catch (Exception $e) {
             echo "not found video 1";
             goto end;
-      
         }
         sleep(0.5);
 
         try {
             $this->seleniumDriver->clickButton(".videoInner");
-            $url_video = $this->seleniumDriver->waitGetUrl();            
+            $url_video = $this->seleniumDriver->waitGetUrl();
         } catch (Exception $e) {
             echo "not found video 2";
-        }        
+        }
         end:
         return $url_video;
     }
@@ -184,6 +183,12 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         } else {
             $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus", 0);
 
+            if ($divStatus) {
+                $time = $divStatus->text();
+            }
+        }
+        if (!$time) {
+            $divStatus =  $divCrawl->find(".detailScore__status", 0);
             if ($divStatus) {
                 $time = $divStatus->text();
             }
