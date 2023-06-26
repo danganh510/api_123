@@ -214,6 +214,7 @@ class MatchController extends ControllerBase
             'video' => $matchInfo['video'],
             'stats' => json_encode($match_start,true),
         ];
+        
         return $info;
     }
 }
