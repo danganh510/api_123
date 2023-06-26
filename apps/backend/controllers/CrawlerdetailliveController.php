@@ -100,7 +100,7 @@ class CrawlerdetailliveController extends ControllerBase
         if (!$detail) {
             $matchCrawl->setMatchStatus("C");
             $matchCrawl->save();
-            echo "not crawl match";
+            echo "can not crawl match";
             $infoModel->setInfoTime(json_encode([]));
             $infoModel->setInfoStats(json_encode([]));
             $infoModel->setInfoSummary(json_encode([]));
