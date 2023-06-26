@@ -235,7 +235,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $info = [];
         $divCrawl = str_get_html($this->divInfo);
         if (!$divCrawl) {
-            return [];
+            return $info;
         }
 
         $divsInfo = $divCrawl->find("div[elementtiming='SpeedCurveFRP'] > div");
@@ -261,7 +261,6 @@ class CrawlerDetailFlashScore extends CrawlerDetail
 
             if (strpos($classDiv, 'smv__homeParticipant') !== false) {
                 $time = $div->find(".smv__timeBox", 0);
-                echo ($time);exit;
                 if ($time) {
                     $timeNow = $time->text();
                 }
@@ -334,6 +333,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
                 }
             }
 
+            var_dump($timeNow);exit;
             if ($timeNow) {
                 $info[] = [
                     'time' => $timeNow,
