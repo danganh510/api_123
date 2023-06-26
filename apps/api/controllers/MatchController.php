@@ -190,6 +190,7 @@ class MatchController extends ControllerBase
         $away = $teamRepo->getTeamByIdAndLang($matchInfo['match_away_id'],$this->requestParams['language']);
 
 
+
         
         $match_start = MatchDetailLocale::changeKeyToContentStart(json_decode($matchInfo['info_stats'],true),$this->requestParams['language']);
         $info = [
@@ -211,7 +212,7 @@ class MatchController extends ControllerBase
             'htScore' => $matchInfo['match_score_ht'],
             'summary' => $matchInfo['info_summary'],
             'timeLine' => $matchInfo['info_time'],
-            'video' => $matchInfo['video'],
+            'video' => $matchInfo['info_video'],
             'stats' => json_encode($match_start,true),
         ];
         
