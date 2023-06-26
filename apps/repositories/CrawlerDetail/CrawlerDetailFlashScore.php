@@ -22,7 +22,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $result = [];
         $this->getDivParent();
         $info = $this->crawlDetailInfo();
-        if (!$info) {
+        if (empty($info['info'])) {
             return false;
         }
         $start = $this->crawlDetailStarts();
