@@ -22,6 +22,9 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $result = [];
         $this->getDivParent();
         $info = $this->crawlDetailInfo();
+        if (!$info) {
+            return false;
+        }
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
         $match = $this->crawlDetailMatch();
