@@ -27,7 +27,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
-        // $video = $this->crawlDetailVideo();
+        $match = $this->crawlDetailMatch();
 
         if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
             return false;
