@@ -76,7 +76,6 @@ class CrawlerdetailliveController extends ControllerBase
         $transaction->commit();
 
         echo $matchCrawl->getMatchId() . "---";
-        var_dump($matchCrawl->getMatchLinkDetailFlashscore() );exit;
         if ($matchCrawl->getMatchLinkDetailFlashscore() == "" || $matchCrawl->getMatchLinkDetailFlashscore() == null) {
             goto end;
         }
@@ -98,6 +97,7 @@ class CrawlerdetailliveController extends ControllerBase
             $infoModel = new ScMatchInfo();
             $infoModel->setInfoMatchId($matchCrawl->getMatchId());
         }
+        var_dump($detail);exit;
         if (!$detail) {
             $matchCrawl->setMatchStatus("C");
             $matchCrawl->save();
