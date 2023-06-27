@@ -26,7 +26,7 @@ class Team extends Component
             ]);
         } else {
             return ScTeam::findFirst([
-                'team_name_flashscore = :name: OR team_name = :name: OR team_slug= :slug: OR team_name_livescore = :name: AND team_is_public = "Y"',
+                'team_name_flashscore = :name: OR team_name = :name: OR team_slug= :slug: OR team_name_livescore = :name:',
                 'bind' => [
                     'name' => $name,
                     'slug' => $name_slug
@@ -80,7 +80,7 @@ class Team extends Component
             $team->save();
             $is_cache_team = true;
         }
-        if (!$team->getTeamCountryCode() || (is_numeric($team->getTeamCountryCode()) && !is_numeric($team->getTeamCountryCode()))) {
+        if ($country_code && !$team->getTeamCountryCode() || (is_numeric($team->getTeamCountryCode()) && !is_numeric($team->getTeamCountryCode()))) {
             $team->setTeamCountryCode($country_code);
             $team->save();
             $is_cache_team = true;

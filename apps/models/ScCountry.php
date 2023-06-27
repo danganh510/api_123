@@ -36,7 +36,12 @@ class ScCountry extends \Phalcon\Mvc\Model
      * @Column(type="string", length=2, nullable=true)
      */
     protected $country_code;
-
+    /**
+     *
+     * @var string
+     * @Column(type="string", length=5, nullable=true)
+     */
+    protected $country_code_alpha3;
     /**
      *
      * @var integer
@@ -128,6 +133,18 @@ class ScCountry extends \Phalcon\Mvc\Model
         return $this;
     }
 
+    /**
+     * Method to set the value of field country_code_alpha3
+     *
+     * @param string $country_code_alpha3
+     * @return $this
+     */
+    public function setCountryCodeAlpha3($country_code_alpha3)
+    {
+        $this->country_code_alpha3 = $country_code_alpha3;
+
+        return $this;
+    }
     /**
      * Method to set the value of field country_order
      *
@@ -239,6 +256,15 @@ class ScCountry extends \Phalcon\Mvc\Model
     public function getCountryCode()
     {
         return $this->country_code;
+    }
+    /**
+     * Returns the value of field country_code_alpha3
+     *
+     * @return string
+     */
+    public function getCountryCodeAlpha3()
+    {
+        return $this->country_code_alpha3;
     }
 
     /**

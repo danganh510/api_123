@@ -155,6 +155,9 @@ class CrawlerList extends Component
         if (strpos($data['home'], '(')) {
             $data['home'] = explode('(', $data['home']);
             $data['home'] = trim($data['home'][0]);
+            $data['homeCountry'] = trim($data['home'][1]);
+            $data['homeCountry'] = str_replace(")","",$data['homeCountry']);
+            $data['homeCountry'] = trim($data['homeCountry']);
         }
         $data['away'] = $this->replaceTeamName($data['away']);
         $data['away'] = trim($data['away']);
@@ -162,14 +165,19 @@ class CrawlerList extends Component
         if (strpos($data['away'], '(')) {
             $data['away'] = explode('(', $data['away']);
             $data['away'] = trim($data['away'][0]);
+            $data['awayCountry'] = trim($data['away'][1]);
+            $data['awayCountry'] = str_replace(")","",$data['awayCountry']);
+            $data['awayCountry'] = trim($data['awayCountry']);
         }
 
         $liveMatch = new MatchCrawl();
         $liveMatch->setTime(MyRepo::replace_space($data['time']));
         $liveMatch->setHome($data['home']);
+        $liveMatch->setHomeCountry(isset($data['homeCountry']) ? $data['homeCountry'] : "");
         $liveMatch->setHomeScore(is_numeric($data['home_score']) ? $data['home_score'] : 0);
 
         $liveMatch->setAway($data['away']);
+        $liveMatch->setAwayCountry(isset($data['awayCountry']) ? $data['awayCountry'] : "");
         $liveMatch->setAwayScore(is_numeric($data['away_score']) ? $data['away_score'] : 0);
         $liveMatch->setHrefDetail($data['href_detail']);
         if ($data['round']) {

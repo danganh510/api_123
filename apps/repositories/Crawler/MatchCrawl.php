@@ -3,6 +3,7 @@
 namespace Score\Repositories;
 
 use Phalcon\Mvc\User\Component;
+use Score\Models\ScCountry;
 
 class MatchCrawl extends Component
 {
@@ -18,10 +19,12 @@ class MatchCrawl extends Component
     public $start_time;
 
     public $home;
+    public $homeCountry;
     public $home_score;
     public $home_card_red;
     public $home_img;
     public $away;
+    public $awayCountry;
     public $away_score;
     public $away_card_red;
     public $match_score_ht;
@@ -53,6 +56,10 @@ class MatchCrawl extends Component
     {
         return $this->home;
     }
+    public function getHomeCountry()
+    {
+        return $this->homeCountry;
+    }
     public function getHomeScore()
     {
         return $this->home_score;
@@ -68,6 +75,10 @@ class MatchCrawl extends Component
     public function getAway()
     {
         return $this->away;
+    }
+    public function getAwayCountry()
+    {
+        return $this->awayCountry;
     }
     public function getAwayScore()
     {
@@ -124,6 +135,24 @@ class MatchCrawl extends Component
         $this->home = $home;
         return $this->home;
     }
+    public function setHomeCountry($homeCountry)
+    {
+        $countryCodeAlpha2 = "";
+        if ($homeCountry) {
+            $cacheCountry = new CacheRepoNew("matchCrawl_sethomecountry_".$homeCountry);
+            $countryCodeAlpha2 = $cacheCountry->getCache();
+            if (!$countryCodeAlpha2) {
+                $countryModel = ScCountry::findFirst([
+                    'country_code_alpha3 = :countryCode:',
+                    'bind' => ['countryCode' => strtoupper($homeCountry)]
+                ]);
+                $countryCodeAlpha2 = $countryModel ? $countryModel->getCountryCode() : "";
+                $countryCodeAlpha2 = $cacheCountry->setCache($countryCodeAlpha2);
+            }
+        }
+        $this->homeCountry = $countryCodeAlpha2;
+        return $this->homeCountry;
+    }
     public function setHomeScore($home_score)
     {
         $this->home_score = $home_score;
@@ -143,6 +172,11 @@ class MatchCrawl extends Component
     {
         $this->away = $away;
         return $this->away;
+    }
+    public function setAwayCountry($awayCountry)
+    {
+        $this->awayCountry = $awayCountry;
+        return $this->awayCountry;
     }
     public function setAwayScore($away_score)
     {

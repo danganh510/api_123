@@ -55,8 +55,8 @@ class SavematchController extends ControllerBase
             $tournamentCrawl = new MatchTournament();
             $tournamentCrawl->setData($match->getTournament());
 
-            $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl, $is_cache_team);
-            $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getCountryCode(), $arrTeamOb, $this->type_crawl, $is_cache_team);
+            $home = Team::saveTeam($match->getHome(), $match->getHomeImg(), $match->getHomeCountry(), $arrTeamOb, $this->type_crawl, $is_cache_team);
+            $away = Team::saveTeam($match->getAway(), $match->getAwayImg(), $match->getAwayCountry(), $arrTeamOb, $this->type_crawl, $is_cache_team);
             $tournament = Tournament::saveTournament($tournamentCrawl, $this->type_crawl, $arrTour, $is_cache_tour);
 
             if (!$home) {
