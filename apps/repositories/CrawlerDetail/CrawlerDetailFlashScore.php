@@ -22,13 +22,12 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $result = [];
         $this->getDivParent();
         $info = $this->crawlDetailInfo();
-        if (empty($info['info'])) {
+        if (empty($info)) {
             return false;
         }
         $start = $this->crawlDetailStarts();
         $tracker = $this->crawlDetailTracker();
         $match = $this->crawlDetailMatch();
-        // $video = $this->crawlDetailVideo();
 
         if (!$this->divInfo && !$this->divStart && !$this->divTracker) {
             return false;
@@ -75,13 +74,13 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     }
     public function getDivInfo()
     {
-        try{
+        try {
             $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
         } catch (Exception $e) {
             echo "Tran đấu đã bị hủy \r\n";
             return "";
         }
-    
+
 
         $htmlDivInfo = $parentDiv->getAttribute("outerHTML");
 
@@ -106,7 +105,8 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         sleep(0.5);
         $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
-        if (!$parentDiv) return "";
+        if (!$parentDiv)
+            return "";
         $htmlDivStart = $parentDiv->getAttribute("outerHTML");
 
         $htmlDivStart = "<!DOCTYPE html>" . $htmlDivStart;
@@ -131,7 +131,8 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         sleep(0.5);
         $parentDiv = $this->seleniumDriver->findElement('div[id="detail"]');
-        if (!$parentDiv) return "";
+        if (!$parentDiv)
+            return "";
         $htmlTRacker = $parentDiv->getAttribute("outerHTML");
 
         $htmlTRacker = "<!DOCTYPE html>" . $htmlTRacker;
@@ -151,18 +152,27 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         }
         try {
             $this->seleniumDriver->clickButton("a[href='#$href']");
+            sleep(0.5);
+
+            $videoElement = $this->seleniumDriver->findElement(".videoInner > object");
+            if ($videoElement) {
+                $url_video = $videoElement->getAttribute("data");
+            } else {
+                $this->seleniumDriver->clickButton(".videoInner");
+                $url_video = $this->seleniumDriver->waitGetUrl();
+            }
         } catch (Exception $e) {
             echo "not found video 1";
             goto end;
         }
-        sleep(0.5);
 
-        try {
-            $this->seleniumDriver->clickButton(".videoInner");
-            $url_video = $this->seleniumDriver->waitGetUrl();
-        } catch (Exception $e) {
-            echo "not found video 2";
-        }
+        // try {
+        //     $this->seleniumDriver->clickButton(".videoInner");
+        //     $url_video = $this->seleniumDriver->waitGetUrl();
+        // } catch (Exception $e) {
+        //     echo "not found video 2";
+        // }
+
         end:
         return $url_video;
     }
@@ -173,13 +183,13 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     }
     public function crawlDetailMatch()
     {
-        $divCrawl =  str_get_html($this->divInfo);
+        $divCrawl = str_get_html($this->divInfo);
         $homeScore = "";
         $awayScore = "";
         $time = "";
         $divScore = $divCrawl->find(".detailScore__matchInfo > div > span");
         $startTime = $divCrawl->find(".duelParticipant__startTime > div", 0);
-        $divTime =  $divCrawl->find(".detailScore__matchInfo > div > .eventTime", 0);
+        $divTime = $divCrawl->find(".detailScore__matchInfo > div > .eventTime", 0);
         if ($startTime) {
             $startTime = $startTime->text();
         }
@@ -192,14 +202,14 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         if ($divTime) {
             $time = $divTime->text();
         } else {
-            $divStatus =  $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus", 0);
+            $divStatus = $divCrawl->find(".detailScore__matchInfo > div > .fixedHeaderDuel__detailStatus", 0);
 
             if ($divStatus) {
                 $time = $divStatus->text();
             }
         }
         if (!$time) {
-            $divStatus =  $divCrawl->find(".detailScore__status", 0);
+            $divStatus = $divCrawl->find(".detailScore__status", 0);
             if ($divStatus) {
                 $time = $divStatus->text();
             }
@@ -208,7 +218,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
         $homeName = $divCrawl->find(".participant__participantName", 1)->text();
         $awayName = $divCrawl->find(".participant__participantName", 3)->text();
 
-        return  [
+        return [
             'homeName' => $homeName,
             'awayName' => $awayName,
             'homeScore' => $homeScore,
@@ -223,13 +233,9 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     public function crawlDetailInfo()
     {
         $info = [];
-        $divCrawl =  str_get_html($this->divInfo);
+        $divCrawl = str_get_html($this->divInfo);
         if (!$divCrawl) {
-            return [
-                'info' => [],
-                'match' => [],
-
-            ];
+            return $info;
         }
 
         $divsInfo = $divCrawl->find("div[elementtiming='SpeedCurveFRP'] > div");
@@ -354,7 +360,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     public function crawlDetailTracker()
     {
         $tracker = [];
-        $divCrawl =  str_get_html($this->divTracker);
+        $divCrawl = str_get_html($this->divTracker);
         if (!$divCrawl) {
             return $tracker;
         }
@@ -384,7 +390,7 @@ class CrawlerDetailFlashScore extends CrawlerDetail
     public function crawlDetailStarts()
     {
         $start = [];
-        $divCrawl =  str_get_html($this->divStart);
+        $divCrawl = str_get_html($this->divStart);
         if (!$divCrawl) {
             return $start;
         }

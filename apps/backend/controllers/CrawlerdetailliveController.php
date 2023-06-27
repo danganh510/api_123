@@ -60,7 +60,7 @@ class CrawlerdetailliveController extends ControllerBase
             $matchCrawl = $detailRepo->getMatchCrawl($is_live, $id);
         }
         $matchCrawl->setTransaction($transaction);
-
+// var_dump($matchCrawl);exit;
         if (!$matchCrawl) {
             echo "Not found Match";
             die();
@@ -100,7 +100,7 @@ class CrawlerdetailliveController extends ControllerBase
         if (!$detail) {
             $matchCrawl->setMatchStatus("C");
             $matchCrawl->save();
-            echo "not found match";
+            echo "can not crawl match";
             $infoModel->setInfoTime(json_encode([]));
             $infoModel->setInfoStats(json_encode([]));
             $infoModel->setInfoSummary(json_encode([]));
