@@ -25,7 +25,7 @@ class TeamController extends ControllerBase
             if ($validator->validInt($keyword)) {
                 $sql->where("team_id = :keyword:", ["keyword" => $keyword]);
             } else {
-                $sql->where("team_name like CONCAT('%',:keyword:,'%') ");
+                $sql->where("team_name like CONCAT('%',:keyword:,'%') OR team_name_livescore like CONCAT('%',:keyword:,'%') OR team_name_flashscore like CONCAT('%',:keyword:,'%')", ["keyword" => $keyword]);
             }
             $this->dispatcher->setParam("txtSearch", $keyword);
         }
