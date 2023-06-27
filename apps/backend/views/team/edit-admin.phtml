@@ -1,5 +1,6 @@
 <script>
     $(document).ready(function() {
+        $("#txtCountryCode").select2();
         $('form[name=area-form]').submit(function(event) {
             var valid = true;
             if ($('input[name=txtCountryCode]').val() == '') {
