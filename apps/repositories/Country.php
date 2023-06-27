@@ -219,6 +219,35 @@ class Country extends Component
             "order" => "country_name ASC"
         ))->toArray();
     }
+    public static function getComboboxAndAreaByCode($code)
+    {
+        $areas = ScArea::find(array(
+            'area_active = "Y" ',
+            "order" => "area_name ASC",
+        ));
+        $output = '';
+        foreach ($areas as $area) {
+            $selected = '';
+            if ($area->getAreaId() == $code) {
+                $selected = 'selected';
+            }
+            $output .= "<option " . $selected . " value='" . $area->getAreaId() . "'>" . $area->getAreaName() . ' - ' . $area->getAreaId() . "</option>";
+
+        }
+        $jurisdiction = ScCountry::find(array(
+            'country_active = "Y" ',
+            "order" => "country_name ASC",
+        ));
+        foreach ($jurisdiction as $value) {
+            $selected = '';
+            if ($value->getCountryCode() == $code) {
+                $selected = 'selected';
+            }
+            $output .= "<option " . $selected . " value='" . $value->getCountryCode() . "'>" . $value->getCountryCode() . ' - ' . $value->getCountryName() . "</option>";
+
+        }
+        return $output;
+    }
     public static function getComboboxByCode($code)
     {
         $jurisdiction = ScCountry::find(array(

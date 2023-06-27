@@ -95,10 +95,18 @@ class TeamController extends ControllerBase
                     $messages[$save_mode]['team_slug'] = 'Slug field is required.';
                 }
             } else {
-                $data_post['team_country_code'] = $this->request->getPost('txtCountryCode', array('string', 'trim'));
-                $data_post['team_name_flashscore '] = $this->request->getPost('txtFlashScore', array('string', 'trim'));
-                $data_post['team_name_livescore'] = $this->request->getPost('txtLiveScore', array('string', 'trim'));
-                $data_post['team_logo_medium'] = $this->request->getPost("txtLogoMedium");
+                if ($this->request->getPost('txtCountryCode', array('string', 'trim'))) {
+                    $data_post['team_country_code'] = $this->request->getPost('txtCountryCode', array('string', 'trim'));
+                }
+                if ($this->request->getPost('txtFlashScore', array('string', 'trim'))) {
+                    $data_post['team_name_flashscore '] = $this->request->getPost('txtFlashScore', array('string', 'trim'));
+                }
+                if ($this->request->getPost('txtLiveScore', array('string', 'trim'))) {
+                    $data_post['team_name_livescore'] = $this->request->getPost('txtLiveScore', array('string', 'trim'));
+                }
+                if ($this->request->getPost("txtLogoMedium")) {
+                    $data_post['team_logo_medium'] = $this->request->getPost("txtLogoMedium");
+                }
                 // $data_post['team_active'] = trim($this->request->get("txtTag"));
 
 
@@ -186,10 +194,12 @@ class TeamController extends ControllerBase
             'lang_current' => $lang_current
         );
         $messages["status"] = "border-red";
+        $select_country = Country::getComboboxAndAreaByCode($formData['team_country_code']);
 
         $this->view->setVars([
             'formData' => $formData,
             'messages' => $messages,
+            'select_country' => $select_country
         ]);
         switch ($this->auth['role']) {
             case "Admin":

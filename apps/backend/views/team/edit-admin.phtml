@@ -50,13 +50,17 @@
                 <form name="area-form" id="area-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
                     <input type="hidden" name="save" id="save" value="<?php echo \Score\Models\ScLanguage::GENERAL; ?>" />
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Country Code <span class="text-danger">*</span>
-                        </label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtCountryCode">Country <span class="text-danger">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input value="<?php echo isset($formData["team_country_code"]) ? $formData["team_country_code"] : "" ?>" type="text" id="txtCountryCode" name="txtCountryCode" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_country_code"])) ? $messages["status"] : ""; ?>">
-                            <span class="text-danger msg-country-code"><?php echo isset($messages["team_country_code"]) ? $messages["team_country_code"] : ""; ?></span>
+                            <select id="txtCountryCode" name="txtCountryCode" class="form-control <?php echo isset($messages["team_country_code"]) ? $messages["status"] : ""; ?>">
+                                <option value="">Select country...</option>
+                                <?= isset($select_country) ? $select_country : ""
+                                ?>
+                            </select>
+                            <span class="text-danger msg-country-code"><?php echo isset($messages["team_country_code"]) ? $messages["team_country_code"] : "" ?></span>
                         </div>
                     </div>
+                    
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Logo <span class="text-danger">*</span>
                         </label>
