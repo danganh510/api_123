@@ -21,7 +21,7 @@ class TeamController extends ControllerBase
             $current_page = 1;
         $keyword = trim($this->request->get("txtSearch"));
         $sql = ScTeam::query();
-        $sql = $sql->where("1");
+        $sql = $sql->where("true");
         if (!empty($keyword)) {
             if ($validator->validInt($keyword)) {
                 $sql->andWhere("team_id = :keyword:", ["keyword" => $keyword]);
