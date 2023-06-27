@@ -1,5 +1,175 @@
-<?php include('model.phtml'); ?>
 <script>
-    $('.form_title').html('Form Edit');
-    $('form[name=language-form]').prop('action','<?php echo $this->url->get('/dashboard/edit-team?id=').$formData["team_id"]; ?>');
+    $(document).ready(function() {
+        $('form[name=area-form]').submit(function(event) {
+            var valid = true;
+            if ($('input[name=txtCountryCode]').val() == '') {
+                $('.msg-country-code').text('Country Code field is required.');
+                $('#txtCountryCode').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-country-code').text('');
+                $('#txtCountryCode').removeClass("border-red");
+            }
+            if ($('input[name=txtLogoMedium]').val() == '') {
+                $('.msg-logo').text('Logo field is required.');
+                $('#txtLogoMedium').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-logo').text('');
+                $('#txtLogoMedium').removeClass("border-red");
+            }
+         
+            if (!valid) event.preventDefault();
+            if (valid) {
+                $('button[name=submit]').prop('disabled', true);
+            }
+        });
+    });
 </script>
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Team</h3>
+    </div>
+</div>
+<?php if (!empty($messages['message'])) {
+?>
+    <div class="clearfix"></div>
+    <p style="font-size:18px;text-align:center" class="alert alert-<?php echo $messages['typeMessage'] ?>">
+        <?php echo $messages['message']; ?>
+    </p>
+<?php }    ?>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">Form Edit
+                <h2 class="form_title"></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="area-form" id="area-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                    <input type="hidden" name="save" id="save" value="<?php echo \Score\Models\ScLanguage::GENERAL; ?>" />
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Country Code <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10" value="<?php echo isset($formData["team_country_code"]) ? $formData["team_country_code"] : "" ?>" type="text" id="txtCountryCode" name="txtCountryCode" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_country_code"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-country-code"><?php echo isset($messages["team_country_code"]) ? $messages["team_country_code"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Logo <span class="text-danger">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10" value="<?php echo isset($formData["team_logo_medium"]) ? $formData["team_logo_medium"] : "" ?>" type="text" id="txtLogoMedium" name="txtLogoMedium" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_logo_medium"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-logo"><?php echo isset($messages["team_logo_medium"]) ? $messages["team_logo_medium"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Crawl Flash Score
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10" value="<?php echo isset($formData["team_name_flashscore"]) ? $formData["team_name_flashscore"] : "" ?>" type="text" id="txtFlashScore" name="txtFlashScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_flashscore"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-flashscore"><?php echo isset($messages["team_name_flashscore"]) ? $messages["team_name_flashscore"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Crawl Ai Score
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input maxlength="10" value="<?php echo isset($formData["team_name_livescore"]) ? $formData["team_name_livescore"] : "" ?>" type="text" id="txtLiveScore" name="txtLiveScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_livescore"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-livescore"><?php echo isset($messages["team_name_livescore"]) ? $messages["team_name_livescore"] : ""; ?></span>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="submit" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="/dashboard/list-area">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <ul class="nav nav-pills" role="tablist">
+                <?php
+                foreach ($formData['arr_language'] as $code => $lang) {
+                    $active = $formData['lang_current'] == $code ? "active" : "";
+                ?>
+                    <li role="presentation" class="<?php echo $active; ?>">
+                        <a href="#<?php echo $code ?>translate" aria-controls="<?php echo $code ?>translate" role="tab" data-toggle="tab"><?php echo $code . ' - ' . $lang; ?></a>
+                    </li>
+                <?php } ?>
+            </ul>
+            <div class="tab-content">
+                <?php foreach ($formData['arr_language'] as $code => $lang) {
+                    $active = $formData['lang_current'] == $code ? "active" : "";
+                ?>
+                    <div role="tabpanel" class="tab-pane <?php echo $active; ?>" id="<?php echo $code; ?>translate">
+                        <br>
+                        <form name="area-form<?php echo $code; ?>" id="area-form<?php echo $code; ?>" action="" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                            <input type="hidden" name="save" id="save" value="<?php echo $code; ?>" />
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtName">Name <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input maxlength="255" value="<?php echo isset($formData['arr_translate'][$code]["team_name"]) ? $formData['arr_translate'][$code]["team_name"] : "" ?>" type="text" id="txtName<?php echo $code; ?>" name="txtName" class="form-control col-md-7 col-xs-12 <?php echo isset($messages[$code]["team_name"]) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-name-<?php echo $code; ?>"><?php echo isset($messages[$code]["team_name"]) ? $messages[$code]["team_name"] : "" ?></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="txtName">Slug <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input maxlength="255" value="<?php echo isset($formData['arr_translate'][$code]["team_slug"]) ? $formData['arr_translate'][$code]["team_slug"] : "" ?>" type="text" id="txtSlug<?php echo $code; ?>" name="txtSlug" class="form-control col-md-7 col-xs-12 <?php echo isset($messages[$code]["team_slug"]) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-slug-<?php echo $code; ?>"><?php echo isset($messages[$code]["team_slug"]) ? $messages[$code]["team_slug"] : "" ?></span>
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <button name="sbmArea<?php echo $code; ?>" type="submit" class="btn btn-success">
+                                        <?php echo 'Save ' . $lang; ?>
+                                    </button>
+                                </div>
+                            </div>
+                            <script>
+                                $(document).ready(function() {
+                                    $('form[name=area-form<?php echo $code; ?>]').submit(function(event) {
+                                        valid = true;
+                                        if ($('#txtName<?php echo $code; ?>').val() == '') {
+                                            valid = false;
+                                            $('.msg-name-<?php echo $code; ?>').text("Name field is required.");
+                                            $('#txtName<?php echo $code; ?>').addClass("border-red");
+                                        } else {
+                                            $('.msg-name-<?php echo $code; ?>').text('');
+                                            $('#txtName<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if ($('#txtSlug<?php echo $code; ?>').val() == '') {
+                                            valid = false;
+                                            $('.msg-slug-<?php echo $code; ?>').text("Slug field is required.");
+                                            $('#txtSlug<?php echo $code; ?>').addClass("border-red");
+                                        } else {
+                                            $('.msg-slug-<?php echo $code; ?>').text('');
+                                            $('#txtSlug<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if (!valid) event.preventDefault();
+                                        if (valid) {
+                                            $('#sbmArea<?php echo $code; ?>').prop('disabled', true);
+                                        }
+                                    });
+                                });
+                            </script>
+                        </form>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

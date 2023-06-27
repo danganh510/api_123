@@ -8,6 +8,7 @@ use Score\Utils\Validator;
 use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 use Score\Models\ScLanguage;
 use Score\Models\ScTeamLang;
+use Score\Repositories\Language;
 use Score\Repositories\Team;
 
 class TeamController extends ControllerBase
@@ -49,23 +50,30 @@ class TeamController extends ControllerBase
     }
     public function editAction()
     {
-        $id = $this->request->get('id');
+        $team_id = $this->request->get('id');
         $lang_current = $this->request->get('slcLang');
         $lang_current = $lang_current ? $lang_current : $this->globalVariable->defaultLanguage;
         $arr_language = Language::arrLanguages();
         if (!in_array($lang_current, array_keys($arr_language))) {
             return $this->response->redirect('notfound');
         }
+
         $checkID = new Validator();
-        if (!$checkID->validInt($id)) {
-            return $this->response->redirect('notfound');
+        if (!$checkID->validInt($team_id)) {
+            $this->response->redirect('notfound');
+            return;
         }
-        $team_model = Team::getTeamById($id);
+        $team_model = Team::findFirstById($team_id);
         if (empty($team_model)) {
-            return $this->response->redirect('notfound');
+            $this->response->redirect('notfound');
+            return;
         }
-        $data = $team_model->toArray();
+        $arr_translate = array();
         $messages = array();
+        $data_post = $team_model->toArray();
+        $save_mode = '';
+        
+
         if ($this->request->isPost()) {
             if (!isset($_POST['save'])) {
                 $this->view->disable();
@@ -76,58 +84,111 @@ class TeamController extends ControllerBase
             if (isset($arr_language[$save_mode])) {
                 $lang_current = $save_mode;
             }
-            foreach ($_POST as $key => $value) {
-                if ($key == "match_start_time") {
-                    $data[$key] = strtotime($value);
-                } else {
-                    $data[$key] = $value;
+            if ($save_mode != ScLanguage::GENERAL) {
+                $data_post['team_name'] = trim($this->request->getPost('txtName'));
+                $data_post['team_slug'] = trim($this->request->getPost('txtSlug'));
+            
+                if (empty($data_post['team_name'])) {
+                    $messages[$save_mode]['team_name'] = 'Name field is required.';
                 }
-             
-            }
-            if (empty($data["team_name"])) {
-                $messages["name"] = "Name field is required.";
-            }
-         
-            if (count($messages) == 0) {
-                $msg_result = array();
-                if ($save_mode != ScLanguage::GENERAL && $save_mode != "vi") {
-                    $team_model_lang = Team::getTeamLangByIdAndLang($id, $save_mode);
-                    if (!$team_model_lang) {
-                        $team_model_lang = new ScTeamLang();
-                        $team_model_lang->setTeamLangCode($save_mode);
-                    }
-                    $team_model_lang->setTeamName($data["team_name"]);
-                    $team_model_lang->setTeamSlug($data["team_slug"]);
+                if (empty($data_post['team_slug'])) {
+                    $messages[$save_mode]['team_slug'] = 'Slug field is required.';
+                }
+            } else {
+                $data_post['team_country_code'] = $this->request->getPost('txtCountryCode', array('string', 'trim'));
+                $data_post['team_name_flashscore '] = $this->request->getPost('txtFlashScore', array('string', 'trim'));
+                $data_post['team_name_livescore'] = $this->request->getPost('txtLiveScore', array('string', 'trim'));
+                $data_post['team_logo_medium'] = $this->request->getPost("txtLogoMedium");
+                // $data_post['team_active'] = trim($this->request->get("txtTag"));
 
-                    if ($team_model_lang->update($data)) {
-                        $msg_result = array('status' => 'success', 'msg' => 'Edit tournament Success');
-                    } else {
-                        $message = "We can't store your info now: \n";
-                        foreach ($team_model_lang->getMessages() as $msg) {
-                            $message .= $msg . "\n";
-                        }
-                        $msg_result['status'] = 'error';
-                        $msg_result['msg'] = $message;
-                    }
-                } else {
-                    if ($team_model->update($data)) {
-                        $msg_result = array('status' => 'success', 'msg' => 'Edit tournament Success');
-                    } else {
-                        $message = "We can't store your info now: \n";
-                        foreach ($team_model->getMessages() as $msg) {
-                            $message .= $msg . "\n";
-                        }
-                        $msg_result['status'] = 'error';
-                        $msg_result['msg'] = $message;
-                    }
+
+                if (empty($data_post["team_country_code"])) {
+                    $messages["team_country_code"] = "Country code field is required.";
                 }
-                $this->session->set('msg_result', $msg_result);
-                return $this->response->redirect("/dashboard/list-team");
+            }
+
+            if (empty($messages)) {
+                switch ($save_mode) {
+                    case ScLanguage::GENERAL:
+
+                        $result = $team_model->update($data_post);
+
+                        $info = ScLanguage::GENERAL;
+                        break;
+                    case $this->globalVariable->defaultLanguage:
+                        $result = $team_model->update($data_post);
+
+                        $info = $arr_language[$save_mode];
+                        break;
+                    default:
+                        $team_lang_model = ScTeamLang::findFirstByIdAndLang($team_id, $save_mode);
+                        if (!$team_lang_model) {
+                            $team_lang_model = new ScTeamLang();
+                            $team_lang_model->setTeamId($team_id);
+                            $team_lang_model->setTeamLangCode($save_mode);
+                        }
+                        $team_lang_model->setTeamName($data_post['team_name']);
+                        $team_lang_model->setTeamSlug($data_post['team_slug']);
+
+                        $result = $team_lang_model->save();
+                        $info = $arr_language[$save_mode];
+                        break;
+                }
+                if ($result) {
+                    
+                   
+                    $messages = array(
+                        'message' => ucfirst($info . " Update Team success"),
+                        'typeMessage' => "success",
+                    );
+                } else {
+                    $messages = array(
+                        'message' => "Update Team fail",
+                        'typeMessage' => "error",
+                    );
+                }
             }
         }
+
+        $team_model = Team::findFirstById($team_model->getTeamId());
+        $item = array(
+            'team_id' => $team_model->getTeamId(),
+            'team_slug' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['team_keyword'] : $team_model->getTeamSlug(),
+            'team_name' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['team_name'] : $team_model->getTeamName(),
+        );
+        $arr_translate[$this->globalVariable->defaultLanguage] = $item;
+        $arr_team_lang = ScTeamLang::findById($team_id);
+        foreach ($arr_team_lang as $team_lang) {
+            $item = array(
+                'team_id' => $team_lang->getTeamId(),
+                'team_slug' => ($save_mode === $team_lang->getTeamSlug()) ? $data_post['team_slug'] : $team_lang->getTeamSlug(),
+                'team_name' => ($save_mode === $team_lang->getTeamName()) ? $data_post['team_name'] : $team_lang->getTeamName(),
+            );
+            $arr_translate[$team_lang->getTeamLangCode()] = $item;
+        }
+        if (!isset($arr_translate[$save_mode]) && isset($arr_language[$save_mode])) {
+            $item = array(
+                'team_id' => -1,
+                'team_slug' => $data_post['team_slug'],
+                'team_name' => $data_post['team_name'],
+               );
+            $arr_translate[$save_mode] = $item;
+        }
+       
+        $formData = array(
+            'team_id' => $team_model->getTeamId(),
+            'team_country_code' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_order'] : $team_model->getTeamCountryCode(),
+            'team_name_flashscore' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_type_id'] : $team_model->getTeamNameFlashscore(),
+            'team_logo_medium' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_icon'] : $team_model->getTeamLogoMedium(),
+            'team_name_livescore' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_active'] : $team_model->getTeamNameLivescore(),
+            'arr_translate' => $arr_translate,
+            'arr_language' => $arr_language,
+            'lang_current' => $lang_current
+        );
         $messages["status"] = "border-red";
+
         $this->view->setVars([
-            'formData' => $data,
+            'formData' => $formData,
             'messages' => $messages,
         ]);
     }

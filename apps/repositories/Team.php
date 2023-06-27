@@ -114,6 +114,16 @@ class Team extends Component
         ]);
         return $team;
     }
+    public static function findFirstById($team_id)
+    {
+        $team = ScTeam::findFirst([
+            'team_id = :id:',
+            'bind' => [
+                'id' => $team_id
+            ]
+        ]);
+        return $team;
+    }
     public static function getTeamLangByIdAndLang($team_id,$lang)
     {
         $team = ScTeamLang::findFirst([

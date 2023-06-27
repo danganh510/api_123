@@ -88,4 +88,12 @@ class ScTeamLang extends \Phalcon\Mvc\Model
             ]
         ]);
     }
+    public static function findById($id)
+    {
+        return self::find([
+            'team_id = :id:',
+            'bind' => [
+                'id' => $id            ]
+        ]);
+    }
 }
