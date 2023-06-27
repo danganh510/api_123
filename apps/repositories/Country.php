@@ -442,6 +442,13 @@ class Country extends Component
         ]);
         return array_column($arrCountry->toArray(),"country_name",'country_code');
     }
+    public static function getNameAndAreaByCode($code) {
+        $name = self::getNameByCode($code);
+        if (!$name) {
+            $name = Area::getNameById($code);
+        }
+        return $name;
+    }
 
     public function getNameByCodeAndLang($countryCode, $lang = 'en')
     {

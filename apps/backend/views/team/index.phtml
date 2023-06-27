@@ -83,7 +83,7 @@ if (!empty($message_error)) { ?>
                                     <tr>
                                         <td><label class="container_checkbox"><input class="check" name="item[]" value="<?php echo $item->getTeamId() ?>" type="checkbox"><span class="checkmark_checkbox"></span></label></td>
                                         <td class=" "><?php echo $item->getTeamId() ?></td>
-                                        <td class=" "><?php echo Country::getNameByCode($item->getTeamCountryCode()) ?></td>
+                                        <td class=" "><?php echo Country::getNameAndAreaByCode($item->getTeamCountryCode()) ?></td>
                                         <td class=" "><?php echo $item->getTeamName() ?></td>
                                         <td><a class="btn btn-primary btn-xs margin-0" href="<?php echo $this->url->get("/dashboard/edit-team?id=" . $item->getTeamId()); ?> ">View</a>
                                         </td>
