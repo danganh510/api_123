@@ -48,7 +48,12 @@ if (!empty($message_error)) { ?>
                         <div class="col-md-2">
                             <button type="button" name="search" class="btn btn-success">Search</button>
                         </div>
-
+                        <div class="col-md-2">
+                            <button type="button" name="search-ai-null" class="btn btn-info">Search Crawl AI NULL</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" name="search-ai" class="btn btn-warning">Search Crawl AI Not NULL</button>
+                        </div>
                     </div>
                     <div>
                         <strong>Total</strong>
@@ -123,6 +128,14 @@ if (!empty($message_error)) { ?>
     $(document).ready(function() {
         $('button[name=search]').click(function() {
             $('form[name=form-team]').prop('action', '<?php echo $this->url->get('/dashboard/list-team'); ?>');
+            $('form[name=form-team]').submit();
+        });
+        $('button[name=search-ai]').click(function() {
+            $('form[name=form-team]').prop('action', '<?php echo $this->url->get('/dashboard/list-team?ai=yes'); ?>');
+            $('form[name=form-team]').submit();
+        });
+        $('button[name=search-ai-null]').click(function() {
+            $('form[name=form-team]').prop('action', '<?php echo $this->url->get('/dashboard/list-team?ai=no'); ?>');
             $('form[name=form-team]').submit();
         });
         $('.delete-all').click(function() {

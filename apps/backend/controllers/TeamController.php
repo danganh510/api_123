@@ -21,13 +21,22 @@ class TeamController extends ControllerBase
             $current_page = 1;
         $keyword = trim($this->request->get("txtSearch"));
         $sql = ScTeam::query();
+        $sql = $sql->where("1");
         if (!empty($keyword)) {
             if ($validator->validInt($keyword)) {
-                $sql->where("team_id = :keyword:", ["keyword" => $keyword]);
+                $sql->andWhere("team_id = :keyword:", ["keyword" => $keyword]);
             } else {
-                $sql->where("team_name like CONCAT('%',:keyword:,'%') OR team_name_livescore like CONCAT('%',:keyword:,'%') OR team_name_flashscore like CONCAT('%',:keyword:,'%')", ["keyword" => $keyword]);
+                $sql->andWhere("team_name like CONCAT('%',:keyword:,'%') OR team_name_livescore like CONCAT('%',:keyword:,'%') OR team_name_flashscore like CONCAT('%',:keyword:,'%')", ["keyword" => $keyword]);
             }
             $this->dispatcher->setParam("txtSearch", $keyword);
+        }
+        $aiScore = $this->request->get("ai");
+        if ($aiScore) {
+            if ($aiScore == "yes") {
+                $sql->andWhere("team_name_livescore != '' OR team_name_livescore IS NOT NULL");
+            } else {
+                $sql->andWhere("team_name_livescore = '' OR team_name_livescore IS  NULL");
+            }
         }
         $sql->orderBy("team_id DESC");
         $list_tournament = $sql->execute();
