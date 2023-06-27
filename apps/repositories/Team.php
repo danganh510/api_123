@@ -80,7 +80,7 @@ class Team extends Component
             $team->save();
             $is_cache_team = true;
         }
-        if (!$team->getTeamCountryCode()) {
+        if (!$team->getTeamCountryCode() || (is_numeric($team->getTeamCountryCode()) && !is_numeric($team->getTeamCountryCode()))) {
             $team->setTeamCountryCode($country_code);
             $team->save();
             $is_cache_team = true;

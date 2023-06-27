@@ -189,9 +189,6 @@ class MatchController extends ControllerBase
         $home = $teamRepo->getTeamByIdAndLang($matchInfo['match_home_id'],$this->requestParams['language']);
         $away = $teamRepo->getTeamByIdAndLang($matchInfo['match_away_id'],$this->requestParams['language']);
 
-
-
-        
         $match_start = MatchDetailLocale::changeKeyToContentStart(json_decode($matchInfo['info_stats'],true),$this->requestParams['language']);
         $info = [
             'id' => $matchInfo['match_id'],
