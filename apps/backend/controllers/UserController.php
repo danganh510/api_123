@@ -85,19 +85,14 @@ class UserController extends ControllerBase
             $this->session->remove('msg_role');
             $this->view->msg_role = $msg_role;
         }
+        
         $data = array(
             'user_id' => $user_model->getUserId(),
             'user_email' => isset($input_data['user_email']) ? $input_data['user_email'] : $user_model->getUserEmail(),
-            'user_tel' => isset($input_data['user_tel']) ? $input_data['user_tel'] : $user_model->getUserTel(),
-            'user_country_code' => isset($input_data['user_country_code']) ? $input_data['user_country_code'] : $user_model->getUserCountryCode(),
-            'user_telapi_international_format' => isset($input_data['user_telapi_international_format']) ? $input_data['user_telapi_international_format'] : $user_model->getUserTelapiInternationalFormat(),
-            'user_telapi_country_code' => isset($input_data['user_telapi_country_code']) ? $input_data['user_telapi_country_code'] : $user_model->getUserTelapiCountryCode(),
+            'user_name' => isset($input_data['user_name']) ? $input_data['user_name'] : $user_model->getUserName(),
 
-            'user_address' => isset($input_data['user_address']) ? $input_data['user_address'] : $user_model->getUserAddress(),
-            'user_payment_fails' => isset($input_data['user_payment_fails']) ? $input_data['user_payment_fails'] : $user_model->getUserPaymentFails(),
             'user_role_id' => isset($input_data['user_role_id']) ? $input_data['user_role_id'] : $user_model->getUserRoleId(),
             'user_active' => isset($input_data['user_active']) ? $input_data['user_active'] : $user_model->getUserActive(),
-            'user_is_subscribe' => isset($input_data['user_is_subscribe']) ? $input_data['user_is_subscribe'] : $user_model->getUserIsSubscribe(),
             'user_insert_time' => $user_model->getUserInsertTime(),
         );
         $strRole = Role::getComboBox($data['user_role_id']);
@@ -124,115 +119,27 @@ class UserController extends ControllerBase
             $this->response->redirect('notfound');
             return;
         }
+        $input_data = $user_model->toArray();
         $messages = array();
         if($this->request->isPost()) {
-            $input_data = array(
-                'user_id' => $id,
-                'user_first_name' => $this->request->getPost('txtFirstName', array('string', 'trim')),
-                'user_second_name' => $this->request->getPost('txtSecondName', array('string', 'trim')),
-                'user_last_name' => $this->request->getPost('txtLastName', array('string', 'trim')),
-                'user_email' => $this->request->getPost('txtEmail', array('string', 'trim')),
-                'user_country_code' => $this->request->getPost('slcCountry', array('string', 'trim')),
-                'user_currency_code' => $this->request->getPost('slcCurrency', array('string', 'trim')),
-                'user_language_code' => $this->request->getPost('slcLanguage', array('string', 'trim')),
-                'user_address' => $this->request->getPost('txtAddress', array('string', 'trim')),
-                'user_avatar' => $this->request->getPost('txtAvatar', array('string', 'trim')),
-                'user_birthday' => $this->request->getPost('txtBirthday', array('string', 'trim')),
-                'user_type' => $this->request->getPost('slcType'),
-                'user_gender' => $this->request->getPost('slcGender'),
-                'user_app_id' => $this->request->getPost('txtApp', array('string', 'trim')),
-                'user_payment_fails' => $this->request->getPost('txtPayment', array('string', 'trim')),
-                'user_insert_time' => $this->globalVariable->curTime,
-                'user_active' => $this->request->getPost('radActive'),
-                'user_is_subscribe' => $this->request->getPost('radSubscribe'),
-                'user_tel' => $this->request->getPost('txtTel2', array('string', 'trim')),
-                'user_telapi_country_code' => $this->request->getPost('txtCountryCode', array('string', 'trim')),
-                'reason' => $this->request->getPost('txtReason', array('string', 'trim')),
-            );
-            if(empty($input_data['user_first_name'])) {
-                $messages['user_first_name'] = 'First Name field is required.';
+            $input_data['user_name'] = $this->request->getPost('txtName', array('string', 'trim'));
+            $input_data['user_active'] = $this->request->getPost('radActive', array('string', 'trim'));
+            
+            if(empty($input_data['user_name'])) {
+                $messages['user_name'] = 'First Name field is required.';
             }
-            if(empty($input_data['user_last_name'])) {
-                $messages['user_last_name'] = 'Last Name field is required.';
-            }
-            if(empty($input_data['user_tel'])) {
-                $messages['user_tel'] = 'Tel field is required.';
-            }
-            if(empty($input_data['user_type'])) {
-                $messages['user_type'] = 'Type field is required.';
-            }
-            if(empty($input_data['user_gender'])) {
-                $messages['user_gender'] = 'Gender field is required.';
-            }
-            if ($input_data['user_payment_fails'] === '' ) {
-                $messages['user_payment_fails'] = "Payment Fails field is required.";
-            } else if (!is_numeric($input_data['user_payment_fails']) ){
-                $messages['user_payment_fails'] = "Payment Fails is not valid";
-            }
-            $user_tel_info = NumVerify::info($input_data['user_tel']);
-            if ($user_tel_info->valid != true) {
-                $messages['user_tel'] = "Invalid number";
-            } else {
-                $input_data = array_merge($input_data, array(
-                    'user_telapi_number' => $user_tel_info->number,
-                    'user_telapi_local_format' => $user_tel_info->local_format,
-                    'user_telapi_international_format' => $user_tel_info->international_format,
-                    'user_telapi_country_prefix' => $user_tel_info->country_prefix,
-                    'user_telapi_country_code' => $user_tel_info->country_code,
-                    'user_telapi_country_name' => $user_tel_info->country_name,
-                    'user_telapi_location' => $user_tel_info->location,
-                    'user_telapi_carrier' => $user_tel_info->carrier,
-                    'user_telapi_line_type' => $user_tel_info->line_type,
-                ));
-            }
-            if(empty($input_data['user_country_code'])) {
-                $messages['user_country_code'] = 'Country field is required.';
-            }
-
+          
+            
             if(count($messages) == 0)
             {
-                $flag_sent_email_update = false;
-                $arrReason = json_decode($user_model->getUserReason(), true);
                 
-                //active lại tài khoản
-                if ($input_data['user_active'] != $user_model->getUserActive()) {
-                    if ($input_data['user_active'] == "Y") {
-                        $arrReason[] = [
-                            'time' => time(),
-                            'action' => "activeUser",
-                            'userUpdate' => $this->auth['id'],
-                            'message' => $input_data['reason']
-                        ];
-                        $flag_sent_email_update = true;
-                    } else {
-                        $arrReason[] = [
-                            'time' => time(),
-                            'action' => "updateUser",
-                            'userUpdate' => $this->auth['id'],
-                            'message' => $input_data['reason']
-                        ];
-                    }
-                } else {
-                    $arrReason[] = [
-                        'time' => time(),
-                        'action' => "updateUser",
-                        'userUpdate' => $this->auth['id'],
-                        'message' => $input_data['reason']
-                    ];
-                }
-
-                $input_data['user_reason'] = json_encode($arrReason);
-                $input_data['user_birthday'] = strtotime($input_data['user_birthday']);
                 $result = $user_model->update($input_data);
                 if ($result === false) {
                     $message = "Edit User fail !";
                     $msg_result['status'] = 'error';
                     $msg_result['msg'] = $message;
                 } else {
-                    if ($flag_sent_email_update == true) {
-                        $userRepo = new User();
-                        $userRepo->sentEmailActive($user_model);
-                    }
+                    
                     $msg_result = array('status' => 'success', 'msg' => 'Edit User Success');
                 }
                 $this->session->set('msg_information', $msg_result);
@@ -242,7 +149,7 @@ class UserController extends ControllerBase
                 $this->session->set('messages', $messages);
             }
         }
-        return $this->response->redirect("user/edit?id=".$id);
+        return $this->response->redirect("dashboard/list-user?id=".$id);
     }
     public function passwordAction()
     {
@@ -270,16 +177,8 @@ class UserController extends ControllerBase
                 $messages['password'] = 'New Password field is required.';
             }
 
-            $arrReason = json_decode($user_model->getUserReason(), true);
-            $arrReason[] = [
-                'time' => time(),
-                'action' => "changePassword",
-                'userUpdate' => $this->auth['id'],
-                'message' => $input_data['reason']
-            ];
             if(count($messages) == 0){
                 $user_model->setUserPassword($data['user_password']);
-                $user_model->setUserReason(json_encode($arrReason));
                 $result = $user_model->update();
                 if ($result === false) {
                     $message = "Change Password fail !";
@@ -291,7 +190,7 @@ class UserController extends ControllerBase
                 $this->session->set('msg_password', $msg_result);
             }
         }
-        return $this->response->redirect("user/edit?id=".$id);
+        return $this->response->redirect("dashboard/list-user?id=".$id);
     }
     public function roleAction()
     {
@@ -320,15 +219,8 @@ class UserController extends ControllerBase
             $data = $input_data;
             $messages = array();
             if(count($messages) == 0){
-                $arrReason = json_decode($user_model->getUserReason(), true);
-                $arrReason[] = [
-                    'time' => time(),
-                    'action' => "changeRole",
-                    'userUpdate' => $this->auth['id'],
-                    'message' => $input_data['reason']
-                ];
+              
                 $user_model->setUserRoleId($data['user_role_id']);
-                $user_model->setUserReason(json_encode($arrReason));
                 $result = $user_model->update();
                 if ($result === false) {
                     $message = "Update Role fail !";
@@ -341,7 +233,7 @@ class UserController extends ControllerBase
                 $this->session->set('msg_role', $msg_result);
             }
         }
-        return $this->response->redirect("user/edit?id=".$id);
+        return $this->response->redirect("dashboard/list-user?id=".$id);
     }
     public function deleteAction ()
     {
@@ -353,7 +245,7 @@ class UserController extends ControllerBase
                 $user_model = ScUser::findFirstById($user_id);
                 if($user_model) {
                     $table_names = array();
-                    $message_temp = "Can't delete Name = ".$user_model->getUserFirstName()." ".$user_model->getUserLastName().". Because It's exist in";
+                    $message_temp = "Can't delete Name = ".$user_model->getUserName().". Because It's exist in";
                     if(empty($table_names)) {
                         $old_user_data = $user_model->toArray();
                         $new_user_data = array();
@@ -372,7 +264,7 @@ class UserController extends ControllerBase
 
         }
         $this->session->set('msg_delete', $msg_delete);
-        $this->response->redirect('/user');
+        $this->response->redirect('/dashboard/list-user');
         return;
     }
     private function getParameter(){
@@ -394,16 +286,12 @@ class UserController extends ControllerBase
                 $arrParameter['number'] = $this->my->getIdFromFormatID($keyword, true);
             }
             else {
-                $sql.=" AND (CONCAT(user_first_name ,' ',user_last_name) like CONCAT('%',:keyword:,'%') OR user_email like CONCAT('%',:keyword:,'%'))";
+                $sql.=" AND (CONCAT(user_name ,' ',user_last_name) like CONCAT('%',:keyword:,'%') OR user_email like CONCAT('%',:keyword:,'%'))";
                 $arrParameter['keyword'] = $keyword;
             }
             $this->dispatcher->setParam("txtSearch", $keyword);
         }
-        if($appId){
-            $sql .= " AND user_app_id = :appId:";
-            $arrParameter['appId'] = $appId;
-            $this->dispatcher->setParam("slcAppId", $appId);
-        }
+      
         if($from){
             $intFrom = $this->my->UTCTime(strtotime($from)); //UTC_mysql_time = date_picker - time zone
             $sql .= " AND user_insert_time >= :from:";
@@ -421,11 +309,7 @@ class UserController extends ControllerBase
             $arrParameter['active'] = $active;
             $this->dispatcher->setParam("slcActive", $active);
         }
-        if($subscribe){
-            $sql .= " AND user_is_subscribe = :subscribe:";
-            $arrParameter['subscribe'] = $subscribe;
-            $this->dispatcher->setParam("slcSubscribe", $subscribe);
-        }
+       
         if($role){
             $sql .= " AND user_role_id = :role:";
             $arrParameter['role'] = $role;

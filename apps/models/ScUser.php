@@ -3,7 +3,7 @@
 namespace Score\Models;
 
 use Phalcon\Db\RawValue;
-
+use Phalcon\Security;
 class ScUser extends \Phalcon\Mvc\Model
 {
     const TYPE_SMS = 'sms';
@@ -194,7 +194,8 @@ class ScUser extends \Phalcon\Mvc\Model
      */
     public function setUserPassword($user_password)
     {
-        $this->user_password = $user_password;
+        $security = new Security();
+        $this->user_password = !empty($user_password) ? $security->hash($user_password) : '';
 
         return $this;
     }
