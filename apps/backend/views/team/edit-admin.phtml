@@ -53,7 +53,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Country Code <span class="text-danger">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input maxlength="10" value="<?php echo isset($formData["team_country_code"]) ? $formData["team_country_code"] : "" ?>" type="text" id="txtCountryCode" name="txtCountryCode" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_country_code"])) ? $messages["status"] : ""; ?>">
+                            <input value="<?php echo isset($formData["team_country_code"]) ? $formData["team_country_code"] : "" ?>" type="text" id="txtCountryCode" name="txtCountryCode" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_country_code"])) ? $messages["status"] : ""; ?>">
                             <span class="text-danger msg-country-code"><?php echo isset($messages["team_country_code"]) ? $messages["team_country_code"] : ""; ?></span>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Logo <span class="text-danger">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input maxlength="10" value="<?php echo isset($formData["team_logo_medium"]) ? $formData["team_logo_medium"] : "" ?>" type="text" id="txtLogoMedium" name="txtLogoMedium" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_logo_medium"])) ? $messages["status"] : ""; ?>">
+                            <input  value="<?php echo isset($formData["team_logo_medium"]) ? $formData["team_logo_medium"] : "" ?>" type="text" id="txtLogoMedium" name="txtLogoMedium" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_logo_medium"])) ? $messages["status"] : ""; ?>">
                             <span class="text-danger msg-logo"><?php echo isset($messages["team_logo_medium"]) ? $messages["team_logo_medium"] : ""; ?></span>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Crawl Flash Score
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input maxlength="10" value="<?php echo isset($formData["team_name_flashscore"]) ? $formData["team_name_flashscore"] : "" ?>" type="text" id="txtFlashScore" name="txtFlashScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_flashscore"])) ? $messages["status"] : ""; ?>">
+                            <input  value="<?php echo isset($formData["team_name_flashscore"]) ? $formData["team_name_flashscore"] : "" ?>" type="text" id="txtFlashScore" name="txtFlashScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_flashscore"])) ? $messages["status"] : ""; ?>">
                             <span class="text-danger msg-flashscore"><?php echo isset($messages["team_name_flashscore"]) ? $messages["team_name_flashscore"] : ""; ?></span>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Crawl Ai Score
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input maxlength="10" value="<?php echo isset($formData["team_name_livescore"]) ? $formData["team_name_livescore"] : "" ?>" type="text" id="txtLiveScore" name="txtLiveScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_livescore"])) ? $messages["status"] : ""; ?>">
+                            <input  value="<?php echo isset($formData["team_name_livescore"]) ? $formData["team_name_livescore"] : "" ?>" type="text" id="txtLiveScore" name="txtLiveScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_livescore"])) ? $messages["status"] : ""; ?>">
                             <span class="text-danger msg-livescore"><?php echo isset($messages["team_name_livescore"]) ? $messages["team_name_livescore"] : ""; ?></span>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                     <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                             <button name="submit" type="submit" class="btn btn-success">Save change</button>
-                            <a class="btn btn-primary" href="/dashboard/list-area">Cancel</a>
+                            <a class="btn btn-primary" href="/dashboard/list-team">Cancel</a>
                         </div>
                     </div>
                 </form>

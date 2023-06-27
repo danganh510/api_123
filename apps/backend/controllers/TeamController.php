@@ -72,7 +72,7 @@ class TeamController extends ControllerBase
         $messages = array();
         $data_post = $team_model->toArray();
         $save_mode = '';
-        
+
 
         if ($this->request->isPost()) {
             if (!isset($_POST['save'])) {
@@ -87,7 +87,7 @@ class TeamController extends ControllerBase
             if ($save_mode != ScLanguage::GENERAL) {
                 $data_post['team_name'] = trim($this->request->getPost('txtName'));
                 $data_post['team_slug'] = trim($this->request->getPost('txtSlug'));
-            
+
                 if (empty($data_post['team_name'])) {
                     $messages[$save_mode]['team_name'] = 'Name field is required.';
                 }
@@ -135,8 +135,8 @@ class TeamController extends ControllerBase
                         break;
                 }
                 if ($result) {
-                    
-                   
+
+
                     $messages = array(
                         'message' => ucfirst($info . " Update Team success"),
                         'typeMessage' => "success",
@@ -153,7 +153,7 @@ class TeamController extends ControllerBase
         $team_model = Team::findFirstById($team_model->getTeamId());
         $item = array(
             'team_id' => $team_model->getTeamId(),
-            'team_slug' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['team_keyword'] : $team_model->getTeamSlug(),
+            'team_slug' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['team_slug'] : $team_model->getTeamSlug(),
             'team_name' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['team_name'] : $team_model->getTeamName(),
         );
         $arr_translate[$this->globalVariable->defaultLanguage] = $item;
@@ -171,16 +171,16 @@ class TeamController extends ControllerBase
                 'team_id' => -1,
                 'team_slug' => $data_post['team_slug'],
                 'team_name' => $data_post['team_name'],
-               );
+            );
             $arr_translate[$save_mode] = $item;
         }
-       
+
         $formData = array(
             'team_id' => $team_model->getTeamId(),
-            'team_country_code' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_order'] : $team_model->getTeamCountryCode(),
-            'team_name_flashscore' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_type_id'] : $team_model->getTeamNameFlashscore(),
-            'team_logo_medium' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_icon'] : $team_model->getTeamLogoMedium(),
-            'team_name_livescore' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_active'] : $team_model->getTeamNameLivescore(),
+            'team_country_code' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_country_code'] : $team_model->getTeamCountryCode(),
+            'team_name_flashscore' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_name_flashscore'] : $team_model->getTeamNameFlashscore(),
+            'team_logo_medium' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_logo_medium'] : $team_model->getTeamLogoMedium(),
+            'team_name_livescore' => ($save_mode === ScLanguage::GENERAL) ? $data_post['team_name_livescore'] : $team_model->getTeamNameLivescore(),
             'arr_translate' => $arr_translate,
             'arr_language' => $arr_language,
             'lang_current' => $lang_current
@@ -191,6 +191,17 @@ class TeamController extends ControllerBase
             'formData' => $formData,
             'messages' => $messages,
         ]);
+        switch ($this->auth['role']) {
+            case "Admin":
+                $this->view->pick("team/edit-admin");
+                break;
+            case "data":
+                $this->view->pick("team/edit-operator");
+                break;
+            case "crawl":
+                $this->view->pick("team/edit-crawl");
+                break;
+        }
     }
 
     public function deleteAction()

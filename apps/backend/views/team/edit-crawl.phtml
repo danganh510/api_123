@@ -1,0 +1,54 @@
+
+<div class="page-title">
+    <div class="title_left">
+        <h3 class="type-title">Team</h3>
+    </div>
+</div>
+<?php if (!empty($messages['message'])) {
+?>
+    <div class="clearfix"></div>
+    <p style="font-size:18px;text-align:center" class="alert alert-<?php echo $messages['typeMessage'] ?>">
+        <?php echo $messages['message']; ?>
+    </p>
+<?php }    ?>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">Form Edit
+                <h2 class="form_title"></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br />
+                <form name="area-form" id="area-form" data-parsley-validate class="form-horizontal form-label-left" method="post">
+                    <input type="hidden" name="save" id="save" value="<?php echo \Score\Models\ScLanguage::GENERAL; ?>" />
+            
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Crawl Flash Score
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input  value="<?php echo isset($formData["team_name_flashscore"]) ? $formData["team_name_flashscore"] : "" ?>" type="text" id="txtFlashScore" name="txtFlashScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_flashscore"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-flashscore"><?php echo isset($messages["team_name_flashscore"]) ? $messages["team_name_flashscore"] : ""; ?></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Crawl Ai Score
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input  value="<?php echo isset($formData["team_name_livescore"]) ? $formData["team_name_livescore"] : "" ?>" type="text" id="txtLiveScore" name="txtLiveScore" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages["team_name_livescore"])) ? $messages["status"] : ""; ?>">
+                            <span class="text-danger msg-livescore"><?php echo isset($messages["team_name_livescore"]) ? $messages["team_name_livescore"] : ""; ?></span>
+                        </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button name="submit" type="submit" class="btn btn-success">Save change</button>
+                            <a class="btn btn-primary" href="/dashboard/list-team">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

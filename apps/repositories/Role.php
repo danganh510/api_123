@@ -83,10 +83,12 @@ class Role extends Component
                     $result = true;
                     break;
                 }
-                foreach ($actions[$controller]['actions'] as $action) {
-                    if (in_array($action, $role_action[$controller])) {
-                        $result = true;
-                        break;
+                if (!empty($actions[$controller]['actions'])) {
+                    foreach ($actions[$controller]['actions'] as $action) {
+                        if (in_array($action, $role_action[$controller])) {
+                            $result = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -247,8 +249,8 @@ class Role extends Component
                     'Article' => 'backendarticle',
                 ]
             ]
-        
-         
+
+
         );
     }
     public static function getActionsShow()
