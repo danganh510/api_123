@@ -198,7 +198,7 @@ class TeamController extends ControllerBase
             case "data":
                 $this->view->pick("team/edit-operator");
                 break;
-            case "crawl":
+            case "crawler":
                 $this->view->pick("team/edit-crawl");
                 break;
         }
