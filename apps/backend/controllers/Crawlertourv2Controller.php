@@ -165,6 +165,10 @@ class Crawlertourv2Controller extends ControllerBase
 
             foreach ($list_tour['tourInfoAway'] as $standingOveral) {
                 $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
+                if (!$team) {
+                    echo $standingOveral['name'] . " Not found ";
+                    continue;
+                }
                 $arrEnemy = [];
                 foreach ($standingOveral['matchInfo'] as $matchInfo) {
                     if ($standingOveral['name'] == $matchInfo["home"]) {
@@ -189,6 +193,10 @@ class Crawlertourv2Controller extends ControllerBase
 
             foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
                 $team = Team::findByName($standingOveral['name'], MyRepo::create_slug($standingOveral['name']), $tour->getTournamentCountryCode());
+                if (!$team) {
+                    echo $standingOveral['name'] . " Not found ";
+                    continue;
+                }
                 $arrEnemy = [];
                 foreach ($standingOveral['matchInfo'] as $matchInfo) {
                     if ($standingOveral['name'] == $matchInfo["home"]) {
