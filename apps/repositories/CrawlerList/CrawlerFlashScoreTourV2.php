@@ -31,6 +31,8 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
         }
 
         try {
+            $seasonDiv = $this->seleniumDriver->findElement('.heading__info');
+            $season = $seasonDiv->getText();
             $parentsDiv = $this->seleniumDriver->findElements('.sportName');
             foreach ($parentsDiv as $parentDiv) {
                 $htmlDiv .= $parentDiv->getAttribute("outerHTML");
@@ -86,7 +88,8 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
             'htmlDiv' => $htmlDiv,
             'htmlDivHomeStanding' => $htmlDivHomeStanding,
             'htmlDivAwayStanding' => $htmlDivAwayStanding,
-            'htmlDivOveralStanding' => $htmlDivOveralStanding
+            'htmlDivOveralStanding' => $htmlDivOveralStanding,
+            'season' => $season
         ];
     }
     public function crawlList()
@@ -97,6 +100,7 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
         $list_live_match = [];
         $list_standing_home = [];
         $list_standing_away = [];
+        $season = $parentDiv['season'];
 
         $divHomeStanding =  str_get_html($parentDiv['htmlDivHomeStanding']);
         $divAwayStanding =  str_get_html($parentDiv['htmlDivAwayStanding']);
@@ -171,7 +175,8 @@ class CrawlerFlashScoreTourV2 extends CrawlerFlashScoreBase
             'list_live_match' => $list_live_match,
             'tourInfoHome' => $tourInfoHome,
             'tourInfoAway' => $tourInfoAway,
-            'tourInfoOveral' => $tourInfoOveral
+            'tourInfoOveral' => $tourInfoOveral,
+            'season' => $season
         ];
     }
     public function crawlStanding($divHomeTeam)

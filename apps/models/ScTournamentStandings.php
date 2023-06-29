@@ -5,6 +5,7 @@ namespace Score\Models;
 class ScTournamentStandings extends \Phalcon\Mvc\Model
 {
     private $standing_tournament_id;
+    private $standing_tournament_season;
     private $standing_team_id;
     private $standing_team_name;
     private $standing_rank;
@@ -27,7 +28,16 @@ class ScTournamentStandings extends \Phalcon\Mvc\Model
     {
         $this->standing_tournament_id = $standing_tournament_id;
     }
-
+  
+    public function getStandingTournamentSeason()
+    {
+        return $this->standing_tournament_season;
+    }
+    public function setStandingTournamentSeason($standing_tournament_season)
+    {
+        $this->standing_tournament_season = $standing_tournament_season;
+    }
+  
     public function getStandingTeamId()
     {
         return $this->standing_team_id;
@@ -168,36 +178,52 @@ class ScTournamentStandings extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-    public static function findFirstByIdTeamType($id, $team_id, $type)
+    public static function findFirstByIdTeamType($id, $team_id, $type, $season)
     {
         return self::findFirst([
-            'standing_tournament_id  = :ID: AND standing_team_id  = :TEAM_ID: AND standing_type  = :TYPE:',
+            'standing_tournament_id  = :ID: AND standing_team_id  = :TEAM_ID: AND standing_type  = :TYPE: AND standing_tournament_season = :season:',
             'bind' => [
                 'ID' => $id,
                 'TEAM_ID' => $team_id,
                 'TYPE' => $type,
+                'season' => $season
             ]
         ]);
     }
     public static function findByIdAndType($id, $type, $limit = 5)
     {
+        $season_max = self::findFirst([
+            'columns' => "standing_tournament_season",
+            'standing_tournament_id = :ID:',
+            "order" => "standing_tournament_season DESC",
+            'bind' => [
+                'ID' => $id,
+            ]
+        ]);
+        if ($season_max) {
+            $season_max = $season_max->standing_tournament_season;
+        } else {
+            $season_max = "";
+        }
         if ($limit) {
             return self::find([
-                'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
+                'standing_tournament_id = :ID: AND standing_type  = :TYPE: AND standing_tournament_season = :season:',
                 "limit" => (int) $limit,
                 "order" => "standing_rank ASC",
                 'bind' => [
                     'ID' => $id,
                     'TYPE' => $type,
+                    'season' => $season_max
                 ]
             ]);
         } else {
             return self::find([
-                'standing_tournament_id = :ID: AND standing_type  = :TYPE:',
-                "order" => "standing_rank ASC",
+                'standing_tournament_id = :ID: AND standing_type  = :TYPE:  AND standing_tournament_season = :season:',
+                "order" => "standing_tournament_season DESC,standing_rank ASC",
                 'bind' => [
                     'ID' => $id,
                     'TYPE' => $type,
+                    'season' => $season_max
                 ]
             ]);
         }

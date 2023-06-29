@@ -20,7 +20,7 @@ class Crawlertourv2Controller extends ControllerBase
     public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
 
     public function indexAction()
-    {
+    {        
         $currentHour = date('G');
         $currentMinutes = date('i');
         echo "Now is: " . $currentHour . " Hour " . $currentMinutes . " Minutes \r\n";
@@ -92,7 +92,10 @@ class Crawlertourv2Controller extends ControllerBase
         $arrMatchCrawl = [];
         $is_new = false;
         //start crawler
-
+        if (!empty($list_tour['season'])) {            
+            $tour->setTournamentSeason($list_tour['season']);
+            $tour->save();
+        }
 
         try {
             statCrawler:
@@ -153,7 +156,7 @@ class Crawlertourv2Controller extends ControllerBase
                         'away' => $matchInfo["away"],
                     ];
                 }
-                $this->saveTournamentStanding($standingOveral, "overal", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy);
+                $this->saveTournamentStanding($standingOveral, "overal", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy, $list_tour['season']);
             }
 
             foreach ($list_tour['tourInfoAway'] as $standingOveral) {
@@ -177,7 +180,7 @@ class Crawlertourv2Controller extends ControllerBase
                         'away' => $matchInfo["away"],
                     ];
                 }
-                $this->saveTournamentStanding($standingOveral, "away", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy);
+                $this->saveTournamentStanding($standingOveral, "away", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy, $list_tour['season']);
             }
 
             foreach ($list_tour['tourInfoOveral'] as $standingOveral) {
@@ -201,8 +204,9 @@ class Crawlertourv2Controller extends ControllerBase
                         'away' => $matchInfo["away"],
                     ];
                 }
-                $this->saveTournamentStanding($standingOveral, "home", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy);
+                $this->saveTournamentStanding($standingOveral, "home", $tour->getTournamentId(), $team->getTeamId(), $arrEnemy, $list_tour['season']);
             }
+          
 
 
             echo "status: " . $total;
@@ -224,9 +228,9 @@ class Crawlertourv2Controller extends ControllerBase
         echo "---finish in " . (time() - $start_time_cron) . " second \n\r";
         die();
     }
-    public function saveTournamentStanding($standing, $type, $tour_id, $team_id, $arrEnemy)
+    public function saveTournamentStanding($standing, $type, $tour_id, $team_id, $arrEnemy, $season)
     {
-        $standingModel = ScTournamentStandings::findFirstByIdTeamType($tour_id, $team_id, $type);
+        $standingModel = ScTournamentStandings::findFirstByIdTeamType($tour_id, $team_id, $type, $season);
         if (!$standingModel) {
             $standingModel = new ScTournamentStandings();
             $standingModel->setStandingTournamentId($tour_id);
@@ -235,6 +239,7 @@ class Crawlertourv2Controller extends ControllerBase
             $standingModel->setStandingType($type);
             $standingModel->setStandingTournamentId($tour_id);
         }
+        $standingModel->setStandingTournamentSeason($season);
         $standingModel->setStandingUpdateTime(time());
         $standingModel->setStandingRank($standing['rank']);
         $standingModel->setStandingEnemy(json_encode($arrEnemy)); //
@@ -244,6 +249,6 @@ class Crawlertourv2Controller extends ControllerBase
         $standingModel->setStandingTotalWin($standing['totalWin']);
         $standingModel->setStandingTotalDraw($standing['totalDraw']);
         $standingModel->setStandingTotalLose($standing['totalLose']);
-        $standingModel->save();
+        $result = $standingModel->save();        
     }
 }
