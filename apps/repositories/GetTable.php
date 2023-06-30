@@ -110,9 +110,10 @@ class GetTable extends Component
             ->addFrom($modelInfo['str'], "nlang")
             ->innerJoin($modelInfo['strLang'], "nlang.{$modelInfo['column_id']} = lang.{$modelInfo['column_id']}", 'lang')
             ->where("lang.{$modelInfo['column_lang_code']} = :lang_code:", ['lang_code' => $params['language']]);
-        if (isset($modelInfo['conditions']) && !empty($modelInfo['conditions'])) {
-            $sql = $sql->andWhere($modelInfo['conditions']);
+        if (isset($params['conditions']) && !empty($params['conditions'])) {
+            $sql = $sql->andWhere($params['conditions']);
         }
+        
         $total = count($sql->getQuery()->execute());
 
         if (isset($params['limit'])) {

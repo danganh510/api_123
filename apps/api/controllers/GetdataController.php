@@ -73,6 +73,8 @@ class GetdataController extends ControllerBase
         $cacheData = new CacheGetData($this->requestParams);
         $result = $cacheData->getCache();
         $result = [];
+
+        
         if (empty($result)) {
             if ($this->requestParams['language'] == $this->globalVariable->defaultLanguage) {
                 $result = $getData->getListTable($this->requestParams, $modelInfo);
