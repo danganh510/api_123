@@ -12,7 +12,7 @@ class ScMatch extends \Phalcon\Mvc\Model
      * @Column(type="integer", length=11, nullable=false)
      */
     protected $match_id;
-    
+
     protected $match_tournament_id;
     protected $match_season;
     protected $match_name;
@@ -62,14 +62,14 @@ class ScMatch extends \Phalcon\Mvc\Model
      */
     public function getMatchSeaSon()
     {
-        return $this->match_id;
+        return $this->match_season;
     }
     /**
-     * @param mixed $match_id
+     * @param mixed $match_season
      */
-    public function setMatchSeaSon($match_id)
+    public function setMatchSeaSon($match_season)
     {
-        $this->match_id = $match_id;
+        $this->match_season = $match_season;
     }
     /**
      * @return mixed
