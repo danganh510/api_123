@@ -2,11 +2,9 @@
 
 namespace Score\Repositories;
 
-use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
 use Score\Library\AppDI;
 use Score\Models\ScTournament;
-use Symfony\Component\DomCrawler\Crawler;
 
 class Tournament extends Component
 {

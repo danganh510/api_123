@@ -45,6 +45,7 @@ class MatchController extends ControllerBase
 
         $cacheTour = new CacheTour($this->requestParams['language']);
         $arrTournament = $cacheTour->get(ConstEnv::CACHE_TYPE_ID);
+        
         // $matchRepo = new MatchRepo();
         // $arrMatch = $matchRepo->getMatch($time, $status);
         if ($this->my->getDays($time, time() + $time_zone * 60 * 60) == 0 && !$isLive) {

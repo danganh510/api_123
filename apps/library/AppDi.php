@@ -6,13 +6,11 @@ use App\Services\AchievementService;
 use Library\AppCacheManager;
 use Library\Auth\Auth;
 use Phalcon\Di;
-use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Session\Manager as SessionRedis;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Logger\Logger;
-use Phalcon\Cache\Cache;
 use Aws\S3\S3Client;
 use Library\Plugin\TranslatorPlugin;
 
