@@ -4,7 +4,15 @@ namespace Score\Models;
 
 class ScMatch extends \Phalcon\Mvc\Model
 {
+     /**
+     *
+     * @var integer
+     * @Primary
+     * @Identity
+     * @Column(type="integer", length=11, nullable=false)
+     */
     protected $match_id;
+    
     protected $match_tournament_id;
     protected $match_season;
     protected $match_name;
@@ -36,9 +44,7 @@ class ScMatch extends \Phalcon\Mvc\Model
     protected $match_link_detail_sofa;
     protected $match_link_detail_livescore;
 
-    /**
-     * @return mixed
-     */
+   
     public function getMatchId()
     {
         return $this->match_id;
