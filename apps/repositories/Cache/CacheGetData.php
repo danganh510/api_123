@@ -38,7 +38,7 @@ class CacheGetData extends Component
                 $value = trim(json_encode($value));
             //    $value = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $value);
                 $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
-                $key .= $value;
+                $key .= "_".$value;
             }
         }
         //rút ngắn key lại
