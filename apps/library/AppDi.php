@@ -108,7 +108,7 @@ class AppDI
         return AppDI::getService(DI_SERVICE_AWS, true);
     }
 
-    public static function getTranslator():TranslatorPlugin
+    public static function getTranslator(): TranslatorPlugin
     {
         return AppDI::getService(DI_SERVICE_LOCATE, true);
     }

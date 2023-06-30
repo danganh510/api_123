@@ -2,6 +2,7 @@
 
 namespace Score\Repositories;
 
+use Library\AppDI;
 use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
 use Score\Models\ScTeam;
@@ -139,7 +140,7 @@ class Team extends Component
         if ($language == "vi") {
             return ScTeam::find("team_active = 'Y'")->toArray();
         } else {
-            return $this->modelsManager->createBuilder()
+            return AppDI::getModelManager()->createBuilder()
             ->columns("t.team_id, t.team_country_code, t.team_name_flashscore, t.team_logo, t.team_logo_crawl, t.team_logo_small, t.team_logo_medium, t.team_active, t.team_is_public,
             tl.team_name,tl.team_slug")
             ->addFrom("Score\Models\ScTeam", "t")
@@ -154,7 +155,7 @@ class Team extends Component
         if ($language == "vi") {
             return ScTeam::find("team_active = 'Y' AND team_id = $id")->toArray()[0];
         } else {
-            return $this->modelsManager->createBuilder()
+            return AppDI::getModelManager()->createBuilder()
             ->columns("t.team_id, t.team_country_code, t.team_name_flashscore, t.team_logo, t.team_logo_crawl, t.team_logo_small, t.team_logo_medium, t.team_active, t.team_is_public,
             tl.team_name,tl.team_slug")
             ->addFrom("Score\Models\ScTeam", "t")
