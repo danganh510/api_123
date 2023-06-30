@@ -9,7 +9,7 @@ use Phalcon\Cache\Frontend\Data as FrontData;
 class CacheRepoNew extends Component
 {
     const PRE_SESSION_CACHE = "";
-    const filePath = __DIR__ . "/../cache/";
+    const filePath = __DIR__ . "/../Cache/";
     static $frontCache = null;
     static $backCache = null;
     public $key;

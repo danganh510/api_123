@@ -4,7 +4,6 @@ namespace Score\Repositories;
 
 use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
-use Score\Library\AppDI;
 use Score\Models\ScTournament;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -95,11 +94,11 @@ class Tournament extends Component
         }        
         return $tournament;
     }
-    public static function getTourByLang($language) {
+    public function getTourByLang($language) {
         if ($language == "vi") {
             return ScTournament::find()->toArray();
         } else {
-            return AppDI::getModelManager()->createBuilder()
+            return $this->modelsManager->createBuilder()
             ->columns("t.tournament_id, t.tournament_type, t.tournament_href_flashscore, t.tournament_name_flash_score, t.tournament_country, t.tournament_country_code,
              t.tournament_image, t.tournament_order, t.tournament_crawl , t.tournament_is_show, t.tournament_is_crawling, t.tournament_active ,
             tl.tournament_name,tl.tournament_slug")
@@ -111,11 +110,11 @@ class Tournament extends Component
             ->toArray();
         }
     }
-    public static function getTourByIdAndLang($id,$language) {
+    public function getTourByIdAndLang($id,$language) {
         if ($language == "vi") {
             return ScTournament::find("tournament_id = $id")->toArray()[0];
         } else {
-            return AppDI::getModelManager()->createBuilder()
+            return $this->modelsManager->createBuilder()
             ->columns("t.tournament_id, t.tournament_type, t.tournament_href_flashscore, t.tournament_name_flash_score, t.tournament_country, t.tournament_country_code,
              t.tournament_image, t.tournament_order, t.tournament_crawl , t.tournament_is_show, t.tournament_is_crawling, t.tournament_active ,
             tl.tournament_name,tl.tournament_slug")
@@ -135,7 +134,7 @@ class Tournament extends Component
                 "order" => "tournament_order DESC"
                 ])->toArray();
         } else {
-            return AppDI::getModelManager()->createBuilder()
+            return $this->modelsManager->createBuilder()
             ->columns("t.tournament_id, t.tournament_type, t.tournament_href_flashscore, t.tournament_name_flash_score, t.tournament_country, t.tournament_country_code,
              t.tournament_image, t.tournament_order, t.tournament_crawl , t.tournament_is_show, t.tournament_is_crawling, t.tournament_active ,
             tl.tournament_name,tl.tournament_slug")
