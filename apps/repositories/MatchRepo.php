@@ -100,6 +100,8 @@ class MatchRepo extends Component
             $matchSave->setMatchStartYear($year_start);
             $matchSave->setMatchStartTime($timeInfo['start_time']);
             $matchSave->setMatchSeaSon($tournament->getTournamentSeason());
+            $matchSave->setMatchCrawlDetail(0);
+            $matchSave->setMatchCrawlDetailLive(0);
         }
      //   $matchSave->setTransaction($transaction);
 
