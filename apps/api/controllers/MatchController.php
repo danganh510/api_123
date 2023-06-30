@@ -63,6 +63,10 @@ class MatchController extends ControllerBase
             if (!is_array($match)) {
                 $match = (array) $match;
             }
+            if ($match['match_id'] == 57976) {
+                var_dump($arrTeam[$match['match_home_id']]);exit;
+                
+            }
             if (empty($arrTeam[$match['match_home_id']]) || empty($arrTeam[$match['match_away_id']])) {
                 continue;
             }
