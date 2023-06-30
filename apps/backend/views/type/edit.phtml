@@ -2,14 +2,7 @@
     $(document).ready(function() {
         $('form[name=type-form]').submit(function(event) {
             var valid = true;
-            if ($('input[name=txtKeyword]').val() == '') {
-                $('.msg-keyword').text('Keyword field is required.');
-                $('#txtKeyword').addClass("border-red");
-                valid = false;
-            } else {
-                $('.msg-keyword').text('');
-                $('#txtKeyword').removeClass("border-red");
-            }
+
             if ($('input[name=txtOrder]').val() == '') {
                 $('.msg-order').text('Order field is required.');
                 $('#txtOrder').addClass("border-red");
@@ -78,14 +71,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Alias URL <span class="text-danger">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input maxlength="255" value="<?php echo isset($formData["type_keyword"]) ? $formData["type_keyword"] : "" ?>" id="txtKeyword" name="txtKeyword" class="form-control col-md-7 col-xs-12 <?php echo isset($messages["keyword"]) ? $messages["status"] : ""; ?>" type="text" >
-                            <span class="text-danger msg-keyword"><?php echo isset($messages["keyword"]) ? $messages["keyword"] : ""; ?></span>
-                        </div>
-                    </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Meta image</label>
@@ -158,6 +143,14 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Alias URL <span class="text-danger">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <input maxlength="255" value="<?php echo isset($formData['arr_translate'][$code]["type_keyword"]) ? $formData['arr_translate'][$code]["type_keyword"] : "" ?>" type="text" id="txtKeyword<?php echo $code; ?>" name="txtKeyword" class="form-control col-md-7 col-xs-12 <?php echo (isset($messages[$code]["keyword"])) ? $messages["status"] : ""; ?>">
+                                    <span class="text-danger msg-keyword-<?php echo $code; ?>"><?php echo isset($messages[$code]["keyword"]) ? $messages[$code]["keyword"] : ""; ?></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Title <span class="text-danger">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -200,6 +193,7 @@
                                         var id = <?php echo isset($formData['arr_translate'][$code]["type_id"]) ? $formData['arr_translate'][$code]["type_id"] : -1; ?>;
                                         if (id < 0) {
                                             var str = $(this).val();
+                                            $('#txtKeyword').val(str_slug);
                                             $('#txtTitle<?php echo $code; ?>').val(str);
                                             $('#txtMetaKey<?php echo $code; ?>').val(str);
                                             $('#txtMetaDesc<?php echo $code; ?>').val(str);
@@ -214,6 +208,14 @@
                                         } else {
                                             $('.msg-name-<?php echo $code; ?>').text('');
                                             $('#txtName<?php echo $code; ?>').removeClass("border-red");
+                                        }
+                                        if ($('#txtKeyword<?php echo $code; ?>').val() == '') {
+                                            valid = false;
+                                            $('.msg-keyword-<?php echo $code; ?>').text("Keyword field is required.");
+                                            $('#txtKeyword<?php echo $code; ?>').addClass("border-red");
+                                        } else {
+                                            $('.msg-keyword-<?php echo $code; ?>').text('');
+                                            $('#txtKeyword<?php echo $code; ?>').removeClass("border-red");
                                         }
                                         if ($('#txtTitle<?php echo $code; ?>').val() == '') {
                                             $('.msg-title-<?php echo $code; ?>').text('Title field is required.');

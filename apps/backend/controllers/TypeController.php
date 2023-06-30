@@ -26,7 +26,7 @@ class TypeController extends ControllerBase
     {
         $selectAll = '';
         $keyword = trim($this->request->get("txtSearch"));
-  
+
 
         $data = $this->getParameter();
         $list_page = $this->modelsManager->executeQuery($data['sql'], $data['para']);
@@ -50,7 +50,9 @@ class TypeController extends ControllerBase
             if ($lang_search != $this->globalVariable->defaultLanguage) {
                 foreach ($list_page as $item) {
                     $result[] = \Phalcon\Mvc\Model::cloneResult(
-                        new ScType(), array_merge($item->t->toArray(), $item->tl->toArray()));
+                        new ScType(),
+                        array_merge($item->t->toArray(), $item->tl->toArray())
+                    );
                 }
             } else {
                 foreach ($list_page as $item) {
@@ -78,7 +80,7 @@ class TypeController extends ControllerBase
 
     public function createAction()
     {
-        $data = array('id' => -1, 'order' => 1, 'active' => 'Y','type_parent_id' => 0);
+        $data = array('id' => -1, 'order' => 1, 'active' => 'Y', 'type_parent_id' => 0);
         $messages = array();
         if ($this->request->isPost()) {
             $messages = array();
@@ -103,7 +105,7 @@ class TypeController extends ControllerBase
             }
             if (empty($data["keyword"])) {
                 $messages["keyword"] = "Keyword field is required.";
-            }elseif (Type::checkKeyword($data["keyword"], -1))
+            } elseif (Type::checkKeyword($data["keyword"], -1))
                 $messages["keyword"] = "Keyword field is exist.";
 
             if (empty($data["meta_description"])) {
@@ -161,7 +163,7 @@ class TypeController extends ControllerBase
     {
         $type_id = $this->request->get('id');
         $lang_current = $this->request->get('slcLang');
-       $lang_current = $lang_current ? $lang_current : $this->globalVariable->defaultLanguage;
+        $lang_current = $lang_current ? $lang_current : $this->globalVariable->defaultLanguage;
         $checkID = new Validator();
         if (!$checkID->validInt($type_id)) {
             $this->response->redirect('notfound');
@@ -188,7 +190,7 @@ class TypeController extends ControllerBase
         );
         $save_mode = '';
         $arr_language = Language::arrLanguages();
-                if ($this->request->isPost()) {
+        if ($this->request->isPost()) {
             if (!isset($_POST['save'])) {
                 $this->view->disable();
                 $this->response->redirect("notfound");
@@ -203,9 +205,15 @@ class TypeController extends ControllerBase
                 $data_post['type_title'] = $this->request->getPost('txtTitle', array('string', 'trim'));
                 $data_post['type_meta_keyword'] = $this->request->getPost('txtMetaKey', array('string', 'trim'));
                 $data_post['type_meta_description'] = $this->request->getPost('txtMetaDesc', array('string', 'trim'));
+                $data_post['type_keyword'] = $this->request->getPost('txtKeyword', array('string', 'trim'));
                 if (empty($data_post['type_name'])) {
                     $messages[$save_mode]['name'] = 'Name field is required.';
                 }
+                if (empty($data_post['type_keyword'])) {
+                    $messages['keyword'] = 'Keyword field is required.';
+                } elseif (Type::checkKeywordAndLang($data_post["type_keyword"], $type_id, $save_mode))
+                    $messages["keyword"] = "Keyword field is exist.";
+
                 if (empty($data_post['type_title'])) {
                     $messages[$save_mode]['title'] = 'Title field is required.';
                 }
@@ -217,14 +225,10 @@ class TypeController extends ControllerBase
                 }
             } else {
                 $data_post['type_parent_id'] = $this->request->getPost('slcParent');
-                $data_post['type_keyword'] = $this->request->getPost('txtKeyword', array('string', 'trim'));
                 $data_post['type_order'] = $this->request->getPost('txtOrder', array('string', 'trim'));
                 $data_post['type_meta_image'] = $this->request->getPost('txtMetaImage', array('string', 'trim'));
                 $data_post['type_active'] = $this->request->getPost("radActive");
-                if (empty($data_post['type_keyword'])) {
-                    $messages['keyword'] = 'Keyword field is required.';
-                }elseif (Type::checkKeyword($data_post["type_keyword"], $type_id))
-                    $messages["keyword"] = "Keyword field is exist.";
+
                 if (empty($data_post['type_order'])) {
                     $messages['order'] = "Order field is required.";
                 } else if (!is_numeric($data_post['type_order'])) {
@@ -233,8 +237,7 @@ class TypeController extends ControllerBase
             }
             if (empty($messages)) {
                 switch ($save_mode) {
-                    case ScLanguage::GENERAL:#
-                        $type_model->setTypeKeyword($data_post['type_keyword']);
+                    case ScLanguage::GENERAL: #
                         $type_model->setTypeMetaImage($data_post['type_meta_image']);
                         $type_model->setTypeOrder($data_post['type_order']);
                         $type_model->setTypeParentId($data_post['type_parent_id']);
@@ -242,7 +245,8 @@ class TypeController extends ControllerBase
                         $result = $type_model->update();
                         $info = ScLanguage::GENERAL;
                         break;
-                    case $this->globalVariable->defaultLanguage :
+                    case $this->globalVariable->defaultLanguage:
+                        $type_model->setTypeKeyword($data_post['type_keyword']);
                         $type_model->setTypeName($data_post['type_name']);
                         $type_model->setTypeTitle($data_post['type_title']);
                         $type_model->setTypeMetaKeyword($data_post['type_meta_keyword']);
@@ -257,6 +261,7 @@ class TypeController extends ControllerBase
                             $type_lang_model->setTypeId($type_id);
                             $type_lang_model->setTypeLangCode($save_mode);
                         }
+                        $type_lang_model->setTypeKeyword($data_post['type_keyword']);
                         $type_lang_model->setTypeName($data_post['type_name']);
                         $type_lang_model->setTypeTitle($data_post['type_title']);
                         $type_lang_model->setTypeMetaKeyword($data_post['type_meta_keyword']);
@@ -282,6 +287,7 @@ class TypeController extends ControllerBase
         $item = array(
             'type_id' => $type_model->getTypeId(),
             'type_name' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['type_name'] : $type_model->getTypeName(),
+            'type_keyword' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['type_keyword'] : $type_model->getTypeKeyword(),
             'type_title' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['type_title'] : $type_model->getTypeTitle(),
             'type_meta_keyword' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['type_meta_keyword'] : $type_model->getTypeMetaKeyword(),
             'type_meta_description' => ($save_mode === $this->globalVariable->defaultLanguage) ? $data_post['type_meta_description'] : $type_model->getTypeMetaDescription(),
@@ -292,6 +298,7 @@ class TypeController extends ControllerBase
             $item = array(
                 'type_id' => $type_lang->getTypeId(),
                 'type_name' => ($save_mode === $type_lang->getTypeLangCode()) ? $data_post['type_name'] : $type_lang->getTypeName(),
+                'type_keyword' => ($save_mode === $type_lang->getTypeLangCode()) ? $data_post['type_keyword'] : $type_lang->getTypeKeyword(),
                 'type_title' => ($save_mode === $type_lang->getTypeLangCode()) ? $data_post['type_title'] : $type_lang->getTypeTitle(),
                 'type_meta_keyword' => ($save_mode === $type_lang->getTypeLangCode()) ? $data_post['type_meta_keyword'] : $type_lang->getTypeMetaKeyword(),
                 'type_meta_description' => ($save_mode === $type_lang->getTypeLangCode()) ? $data_post['type_meta_description'] : $type_lang->getTypeMetaDescription(),
@@ -302,6 +309,7 @@ class TypeController extends ControllerBase
             $item = array(
                 'type_id' => -1,
                 'type_name' => $data_post['type_name'],
+                'type_keyword' => $data_post['type_keyword'],
                 'type_title' => $data_post['type_title'],
                 'type_meta_keyword' => $data_post['type_meta_keyword'],
                 'type_meta_description' => $data_post['type_meta_description'],
@@ -312,7 +320,6 @@ class TypeController extends ControllerBase
             'type_id' => $type_model->getTypeId(),
             'type_parent_id' => ($save_mode === ScLanguage::GENERAL) ? $data_post['type_parent_id'] : $type_model->getTypeParentId(),
             'type_order' => ($save_mode === ScLanguage::GENERAL) ? $data_post['type_order'] : $type_model->getTypeOrder(),
-            'type_keyword' => ($save_mode === ScLanguage::GENERAL) ? $data_post['type_keyword'] : $type_model->getTypeKeyword(),
             'type_meta_image' => ($save_mode === ScLanguage::GENERAL) ? $data_post['type_meta_image'] : $type_model->getTypeMetaImage(),
             'type_active' => ($save_mode === ScLanguage::GENERAL) ? $data_post['type_active'] : $type_model->getTypeActive(),
             'arr_translate' => $arr_translate,
@@ -339,17 +346,17 @@ class TypeController extends ControllerBase
                 $table = array();
                 if ($item) {
                     if (count($table) > 0) {
-                        $message_delete = 'Can\'t delete the Type Name = ' . $item->getTypeName().' Because has item in ' . implode(', ',$table)."<br>";
+                        $message_delete = 'Can\'t delete the Type Name = ' . $item->getTypeName() . ' Because has item in ' . implode(', ', $table) . "<br>";
                         $msg_delete['status'] = 'error';
                         $msg_delete['msg'] .= $message_delete;
                     } else {
                         if ($item->delete() === false) {
-                            $message_delete = 'Can\'t delete the  Type Name = ' . $item->getTypeName()."<br>";
+                            $message_delete = 'Can\'t delete the  Type Name = ' . $item->getTypeName() . "<br>";
                             $msg_delete['status'] = 'error';
                             $msg_delete['msg'] .= $message_delete;
                         } else {
                             $total++;
-                           
+
                             if ($lang == $this->globalVariable->defaultLanguage) {
                                 TypeLang::deleteById($id);
                             }
@@ -358,10 +365,9 @@ class TypeController extends ControllerBase
                 }
             }
             if ($total > 0) {
-                $message_delete = 'Delete ' . $total . ' Type successfully.'."<br>";
+                $message_delete = 'Delete ' . $total . ' Type successfully.' . "<br>";
                 $msg_result['status'] = 'success';
                 $msg_result['msg'] = $message_delete;
-
             }
             $this->session->set('msg_result', $msg_result);
             $this->session->set('msg_delete', $msg_delete);
@@ -439,5 +445,4 @@ class TypeController extends ControllerBase
         $data['sql'] = $sql;
         return $data;
     }
-
 }

@@ -35,6 +35,12 @@ class ScTypeLang extends \Phalcon\Mvc\Model
      * @Column(type="string", length=255, nullable=false)
      */
     protected $type_name;
+    /**
+     *
+     * @var string
+     * @Column(type="string", length=255, nullable=false)
+     */
+    protected $type_keyword;
 
     /**
      *
@@ -109,6 +115,18 @@ class ScTypeLang extends \Phalcon\Mvc\Model
         return $this;
     }
 
+    /**
+     * Method to set the value of field type_keyword
+     *
+     * @param string $type_keyword
+     * @return $this
+     */
+    public function setTypeKeyword($type_keyword)
+    {
+        $this->type_keyword = $type_keyword;
+
+        return $this;
+    }
     /**
      * Method to set the value of field type_title
      *
@@ -187,7 +205,15 @@ class ScTypeLang extends \Phalcon\Mvc\Model
     {
         return $this->type_name;
     }
-
+    /**
+     * Returns the value of field type_keyword
+     *
+     * @return string
+     */
+    public function getTypeKeyword()
+    {
+        return $this->type_keyword;
+    }
     /**
      * Returns the value of field type_title
      *
@@ -221,10 +247,10 @@ class ScTypeLang extends \Phalcon\Mvc\Model
     /**
      * Initialize method for model.
      */
-//    public function initialize()
-//    {
-//        $this->setSchema("travelner");
-//    }
+    //    public function initialize()
+    //    {
+    //        $this->setSchema("travelner");
+    //    }
 
     /**
      * Returns table name mapped in the model.
@@ -257,5 +283,4 @@ class ScTypeLang extends \Phalcon\Mvc\Model
     {
         return parent::findFirst($parameters);
     }
-
 }
