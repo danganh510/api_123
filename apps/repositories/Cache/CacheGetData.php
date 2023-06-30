@@ -25,24 +25,30 @@ class CacheGetData extends Component
             mkdir(self::filePath);
         }
         $this->key = $this->formatKey($param);
-      
     }
     private function formatKey($param)
     {
 
         $key = "";
-        $key = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $key);
 
         if (!empty($param)) {
-            foreach ($param as $value) {
-                $value = trim(json_encode($value));
-            //    $value = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $value);
-                // $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
-                $key .= "_".$value;
-            }
+            $key = $this->stringKey($param, $key);
         }
         //rút ngắn key lại
-        $key = str_replace(["a", "o", "e", " ", "i", "f"], ["", "", "", "", "", ""], $key);        
+        $key = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $key);
+        $key = str_replace(["a", "o", "e", " ", "i", "f"], ["", "", "", "", "", ""], $key);
+        return $key;
+    }
+    private function stringKey($param, $key = "")
+    {
+        foreach ($param as $key_param => $value) {
+            if (is_array($value)) {
+                $key .= "_" . $this->stringKey($value, $key);
+            } else {
+                $key .= "_" . $key_param . "_" . $value;
+            }
+        }
+
         return $key;
     }
     public function deleteFolder()
