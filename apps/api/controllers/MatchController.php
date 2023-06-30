@@ -42,6 +42,7 @@ class MatchController extends ControllerBase
         $cacheTeam = new CacheTeam($this->requestParams['language']);
         $arrTeam = $cacheTeam->get(ConstEnv::CACHE_TYPE_ID);
 
+
         $cacheTour = new CacheTour($this->requestParams['language']);
         $arrTournament = $cacheTour->get(ConstEnv::CACHE_TYPE_ID);
         // $matchRepo = new MatchRepo();

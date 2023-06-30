@@ -139,27 +139,29 @@ class Team extends Component
         if ($language == "vi") {
             return ScTeam::find("team_active = 'Y'")->toArray();
         } else {
-            return $this->modelsManager->createBuilder()
+            $a= $this->modelsManager->createBuilder()
             ->columns("t.team_id, t.team_country_code, t.team_name_flashscore, t.team_logo, t.team_logo_crawl, t.team_logo_small, t.team_logo_medium, t.team_active, t.team_is_public,
             tl.team_name,tl.team_slug")
-            ->from("Score\Models\ScTeam", "t")
+            ->addFrom("Score\Models\ScTeam", "t")
             ->innerJoin("Score\Models\ScTeamLang", "t.team_id = tl.team_id", "tl")
             ->where("t.team_active = 'Y'")
-            ->excute()
-            ->toArray();
+            ->getQuery()
+            ->execute()
+            ->toArray();            
         }
     }
     public  function getTeamByIdAndLang($id,$language) {
         if ($language == "vi") {
             return ScTeam::find("team_active = 'Y' AND team_id = $id")->toArray()[0];
         } else {
-            return $this->modelsManager->createBuilder()
+            $a= $this->modelsManager->createBuilder()
             ->columns("t.team_id, t.team_country_code, t.team_name_flashscore, t.team_logo, t.team_logo_crawl, t.team_logo_small, t.team_logo_medium, t.team_active, t.team_is_public,
             tl.team_name,tl.team_slug")
-            ->from("Score\Models\ScTeam", "t")
+            ->addFrom("Score\Models\ScTeam", "t")
             ->innerJoin("Score\Models\ScTeamLang", "t.team_id = tl.team_id", "tl")
             ->where("t.team_active = 'Y' AND t.team_id = {$id}")
-            ->excute()
+            ->getQuery()
+            ->execute()
             ->toArray()[0];
         }
     }
