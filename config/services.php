@@ -31,6 +31,7 @@ include __DIR__ . '/../vendor/autoload.php';
  * Read configuration
  */
 $config = include __DIR__ . "/config.php";
+include __DIR__ . "/common.conf.php";
 
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
@@ -51,7 +52,8 @@ $loader->registerNamespaces(array(
         __DIR__ . '/../apps/repositories/CrawlerDetail/',
         __DIR__ . '/../apps/repositories/Cache/',
     ],
-    'Score\Utils' => __DIR__ . '/../apps/library/Utils/'
+    'Score\Utils' => __DIR__ . '/../apps/library/Utils/',
+    'Score\Library' => __DIR__ . '/../apps/library/'
 ));
 
 $loader->registerDirs(

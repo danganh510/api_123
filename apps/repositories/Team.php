@@ -2,13 +2,10 @@
 
 namespace Score\Repositories;
 
-use Library\AppDI;
-use Score\Models\ForexcecConfig;
 use Phalcon\Mvc\User\Component;
+use Score\Library\AppDI;
 use Score\Models\ScTeam;
 use Score\Models\ScTeamLang;
-use Symfony\Component\DomCrawler\Crawler;
-use Score\Repositories\CacheTeam;
 
 class Team extends Component
 {
@@ -136,7 +133,7 @@ class Team extends Component
         ]);
         return $team;
     }
-    public function getTeamByLang($language) {
+    public static function getTeamByLang($language) {
         if ($language == "vi") {
             return ScTeam::find("team_active = 'Y'")->toArray();
         } else {
@@ -145,13 +142,13 @@ class Team extends Component
             tl.team_name,tl.team_slug")
             ->addFrom("Score\Models\ScTeam", "t")
             ->innerJoin("Score\Models\ScTeamLang", "t.team_id = tl.team_id", "tl")
-            ->where("t.team_active = 'Y'")
+            ->where("t.team_active = 'Y' AND tl.team_lang_code = :language:",['language' => $language])
             ->getQuery()
             ->execute()
             ->toArray();            
         }
     }
-    public  function getTeamByIdAndLang($id,$language) {
+    public static function getTeamByIdAndLang($id,$language) {
         if ($language == "vi") {
             return ScTeam::find("team_active = 'Y' AND team_id = $id")->toArray()[0];
         } else {
@@ -160,7 +157,7 @@ class Team extends Component
             tl.team_name,tl.team_slug")
             ->addFrom("Score\Models\ScTeam", "t")
             ->innerJoin("Score\Models\ScTeamLang", "t.team_id = tl.team_id", "tl")
-            ->where("t.team_active = 'Y' AND t.team_id = {$id}")
+            ->where("t.team_active = 'Y AND t.team_id = {$id} AND tl.team_lang_code = :language:",['language' => $language])
             ->getQuery()
             ->execute()
             ->toArray()[0];

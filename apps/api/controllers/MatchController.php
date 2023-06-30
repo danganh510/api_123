@@ -186,9 +186,8 @@ class MatchController extends ControllerBase
             ];
         }
         $matchInfo = $matchInfo->toArray()[0];
-        $teamRepo = new Team();
-        $home = $teamRepo->getTeamByIdAndLang($matchInfo['match_home_id'],$this->requestParams['language']);
-        $away = $teamRepo->getTeamByIdAndLang($matchInfo['match_away_id'],$this->requestParams['language']);
+        $home = Team::getTeamByIdAndLang($matchInfo['match_home_id'],$this->requestParams['language']);
+        $away = Team::getTeamByIdAndLang($matchInfo['match_away_id'],$this->requestParams['language']);
 
         $match_start = MatchDetailLocale::changeKeyToContentStart(json_decode($matchInfo['info_stats'],true),$this->requestParams['language']);
         $info = [

@@ -29,8 +29,7 @@ class CacheTour extends Component
     {
         $arrTour = $this->getCache($type);
         if (empty($arrTeam)) {
-            $tourRepo = new Tournament();
-            $arrTour = $tourRepo->getTourByLang($this->language);
+            $arrTour = Tournament::getTourByLang($this->language);
 
             $arrTourCache = [];
 
@@ -61,8 +60,7 @@ class CacheTour extends Component
     {
         $arrTour = $this->getCache($type);
         if (empty($arrTeam)) {
-            $tourRepo = new Tournament();
-            $arrTour = $tourRepo->getTourByLang($this->language);
+            $arrTour = Tournament::getTourByLang($this->language);
             $arrTourCache = [];
 
             switch ($type) {

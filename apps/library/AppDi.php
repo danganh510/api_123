@@ -1,11 +1,11 @@
 <?php
 
-namespace Library;
+namespace Score\Library;
 
 use App\Services\AchievementService;
 use Library\AppCacheManager;
 use Library\Auth\Auth;
-use Phalcon\Di\Di;
+use Phalcon\Di;
 use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Url\UrlInterface;
@@ -14,10 +14,9 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Logger\Logger;
 use Phalcon\Cache\Cache;
 use Aws\S3\S3Client;
-use Predis\Client;
 use Library\Plugin\TranslatorPlugin;
 
-class AppDI
+class AppDI 
 {
     public static function get()
     {

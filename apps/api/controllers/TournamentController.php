@@ -31,8 +31,8 @@ class TournamentController extends ControllerBase
   public $type_crawl = MatchCrawl::TYPE_FLASH_SCORE;
   public function gettounamentshowAction()
   {
-    $tourRepo = new Tournament();
-    $arrTour = $tourRepo->getTourIsShowByLang($this->requestParams['language']);
+
+    $arrTour = Tournament::getTourIsShowByLang($this->requestParams['language']);
     $list_data = [];
     foreach ($arrTour as $tour) {
       
@@ -55,8 +55,7 @@ class TournamentController extends ControllerBase
   {
     $limit = $this->request->get("limit");
     $day = $this->request->get("day");
-    $tourRepo = new Tournament();
-    $arrTourIsShow = $tourRepo->getTourIsShowByLang($this->requestParams['language']);
+    $arrTourIsShow = Tournament::getTourIsShowByLang($this->requestParams['language']);
     $str_tour = array_column($arrTourIsShow, "tournament_id");
     $str_tour = implode(",", $str_tour);
 
@@ -178,8 +177,7 @@ class TournamentController extends ControllerBase
     $cache = new CacheRepoNew("tournamencontroller_getTourInfor_".$tour_id."_".$this->requestParams['language']);
     $data = $cache->getCache();
     if (!$data) {
-      $tourRepo = new Tournament();
-      $tourModel = $tourRepo->getTourByIdAndLang($tour_id, $this->requestParams['language']);
+      $tourModel = Tournament::getTourByIdAndLang($tour_id, $this->requestParams['language']);
       if (!$tourModel) {
         return false;
       }

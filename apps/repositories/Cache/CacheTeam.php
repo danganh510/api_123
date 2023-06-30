@@ -29,9 +29,8 @@ class CacheTeam extends Component
     {
         $arrTeam = $this->getCache($type);
         if (empty($arrTeam)) {
-           
-            $team_repo = new Team();
-            $arrTeam = $team_repo->getTeamByLang($this->language);
+
+            $arrTeam = Team::getTeamByLang($this->language);
             $arrTeamCache = [];
             switch ($type) {
                 case ConstEnv::CACHE_TYPE_ID:
