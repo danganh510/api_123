@@ -94,7 +94,7 @@ class Tournament extends Component
         }        
         return $tournament;
     }
-    public function getTourByLang($language) {
+    public static function getTourByLang($language) {
         if ($language == "vi") {
             return ScTournament::find()->toArray();
         } else {
@@ -110,7 +110,7 @@ class Tournament extends Component
             ->toArray();
         }
     }
-    public function getTourByIdAndLang($id,$language) {
+    public static function getTourByIdAndLang($id,$language) {
         if ($language == "vi") {
             return ScTournament::find("tournament_id = $id")->toArray()[0];
         } else {
