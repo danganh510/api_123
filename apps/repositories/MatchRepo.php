@@ -175,7 +175,7 @@ class MatchRepo extends Component
                 'is_new' => $is_new
             ];
         } else {
-            var_dump($matchSave->getMessages());exit;
+            var_dump($matchSave->getMessages(), json_encode($matchSave));exit;
             
             return [
                 'messages' => $matchSave->getMessages()
