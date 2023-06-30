@@ -37,7 +37,7 @@ class CacheGetData extends Component
             foreach ($param as $value) {
                 $value = trim(json_encode($value));
             //    $value = str_replace(["-", " ", "/", "?", "&"], ["_", "_", "_", "_", "_"], $value);
-                $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
+                // $value = preg_replace('/[^a-zA-Z0-9]/s', '', $value);
                 $key .= "_".$value;
             }
         }
